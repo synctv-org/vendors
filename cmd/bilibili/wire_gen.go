@@ -12,7 +12,7 @@ import (
 	"github.com/synctv-org/vendors/internal/conf"
 	"github.com/synctv-org/vendors/internal/registry"
 	"github.com/synctv-org/vendors/internal/server/bilibili"
-	"github.com/synctv-org/vendors/internal/service/bilibili"
+	"github.com/synctv-org/vendors/service/bilibili"
 )
 
 import (
@@ -22,7 +22,7 @@ import (
 // Injectors from wire.go:
 
 func wireApp(confServer *conf.Server, confRegistry *conf.Registry, bilibiliConfig *conf.BilibiliConfig, logger log.Logger) (*kratos.App, func(), error) {
-	bilibiliService := service.NewBilibiliService(bilibiliConfig)
+	bilibiliService := bilibili.NewBilibiliService(bilibiliConfig)
 	grpcServer := server.NewGRPCServer(confServer, bilibiliService, logger)
 	httpServer := server.NewHTTPServer(confServer, bilibiliService, logger)
 	registrar := registry.NewRegistry(confRegistry)

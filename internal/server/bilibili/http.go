@@ -5,7 +5,7 @@ import (
 
 	bili "github.com/synctv-org/vendors/api/bilibili"
 	"github.com/synctv-org/vendors/internal/conf"
-	service "github.com/synctv-org/vendors/internal/service/bilibili"
+	"github.com/synctv-org/vendors/service/bilibili"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/auth/jwt"
@@ -16,7 +16,7 @@ import (
 
 func NewHTTPServer(
 	c *conf.Server,
-	bilibili *service.BilibiliService,
+	bilibili *bilibili.BilibiliService,
 	logger log.Logger,
 ) *http.Server {
 	var opts = []http.ServerOption{

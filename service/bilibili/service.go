@@ -1,4 +1,4 @@
-package service
+package bilibili
 
 import "github.com/google/wire"
 
