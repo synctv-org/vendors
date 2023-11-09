@@ -1,0 +1,15 @@
+bilibili:
+  server:
+    http:
+      addr: 0.0.0.0:8000
+      timeout: 1s
+      custom_endpoint: "http://154.12.85.233:8000"
+    grpc:
+      addr: 0.0.0.0:9000
+      timeout: 1s
+      custom_endpoint: "grpc://154.12.85.233:9000"
+    jwt_secret: "jwt"
+  registry:
+    consul:
+      addr: "104.238.221.128:8500"
+      timeout: 5s

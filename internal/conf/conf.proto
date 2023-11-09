@@ -1,0 +1,52 @@
+syntax = "proto3";
+package kratos.api;
+
+option go_package = "vendors/internal/conf;conf";
+
+import "google/protobuf/duration.proto";
+
+message Registry {
+  message Consul {
+    string scheme = 1;
+    string addr = 2;
+    string prefix = 3;
+    google.protobuf.Duration timeout = 4;
+  }
+  message Etcd {
+    repeated string endpoints = 1;
+    string username = 2;
+    string password = 3;
+    google.protobuf.Duration timeout = 4;
+  }
+  Consul consul = 1;
+  Etcd etcd = 2;
+}
+
+message Server {
+  message HTTP {
+    string network = 1;
+    string addr = 2;
+    google.protobuf.Duration timeout = 3;
+    string custom_endpoint = 4;
+  }
+  message GRPC {
+    string network = 1;
+    string addr = 2;
+    google.protobuf.Duration timeout = 3;
+    string custom_endpoint = 4;
+  }
+
+  HTTP http = 1;
+  GRPC grpc = 2;
+  string jwt_secret = 3;
+}
+
+message BilibiliServer {
+  Server server = 1;
+  Registry registry = 2;
+  BilibiliConfig config = 3;
+}
+
+message BilibiliConfig {}
+
+message Bilibili { BilibiliServer bilibili = 1; }

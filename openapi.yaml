@@ -1,0 +1,490 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: Bilibili API
+    version: 0.0.1
+paths:
+    /api/bilibili/get_dash_pgc_url:
+        post:
+            tags:
+                - Bilibili
+            operationId: Bilibili_GetDashPGCURL
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.bilibili.GetDashPGCURLReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.bilibili.GetDashPGCURLResp'
+    /api/bilibili/get_dash_video_url:
+        post:
+            tags:
+                - Bilibili
+            operationId: Bilibili_GetDashVideoURL
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.bilibili.GetDashVideoURLReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.bilibili.GetDashVideoURLResp'
+    /api/bilibili/get_pgc_url:
+        post:
+            tags:
+                - Bilibili
+            operationId: Bilibili_GetPGCURL
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.bilibili.GetPGCURLReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.bilibili.VideoURL'
+    /api/bilibili/get_subtitles:
+        post:
+            tags:
+                - Bilibili
+            operationId: Bilibili_GetSubtitles
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.bilibili.GetSubtitlesReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.bilibili.GetSubtitlesResp'
+    /api/bilibili/get_video_url:
+        post:
+            tags:
+                - Bilibili
+            operationId: Bilibili_GetVideoURL
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.bilibili.GetVideoURLReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.bilibili.VideoURL'
+    /api/bilibili/login_with_qrcode:
+        post:
+            tags:
+                - Bilibili
+            operationId: Bilibili_LoginWithQRCode
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.bilibili.LoginWithQRCodeReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.bilibili.LoginWithQRCodeResp'
+    /api/bilibili/login_with_sms:
+        post:
+            tags:
+                - Bilibili
+            operationId: Bilibili_LoginWithSMS
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.bilibili.LoginWithSMSReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.bilibili.LoginWithSMSResp'
+    /api/bilibili/match:
+        post:
+            tags:
+                - Bilibili
+            operationId: Bilibili_Match
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.bilibili.MatchReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.bilibili.MatchResp'
+    /api/bilibili/new_captcha:
+        get:
+            tags:
+                - Bilibili
+            operationId: Bilibili_NewCaptcha
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.bilibili.NewCaptchaResp'
+    /api/bilibili/new_qrcode:
+        get:
+            tags:
+                - Bilibili
+            operationId: Bilibili_NewQRCode
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.bilibili.NewQRCodeResp'
+    /api/bilibili/new_sms:
+        post:
+            tags:
+                - Bilibili
+            operationId: Bilibili_NewSMS
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.bilibili.NewSMSReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.bilibili.NewSMSResp'
+    /api/bilibili/parse_pgc_page:
+        post:
+            tags:
+                - Bilibili
+            operationId: Bilibili_ParsePGCPage
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.bilibili.ParsePGCPageReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.bilibili.VideoPageInfo'
+    /api/bilibili/parse_video_page:
+        post:
+            tags:
+                - Bilibili
+            operationId: Bilibili_ParseVideoPage
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.bilibili.ParseVideoPageReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.bilibili.VideoPageInfo'
+    /api/bilibili/user_info:
+        post:
+            tags:
+                - Bilibili
+            operationId: Bilibili_UserInfo
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.bilibili.UserInfoReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.bilibili.UserInfoResp'
+components:
+    schemas:
+        api.bilibili.GetDashPGCURLReq:
+            type: object
+            properties:
+                cookies:
+                    type: object
+                    additionalProperties:
+                        type: string
+                epid:
+                    type: string
+                cid:
+                    type: string
+        api.bilibili.GetDashPGCURLResp:
+            type: object
+            properties:
+                mpd:
+                    type: string
+        api.bilibili.GetDashVideoURLReq:
+            type: object
+            properties:
+                cookies:
+                    type: object
+                    additionalProperties:
+                        type: string
+                aid:
+                    type: string
+                bvid:
+                    type: string
+                cid:
+                    type: string
+        api.bilibili.GetDashVideoURLResp:
+            type: object
+            properties:
+                mpd:
+                    type: string
+        api.bilibili.GetPGCURLReq:
+            type: object
+            properties:
+                cookies:
+                    type: object
+                    additionalProperties:
+                        type: string
+                epid:
+                    type: string
+                cid:
+                    type: string
+                quality:
+                    type: string
+        api.bilibili.GetSubtitlesReq:
+            type: object
+            properties:
+                cookies:
+                    type: object
+                    additionalProperties:
+                        type: string
+                aid:
+                    type: string
+                bvid:
+                    type: string
+                cid:
+                    type: string
+        api.bilibili.GetSubtitlesResp:
+            type: object
+            properties:
+                subtitles:
+                    type: object
+                    additionalProperties:
+                        type: string
+        api.bilibili.GetVideoURLReq:
+            type: object
+            properties:
+                cookies:
+                    type: object
+                    additionalProperties:
+                        type: string
+                aid:
+                    type: string
+                bvid:
+                    type: string
+                cid:
+                    type: string
+                quality:
+                    type: string
+        api.bilibili.LoginWithQRCodeReq:
+            type: object
+            properties:
+                key:
+                    type: string
+        api.bilibili.LoginWithQRCodeResp:
+            type: object
+            properties:
+                status:
+                    type: integer
+                    format: enum
+                cookies:
+                    type: object
+                    additionalProperties:
+                        type: string
+        api.bilibili.LoginWithSMSReq:
+            type: object
+            properties:
+                phone:
+                    type: string
+                code:
+                    type: string
+                captchaKey:
+                    type: string
+        api.bilibili.LoginWithSMSResp:
+            type: object
+            properties:
+                cookies:
+                    type: object
+                    additionalProperties:
+                        type: string
+        api.bilibili.MatchReq:
+            type: object
+            properties:
+                url:
+                    type: string
+        api.bilibili.MatchResp:
+            type: object
+            properties:
+                type:
+                    type: string
+                id:
+                    type: string
+        api.bilibili.NewCaptchaResp:
+            type: object
+            properties:
+                token:
+                    type: string
+                gt:
+                    type: string
+                challenge:
+                    type: string
+        api.bilibili.NewQRCodeResp:
+            type: object
+            properties:
+                url:
+                    type: string
+                key:
+                    type: string
+        api.bilibili.NewSMSReq:
+            type: object
+            properties:
+                phone:
+                    type: string
+                token:
+                    type: string
+                challenge:
+                    type: string
+                validate:
+                    type: string
+        api.bilibili.NewSMSResp:
+            type: object
+            properties:
+                captchaKey:
+                    type: string
+        api.bilibili.ParsePGCPageReq:
+            type: object
+            properties:
+                cookies:
+                    type: object
+                    additionalProperties:
+                        type: string
+                ssid:
+                    type: string
+                epid:
+                    type: string
+        api.bilibili.ParseVideoPageReq:
+            type: object
+            properties:
+                cookies:
+                    type: object
+                    additionalProperties:
+                        type: string
+                aid:
+                    type: string
+                bvid:
+                    type: string
+                sections:
+                    type: boolean
+        api.bilibili.UserInfoReq:
+            type: object
+            properties:
+                cookies:
+                    type: object
+                    additionalProperties:
+                        type: string
+        api.bilibili.UserInfoResp:
+            type: object
+            properties:
+                isLogin:
+                    type: boolean
+                username:
+                    type: string
+                face:
+                    type: string
+                isVip:
+                    type: boolean
+        api.bilibili.VideoInfo:
+            type: object
+            properties:
+                bvid:
+                    type: string
+                cid:
+                    type: string
+                epid:
+                    type: string
+                name:
+                    type: string
+                coverImage:
+                    type: string
+        api.bilibili.VideoPageInfo:
+            type: object
+            properties:
+                title:
+                    type: string
+                actors:
+                    type: string
+                videoInfos:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.bilibili.VideoInfo'
+        api.bilibili.VideoURL:
+            type: object
+            properties:
+                acceptDescription:
+                    type: array
+                    items:
+                        type: string
+                acceptQuality:
+                    type: array
+                    items:
+                        type: string
+                currentQuality:
+                    type: string
+                url:
+                    type: string
+tags:
+    - name: Bilibili

@@ -1,0 +1,230 @@
+syntax = "proto3";
+
+package api.bilibili;
+
+option go_package = "github.com/synctv-org/vendors/api/bilibili;bilibili";
+option java_multiple_files = true;
+option java_package = "api.bilibili";
+
+import "google/api/annotations.proto";
+
+service Bilibili {
+  rpc NewQRCode(Empty) returns (NewQRCodeResp) {
+    option (google.api.http) = {
+      get : "/api/bilibili/new_qrcode"
+    };
+  };
+  rpc LoginWithQRCode(LoginWithQRCodeReq) returns (LoginWithQRCodeResp) {
+    option (google.api.http) = {
+      post : "/api/bilibili/login_with_qrcode"
+      body : "*"
+    };
+  };
+  rpc NewCaptcha(Empty) returns (NewCaptchaResp) {
+    option (google.api.http) = {
+      get : "/api/bilibili/new_captcha"
+    };
+  };
+  rpc NewSMS(NewSMSReq) returns (NewSMSResp) {
+    option (google.api.http) = {
+      post : "/api/bilibili/new_sms"
+      body : "*"
+    };
+  };
+  rpc LoginWithSMS(LoginWithSMSReq) returns (LoginWithSMSResp) {
+    option (google.api.http) = {
+      post : "/api/bilibili/login_with_sms"
+      body : "*"
+    };
+  };
+  rpc ParseVideoPage(ParseVideoPageReq) returns (VideoPageInfo) {
+    option (google.api.http) = {
+      post : "/api/bilibili/parse_video_page"
+      body : "*"
+    };
+  };
+  rpc GetVideoURL(GetVideoURLReq) returns (VideoURL) {
+    option (google.api.http) = {
+      post : "/api/bilibili/get_video_url"
+      body : "*"
+    };
+  };
+  rpc GetDashVideoURL(GetDashVideoURLReq) returns (GetDashVideoURLResp) {
+    option (google.api.http) = {
+      post : "/api/bilibili/get_dash_video_url"
+      body : "*"
+    };
+  };
+  rpc GetSubtitles(GetSubtitlesReq) returns (GetSubtitlesResp) {
+    option (google.api.http) = {
+      post : "/api/bilibili/get_subtitles"
+      body : "*"
+    };
+  };
+  rpc ParsePGCPage(ParsePGCPageReq) returns (VideoPageInfo) {
+    option (google.api.http) = {
+      post : "/api/bilibili/parse_pgc_page"
+      body : "*"
+    };
+  };
+  rpc GetPGCURL(GetPGCURLReq) returns (VideoURL) {
+    option (google.api.http) = {
+      post : "/api/bilibili/get_pgc_url"
+      body : "*"
+    };
+  };
+  rpc GetDashPGCURL(GetDashPGCURLReq) returns (GetDashPGCURLResp) {
+    option (google.api.http) = {
+      post : "/api/bilibili/get_dash_pgc_url"
+      body : "*"
+    };
+  };
+  rpc UserInfo(UserInfoReq) returns (UserInfoResp) {
+    option (google.api.http) = {
+      post : "/api/bilibili/user_info"
+      body : "*"
+    };
+  };
+  rpc Match(MatchReq) returns (MatchResp) {
+    option (google.api.http) = {
+      post : "/api/bilibili/match"
+      body : "*"
+    };
+  };
+}
+
+message Empty {}
+
+message NewQRCodeResp {
+  string url = 1;
+  string key = 2;
+}
+
+message LoginWithQRCodeReq { string key = 1; }
+
+enum QRCodeStatus {
+  UNKNOWN = 0;
+  EXPIRED = 1;
+  NOTSCANNED = 2;
+  SCANNED = 3;
+  SUCCESS = 4;
+}
+
+message LoginWithQRCodeResp {
+  QRCodeStatus status = 1;
+  map<string, string> cookies = 2;
+}
+
+message NewCaptchaResp {
+  string token = 1;
+  string gt = 2;
+  string challenge = 3;
+}
+
+message NewSMSReq {
+  string phone = 1;
+  string token = 2;
+  string challenge = 3;
+  string validate = 4;
+}
+
+message NewSMSResp { string captchaKey = 1; }
+
+message LoginWithSMSReq {
+  string phone = 1;
+  string code = 2;
+  string captchaKey = 3;
+}
+
+message LoginWithSMSResp { map<string, string> cookies = 1; }
+
+message VideoPageInfo {
+  string title = 2;
+  string actors = 3;
+  repeated VideoInfo videoInfos = 4;
+}
+
+message VideoInfo {
+  string bvid = 2;
+  uint64 cid = 3;
+  uint64 epid = 4;
+  string name = 5;
+  string coverImage = 6;
+}
+
+message ParseVideoPageReq {
+  map<string, string> cookies = 1;
+  uint64 aid = 2;
+  string bvid = 3;
+  bool sections = 4;
+}
+
+message VideoURL {
+  repeated string acceptDescription = 1;
+  repeated uint64 acceptQuality = 2;
+  uint64 currentQuality = 3;
+  string url = 4;
+}
+
+message GetVideoURLReq {
+  map<string, string> cookies = 1;
+  uint64 aid = 2;
+  string bvid = 3;
+  uint64 cid = 4;
+  uint64 quality = 5;
+}
+
+message GetDashVideoURLReq {
+  map<string, string> cookies = 1;
+  uint64 aid = 2;
+  string bvid = 3;
+  uint64 cid = 4;
+}
+
+message GetDashVideoURLResp { string mpd = 1; }
+
+message GetSubtitlesReq {
+  map<string, string> cookies = 1;
+  uint64 aid = 2;
+  string bvid = 3;
+  uint64 cid = 4;
+}
+
+message GetSubtitlesResp { map<string, string> subtitles = 1; }
+
+message ParsePGCPageReq {
+  map<string, string> cookies = 1;
+  uint64 ssid = 2;
+  uint64 epid = 3;
+}
+
+message GetPGCURLReq {
+  map<string, string> cookies = 1;
+  uint64 epid = 2;
+  uint64 cid = 3;
+  uint64 quality = 4;
+}
+
+message GetDashPGCURLReq {
+  map<string, string> cookies = 1;
+  uint64 epid = 2;
+  uint64 cid = 3;
+}
+
+message GetDashPGCURLResp { string mpd = 1; }
+
+message UserInfoReq { map<string, string> cookies = 1; }
+
+message UserInfoResp {
+  bool isLogin = 1;
+  string username = 2;
+  string face = 3;
+  bool isVip = 4;
+}
+
+message MatchReq { string url = 1; }
+
+message MatchResp {
+  string type = 1;
+  string id = 2;
+}
