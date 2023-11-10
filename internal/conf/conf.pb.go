@@ -76,20 +76,210 @@ func (x *Registry) GetEtcd() *Registry_Etcd {
 	return nil
 }
 
+type TLS struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	CertFile string `protobuf:"bytes,1,opt,name=cert_file,json=certFile,proto3" json:"cert_file,omitempty"`
+	KeyFile  string `protobuf:"bytes,2,opt,name=key_file,json=keyFile,proto3" json:"key_file,omitempty"`
+	CaFile   string `protobuf:"bytes,3,opt,name=ca_file,json=caFile,proto3" json:"ca_file,omitempty"`
+}
+
+func (x *TLS) Reset() {
+	*x = TLS{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_conf_conf_proto_msgTypes[1]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *TLS) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TLS) ProtoMessage() {}
+
+func (x *TLS) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_conf_proto_msgTypes[1]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TLS.ProtoReflect.Descriptor instead.
+func (*TLS) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *TLS) GetCertFile() string {
+	if x != nil {
+		return x.CertFile
+	}
+	return ""
+}
+
+func (x *TLS) GetKeyFile() string {
+	if x != nil {
+		return x.KeyFile
+	}
+	return ""
+}
+
+func (x *TLS) GetCaFile() string {
+	if x != nil {
+		return x.CaFile
+	}
+	return ""
+}
+
+type Web struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Addr           string `protobuf:"bytes,1,opt,name=addr,proto3" json:"addr,omitempty"`
+	Tls            *TLS   `protobuf:"bytes,2,opt,name=tls,proto3" json:"tls,omitempty"`
+	CustomEndpoint string `protobuf:"bytes,3,opt,name=custom_endpoint,json=customEndpoint,proto3" json:"custom_endpoint,omitempty"`
+}
+
+func (x *Web) Reset() {
+	*x = Web{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_conf_conf_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Web) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Web) ProtoMessage() {}
+
+func (x *Web) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_conf_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Web.ProtoReflect.Descriptor instead.
+func (*Web) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *Web) GetAddr() string {
+	if x != nil {
+		return x.Addr
+	}
+	return ""
+}
+
+func (x *Web) GetTls() *TLS {
+	if x != nil {
+		return x.Tls
+	}
+	return nil
+}
+
+func (x *Web) GetCustomEndpoint() string {
+	if x != nil {
+		return x.CustomEndpoint
+	}
+	return ""
+}
+
+type GRPC struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Addr           string `protobuf:"bytes,1,opt,name=addr,proto3" json:"addr,omitempty"`
+	Tls            *TLS   `protobuf:"bytes,2,opt,name=tls,proto3" json:"tls,omitempty"`
+	CustomEndpoint string `protobuf:"bytes,3,opt,name=custom_endpoint,json=customEndpoint,proto3" json:"custom_endpoint,omitempty"`
+}
+
+func (x *GRPC) Reset() {
+	*x = GRPC{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_conf_conf_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GRPC) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GRPC) ProtoMessage() {}
+
+func (x *GRPC) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_conf_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GRPC.ProtoReflect.Descriptor instead.
+func (*GRPC) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *GRPC) GetAddr() string {
+	if x != nil {
+		return x.Addr
+	}
+	return ""
+}
+
+func (x *GRPC) GetTls() *TLS {
+	if x != nil {
+		return x.Tls
+	}
+	return nil
+}
+
+func (x *GRPC) GetCustomEndpoint() string {
+	if x != nil {
+		return x.CustomEndpoint
+	}
+	return ""
+}
+
 type Server struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Http      *Server_HTTP `protobuf:"bytes,1,opt,name=http,proto3" json:"http,omitempty"`
-	Grpc      *Server_GRPC `protobuf:"bytes,2,opt,name=grpc,proto3" json:"grpc,omitempty"`
-	JwtSecret string       `protobuf:"bytes,3,opt,name=jwt_secret,json=jwtSecret,proto3" json:"jwt_secret,omitempty"`
+	Web       *Web                 `protobuf:"bytes,1,opt,name=web,proto3" json:"web,omitempty"`
+	Grpc      *GRPC                `protobuf:"bytes,2,opt,name=grpc,proto3" json:"grpc,omitempty"`
+	Timeout   *durationpb.Duration `protobuf:"bytes,3,opt,name=timeout,proto3" json:"timeout,omitempty"`
+	JwtSecret string               `protobuf:"bytes,4,opt,name=jwt_secret,json=jwtSecret,proto3" json:"jwt_secret,omitempty"`
 }
 
 func (x *Server) Reset() {
 	*x = Server{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_conf_conf_proto_msgTypes[1]
+		mi := &file_conf_conf_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -102,7 +292,7 @@ func (x *Server) String() string {
 func (*Server) ProtoMessage() {}
 
 func (x *Server) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[1]
+	mi := &file_conf_conf_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -115,19 +305,26 @@ func (x *Server) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Server.ProtoReflect.Descriptor instead.
 func (*Server) Descriptor() ([]byte, []int) {
-	return file_conf_conf_proto_rawDescGZIP(), []int{1}
+	return file_conf_conf_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *Server) GetHttp() *Server_HTTP {
+func (x *Server) GetWeb() *Web {
 	if x != nil {
-		return x.Http
+		return x.Web
 	}
 	return nil
 }
 
-func (x *Server) GetGrpc() *Server_GRPC {
+func (x *Server) GetGrpc() *GRPC {
 	if x != nil {
 		return x.Grpc
+	}
+	return nil
+}
+
+func (x *Server) GetTimeout() *durationpb.Duration {
+	if x != nil {
+		return x.Timeout
 	}
 	return nil
 }
@@ -152,7 +349,7 @@ type BilibiliServer struct {
 func (x *BilibiliServer) Reset() {
 	*x = BilibiliServer{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_conf_conf_proto_msgTypes[2]
+		mi := &file_conf_conf_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -165,7 +362,7 @@ func (x *BilibiliServer) String() string {
 func (*BilibiliServer) ProtoMessage() {}
 
 func (x *BilibiliServer) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[2]
+	mi := &file_conf_conf_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -178,7 +375,7 @@ func (x *BilibiliServer) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BilibiliServer.ProtoReflect.Descriptor instead.
 func (*BilibiliServer) Descriptor() ([]byte, []int) {
-	return file_conf_conf_proto_rawDescGZIP(), []int{2}
+	return file_conf_conf_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *BilibiliServer) GetServer() *Server {
@@ -211,7 +408,7 @@ type BilibiliConfig struct {
 func (x *BilibiliConfig) Reset() {
 	*x = BilibiliConfig{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_conf_conf_proto_msgTypes[3]
+		mi := &file_conf_conf_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -224,7 +421,7 @@ func (x *BilibiliConfig) String() string {
 func (*BilibiliConfig) ProtoMessage() {}
 
 func (x *BilibiliConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[3]
+	mi := &file_conf_conf_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -237,7 +434,7 @@ func (x *BilibiliConfig) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BilibiliConfig.ProtoReflect.Descriptor instead.
 func (*BilibiliConfig) Descriptor() ([]byte, []int) {
-	return file_conf_conf_proto_rawDescGZIP(), []int{3}
+	return file_conf_conf_proto_rawDescGZIP(), []int{6}
 }
 
 type Bilibili struct {
@@ -251,7 +448,7 @@ type Bilibili struct {
 func (x *Bilibili) Reset() {
 	*x = Bilibili{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_conf_conf_proto_msgTypes[4]
+		mi := &file_conf_conf_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -264,7 +461,7 @@ func (x *Bilibili) String() string {
 func (*Bilibili) ProtoMessage() {}
 
 func (x *Bilibili) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[4]
+	mi := &file_conf_conf_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -277,7 +474,7 @@ func (x *Bilibili) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Bilibili.ProtoReflect.Descriptor instead.
 func (*Bilibili) Descriptor() ([]byte, []int) {
-	return file_conf_conf_proto_rawDescGZIP(), []int{4}
+	return file_conf_conf_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *Bilibili) GetBilibili() *BilibiliServer {
@@ -301,7 +498,7 @@ type Registry_Consul struct {
 func (x *Registry_Consul) Reset() {
 	*x = Registry_Consul{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_conf_conf_proto_msgTypes[5]
+		mi := &file_conf_conf_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -314,7 +511,7 @@ func (x *Registry_Consul) String() string {
 func (*Registry_Consul) ProtoMessage() {}
 
 func (x *Registry_Consul) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[5]
+	mi := &file_conf_conf_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -372,7 +569,7 @@ type Registry_Etcd struct {
 func (x *Registry_Etcd) Reset() {
 	*x = Registry_Etcd{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_conf_conf_proto_msgTypes[6]
+		mi := &file_conf_conf_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -385,7 +582,7 @@ func (x *Registry_Etcd) String() string {
 func (*Registry_Etcd) ProtoMessage() {}
 
 func (x *Registry_Etcd) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[6]
+	mi := &file_conf_conf_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -429,148 +626,6 @@ func (x *Registry_Etcd) GetTimeout() *durationpb.Duration {
 	return nil
 }
 
-type Server_HTTP struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Network        string               `protobuf:"bytes,1,opt,name=network,proto3" json:"network,omitempty"`
-	Addr           string               `protobuf:"bytes,2,opt,name=addr,proto3" json:"addr,omitempty"`
-	Timeout        *durationpb.Duration `protobuf:"bytes,3,opt,name=timeout,proto3" json:"timeout,omitempty"`
-	CustomEndpoint string               `protobuf:"bytes,4,opt,name=custom_endpoint,json=customEndpoint,proto3" json:"custom_endpoint,omitempty"`
-}
-
-func (x *Server_HTTP) Reset() {
-	*x = Server_HTTP{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_conf_conf_proto_msgTypes[7]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *Server_HTTP) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Server_HTTP) ProtoMessage() {}
-
-func (x *Server_HTTP) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[7]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Server_HTTP.ProtoReflect.Descriptor instead.
-func (*Server_HTTP) Descriptor() ([]byte, []int) {
-	return file_conf_conf_proto_rawDescGZIP(), []int{1, 0}
-}
-
-func (x *Server_HTTP) GetNetwork() string {
-	if x != nil {
-		return x.Network
-	}
-	return ""
-}
-
-func (x *Server_HTTP) GetAddr() string {
-	if x != nil {
-		return x.Addr
-	}
-	return ""
-}
-
-func (x *Server_HTTP) GetTimeout() *durationpb.Duration {
-	if x != nil {
-		return x.Timeout
-	}
-	return nil
-}
-
-func (x *Server_HTTP) GetCustomEndpoint() string {
-	if x != nil {
-		return x.CustomEndpoint
-	}
-	return ""
-}
-
-type Server_GRPC struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Network        string               `protobuf:"bytes,1,opt,name=network,proto3" json:"network,omitempty"`
-	Addr           string               `protobuf:"bytes,2,opt,name=addr,proto3" json:"addr,omitempty"`
-	Timeout        *durationpb.Duration `protobuf:"bytes,3,opt,name=timeout,proto3" json:"timeout,omitempty"`
-	CustomEndpoint string               `protobuf:"bytes,4,opt,name=custom_endpoint,json=customEndpoint,proto3" json:"custom_endpoint,omitempty"`
-}
-
-func (x *Server_GRPC) Reset() {
-	*x = Server_GRPC{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_conf_conf_proto_msgTypes[8]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *Server_GRPC) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Server_GRPC) ProtoMessage() {}
-
-func (x *Server_GRPC) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[8]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Server_GRPC.ProtoReflect.Descriptor instead.
-func (*Server_GRPC) Descriptor() ([]byte, []int) {
-	return file_conf_conf_proto_rawDescGZIP(), []int{1, 1}
-}
-
-func (x *Server_GRPC) GetNetwork() string {
-	if x != nil {
-		return x.Network
-	}
-	return ""
-}
-
-func (x *Server_GRPC) GetAddr() string {
-	if x != nil {
-		return x.Addr
-	}
-	return ""
-}
-
-func (x *Server_GRPC) GetTimeout() *durationpb.Duration {
-	if x != nil {
-		return x.Timeout
-	}
-	return nil
-}
-
-func (x *Server_GRPC) GetCustomEndpoint() string {
-	if x != nil {
-		return x.CustomEndpoint
-	}
-	return ""
-}
-
 var File_conf_conf_proto protoreflect.FileDescriptor
 
 var file_conf_conf_proto_rawDesc = []byte{
@@ -602,52 +657,54 @@ var file_conf_conf_proto_rawDesc = []byte{
 	0x64, 0x12, 0x33, 0x0a, 0x07, 0x74, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x18, 0x04, 0x20, 0x01,
 	0x28, 0x0b, 0x32, 0x19, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74,
 	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x07, 0x74,
-	0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x22, 0xab, 0x03, 0x0a, 0x06, 0x53, 0x65, 0x72, 0x76, 0x65,
-	0x72, 0x12, 0x2b, 0x0a, 0x04, 0x68, 0x74, 0x74, 0x70, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32,
-	0x17, 0x2e, 0x6b, 0x72, 0x61, 0x74, 0x6f, 0x73, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x53, 0x65, 0x72,
-	0x76, 0x65, 0x72, 0x2e, 0x48, 0x54, 0x54, 0x50, 0x52, 0x04, 0x68, 0x74, 0x74, 0x70, 0x12, 0x2b,
-	0x0a, 0x04, 0x67, 0x72, 0x70, 0x63, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x17, 0x2e, 0x6b,
-	0x72, 0x61, 0x74, 0x6f, 0x73, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72,
-	0x2e, 0x47, 0x52, 0x50, 0x43, 0x52, 0x04, 0x67, 0x72, 0x70, 0x63, 0x12, 0x1d, 0x0a, 0x0a, 0x6a,
-	0x77, 0x74, 0x5f, 0x73, 0x65, 0x63, 0x72, 0x65, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x09, 0x6a, 0x77, 0x74, 0x53, 0x65, 0x63, 0x72, 0x65, 0x74, 0x1a, 0x92, 0x01, 0x0a, 0x04, 0x48,
-	0x54, 0x54, 0x50, 0x12, 0x18, 0x0a, 0x07, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x12, 0x12, 0x0a,
-	0x04, 0x61, 0x64, 0x64, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x61, 0x64, 0x64,
-	0x72, 0x12, 0x33, 0x0a, 0x07, 0x74, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x18, 0x03, 0x20, 0x01,
+	0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x22, 0x56, 0x0a, 0x03, 0x54, 0x4c, 0x53, 0x12, 0x1b, 0x0a,
+	0x09, 0x63, 0x65, 0x72, 0x74, 0x5f, 0x66, 0x69, 0x6c, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x08, 0x63, 0x65, 0x72, 0x74, 0x46, 0x69, 0x6c, 0x65, 0x12, 0x19, 0x0a, 0x08, 0x6b, 0x65,
+	0x79, 0x5f, 0x66, 0x69, 0x6c, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x6b, 0x65,
+	0x79, 0x46, 0x69, 0x6c, 0x65, 0x12, 0x17, 0x0a, 0x07, 0x63, 0x61, 0x5f, 0x66, 0x69, 0x6c, 0x65,
+	0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x63, 0x61, 0x46, 0x69, 0x6c, 0x65, 0x22, 0x65,
+	0x0a, 0x03, 0x57, 0x65, 0x62, 0x12, 0x12, 0x0a, 0x04, 0x61, 0x64, 0x64, 0x72, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x04, 0x61, 0x64, 0x64, 0x72, 0x12, 0x21, 0x0a, 0x03, 0x74, 0x6c, 0x73,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0f, 0x2e, 0x6b, 0x72, 0x61, 0x74, 0x6f, 0x73, 0x2e,
+	0x61, 0x70, 0x69, 0x2e, 0x54, 0x4c, 0x53, 0x52, 0x03, 0x74, 0x6c, 0x73, 0x12, 0x27, 0x0a, 0x0f,
+	0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x5f, 0x65, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x18,
+	0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0e, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x45, 0x6e, 0x64,
+	0x70, 0x6f, 0x69, 0x6e, 0x74, 0x22, 0x66, 0x0a, 0x04, 0x47, 0x52, 0x50, 0x43, 0x12, 0x12, 0x0a,
+	0x04, 0x61, 0x64, 0x64, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x61, 0x64, 0x64,
+	0x72, 0x12, 0x21, 0x0a, 0x03, 0x74, 0x6c, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0f,
+	0x2e, 0x6b, 0x72, 0x61, 0x74, 0x6f, 0x73, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x54, 0x4c, 0x53, 0x52,
+	0x03, 0x74, 0x6c, 0x73, 0x12, 0x27, 0x0a, 0x0f, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x5f, 0x65,
+	0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0e, 0x63,
+	0x75, 0x73, 0x74, 0x6f, 0x6d, 0x45, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x22, 0xa5, 0x01,
+	0x0a, 0x06, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x12, 0x21, 0x0a, 0x03, 0x77, 0x65, 0x62, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0f, 0x2e, 0x6b, 0x72, 0x61, 0x74, 0x6f, 0x73, 0x2e, 0x61,
+	0x70, 0x69, 0x2e, 0x57, 0x65, 0x62, 0x52, 0x03, 0x77, 0x65, 0x62, 0x12, 0x24, 0x0a, 0x04, 0x67,
+	0x72, 0x70, 0x63, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x10, 0x2e, 0x6b, 0x72, 0x61, 0x74,
+	0x6f, 0x73, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x47, 0x52, 0x50, 0x43, 0x52, 0x04, 0x67, 0x72, 0x70,
+	0x63, 0x12, 0x33, 0x0a, 0x07, 0x74, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x18, 0x03, 0x20, 0x01,
 	0x28, 0x0b, 0x32, 0x19, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74,
 	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x07, 0x74,
-	0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x12, 0x27, 0x0a, 0x0f, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d,
-	0x5f, 0x65, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x0e, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x45, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x1a,
-	0x92, 0x01, 0x0a, 0x04, 0x47, 0x52, 0x50, 0x43, 0x12, 0x18, 0x0a, 0x07, 0x6e, 0x65, 0x74, 0x77,
-	0x6f, 0x72, 0x6b, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x6e, 0x65, 0x74, 0x77, 0x6f,
-	0x72, 0x6b, 0x12, 0x12, 0x0a, 0x04, 0x61, 0x64, 0x64, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09,
-	0x52, 0x04, 0x61, 0x64, 0x64, 0x72, 0x12, 0x33, 0x0a, 0x07, 0x74, 0x69, 0x6d, 0x65, 0x6f, 0x75,
-	0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65,
-	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69,
-	0x6f, 0x6e, 0x52, 0x07, 0x74, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x12, 0x27, 0x0a, 0x0f, 0x63,
-	0x75, 0x73, 0x74, 0x6f, 0x6d, 0x5f, 0x65, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x18, 0x04,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x0e, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x45, 0x6e, 0x64, 0x70,
-	0x6f, 0x69, 0x6e, 0x74, 0x22, 0xa2, 0x01, 0x0a, 0x0e, 0x42, 0x69, 0x6c, 0x69, 0x62, 0x69, 0x6c,
-	0x69, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x12, 0x2a, 0x0a, 0x06, 0x73, 0x65, 0x72, 0x76, 0x65,
-	0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x12, 0x2e, 0x6b, 0x72, 0x61, 0x74, 0x6f, 0x73,
-	0x2e, 0x61, 0x70, 0x69, 0x2e, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x52, 0x06, 0x73, 0x65, 0x72,
-	0x76, 0x65, 0x72, 0x12, 0x30, 0x0a, 0x08, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x18,
-	0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x6b, 0x72, 0x61, 0x74, 0x6f, 0x73, 0x2e, 0x61,
-	0x70, 0x69, 0x2e, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x52, 0x08, 0x72, 0x65, 0x67,
-	0x69, 0x73, 0x74, 0x72, 0x79, 0x12, 0x32, 0x0a, 0x06, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x18,
-	0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x6b, 0x72, 0x61, 0x74, 0x6f, 0x73, 0x2e, 0x61,
-	0x70, 0x69, 0x2e, 0x42, 0x69, 0x6c, 0x69, 0x62, 0x69, 0x6c, 0x69, 0x43, 0x6f, 0x6e, 0x66, 0x69,
-	0x67, 0x52, 0x06, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x22, 0x10, 0x0a, 0x0e, 0x42, 0x69, 0x6c,
-	0x69, 0x62, 0x69, 0x6c, 0x69, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x22, 0x42, 0x0a, 0x08, 0x42,
-	0x69, 0x6c, 0x69, 0x62, 0x69, 0x6c, 0x69, 0x12, 0x36, 0x0a, 0x08, 0x62, 0x69, 0x6c, 0x69, 0x62,
-	0x69, 0x6c, 0x69, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x6b, 0x72, 0x61, 0x74,
-	0x6f, 0x73, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x42, 0x69, 0x6c, 0x69, 0x62, 0x69, 0x6c, 0x69, 0x53,
-	0x65, 0x72, 0x76, 0x65, 0x72, 0x52, 0x08, 0x62, 0x69, 0x6c, 0x69, 0x62, 0x69, 0x6c, 0x69, 0x42,
-	0x1c, 0x5a, 0x1a, 0x76, 0x65, 0x6e, 0x64, 0x6f, 0x72, 0x73, 0x2f, 0x69, 0x6e, 0x74, 0x65, 0x72,
-	0x6e, 0x61, 0x6c, 0x2f, 0x63, 0x6f, 0x6e, 0x66, 0x3b, 0x63, 0x6f, 0x6e, 0x66, 0x62, 0x06, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x6a, 0x77, 0x74, 0x5f, 0x73, 0x65,
+	0x63, 0x72, 0x65, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x6a, 0x77, 0x74, 0x53,
+	0x65, 0x63, 0x72, 0x65, 0x74, 0x22, 0xa2, 0x01, 0x0a, 0x0e, 0x42, 0x69, 0x6c, 0x69, 0x62, 0x69,
+	0x6c, 0x69, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x12, 0x2a, 0x0a, 0x06, 0x73, 0x65, 0x72, 0x76,
+	0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x12, 0x2e, 0x6b, 0x72, 0x61, 0x74, 0x6f,
+	0x73, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x52, 0x06, 0x73, 0x65,
+	0x72, 0x76, 0x65, 0x72, 0x12, 0x30, 0x0a, 0x08, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x6b, 0x72, 0x61, 0x74, 0x6f, 0x73, 0x2e,
+	0x61, 0x70, 0x69, 0x2e, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x52, 0x08, 0x72, 0x65,
+	0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x12, 0x32, 0x0a, 0x06, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67,
+	0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x6b, 0x72, 0x61, 0x74, 0x6f, 0x73, 0x2e,
+	0x61, 0x70, 0x69, 0x2e, 0x42, 0x69, 0x6c, 0x69, 0x62, 0x69, 0x6c, 0x69, 0x43, 0x6f, 0x6e, 0x66,
+	0x69, 0x67, 0x52, 0x06, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x22, 0x10, 0x0a, 0x0e, 0x42, 0x69,
+	0x6c, 0x69, 0x62, 0x69, 0x6c, 0x69, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x22, 0x42, 0x0a, 0x08,
+	0x42, 0x69, 0x6c, 0x69, 0x62, 0x69, 0x6c, 0x69, 0x12, 0x36, 0x0a, 0x08, 0x62, 0x69, 0x6c, 0x69,
+	0x62, 0x69, 0x6c, 0x69, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x6b, 0x72, 0x61,
+	0x74, 0x6f, 0x73, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x42, 0x69, 0x6c, 0x69, 0x62, 0x69, 0x6c, 0x69,
+	0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x52, 0x08, 0x62, 0x69, 0x6c, 0x69, 0x62, 0x69, 0x6c, 0x69,
+	0x42, 0x1c, 0x5a, 0x1a, 0x76, 0x65, 0x6e, 0x64, 0x6f, 0x72, 0x73, 0x2f, 0x69, 0x6e, 0x74, 0x65,
+	0x72, 0x6e, 0x61, 0x6c, 0x2f, 0x63, 0x6f, 0x6e, 0x66, 0x3b, 0x63, 0x6f, 0x6e, 0x66, 0x62, 0x06,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -662,37 +719,39 @@ func file_conf_conf_proto_rawDescGZIP() []byte {
 	return file_conf_conf_proto_rawDescData
 }
 
-var file_conf_conf_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_conf_conf_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_conf_conf_proto_goTypes = []interface{}{
 	(*Registry)(nil),            // 0: kratos.api.Registry
-	(*Server)(nil),              // 1: kratos.api.Server
-	(*BilibiliServer)(nil),      // 2: kratos.api.BilibiliServer
-	(*BilibiliConfig)(nil),      // 3: kratos.api.BilibiliConfig
-	(*Bilibili)(nil),            // 4: kratos.api.Bilibili
-	(*Registry_Consul)(nil),     // 5: kratos.api.Registry.Consul
-	(*Registry_Etcd)(nil),       // 6: kratos.api.Registry.Etcd
-	(*Server_HTTP)(nil),         // 7: kratos.api.Server.HTTP
-	(*Server_GRPC)(nil),         // 8: kratos.api.Server.GRPC
-	(*durationpb.Duration)(nil), // 9: google.protobuf.Duration
+	(*TLS)(nil),                 // 1: kratos.api.TLS
+	(*Web)(nil),                 // 2: kratos.api.Web
+	(*GRPC)(nil),                // 3: kratos.api.GRPC
+	(*Server)(nil),              // 4: kratos.api.Server
+	(*BilibiliServer)(nil),      // 5: kratos.api.BilibiliServer
+	(*BilibiliConfig)(nil),      // 6: kratos.api.BilibiliConfig
+	(*Bilibili)(nil),            // 7: kratos.api.Bilibili
+	(*Registry_Consul)(nil),     // 8: kratos.api.Registry.Consul
+	(*Registry_Etcd)(nil),       // 9: kratos.api.Registry.Etcd
+	(*durationpb.Duration)(nil), // 10: google.protobuf.Duration
 }
 var file_conf_conf_proto_depIdxs = []int32{
-	5,  // 0: kratos.api.Registry.consul:type_name -> kratos.api.Registry.Consul
-	6,  // 1: kratos.api.Registry.etcd:type_name -> kratos.api.Registry.Etcd
-	7,  // 2: kratos.api.Server.http:type_name -> kratos.api.Server.HTTP
-	8,  // 3: kratos.api.Server.grpc:type_name -> kratos.api.Server.GRPC
-	1,  // 4: kratos.api.BilibiliServer.server:type_name -> kratos.api.Server
-	0,  // 5: kratos.api.BilibiliServer.registry:type_name -> kratos.api.Registry
-	3,  // 6: kratos.api.BilibiliServer.config:type_name -> kratos.api.BilibiliConfig
-	2,  // 7: kratos.api.Bilibili.bilibili:type_name -> kratos.api.BilibiliServer
-	9,  // 8: kratos.api.Registry.Consul.timeout:type_name -> google.protobuf.Duration
-	9,  // 9: kratos.api.Registry.Etcd.timeout:type_name -> google.protobuf.Duration
-	9,  // 10: kratos.api.Server.HTTP.timeout:type_name -> google.protobuf.Duration
-	9,  // 11: kratos.api.Server.GRPC.timeout:type_name -> google.protobuf.Duration
-	12, // [12:12] is the sub-list for method output_type
-	12, // [12:12] is the sub-list for method input_type
-	12, // [12:12] is the sub-list for extension type_name
-	12, // [12:12] is the sub-list for extension extendee
-	0,  // [0:12] is the sub-list for field type_name
+	8,  // 0: kratos.api.Registry.consul:type_name -> kratos.api.Registry.Consul
+	9,  // 1: kratos.api.Registry.etcd:type_name -> kratos.api.Registry.Etcd
+	1,  // 2: kratos.api.Web.tls:type_name -> kratos.api.TLS
+	1,  // 3: kratos.api.GRPC.tls:type_name -> kratos.api.TLS
+	2,  // 4: kratos.api.Server.web:type_name -> kratos.api.Web
+	3,  // 5: kratos.api.Server.grpc:type_name -> kratos.api.GRPC
+	10, // 6: kratos.api.Server.timeout:type_name -> google.protobuf.Duration
+	4,  // 7: kratos.api.BilibiliServer.server:type_name -> kratos.api.Server
+	0,  // 8: kratos.api.BilibiliServer.registry:type_name -> kratos.api.Registry
+	6,  // 9: kratos.api.BilibiliServer.config:type_name -> kratos.api.BilibiliConfig
+	5,  // 10: kratos.api.Bilibili.bilibili:type_name -> kratos.api.BilibiliServer
+	10, // 11: kratos.api.Registry.Consul.timeout:type_name -> google.protobuf.Duration
+	10, // 12: kratos.api.Registry.Etcd.timeout:type_name -> google.protobuf.Duration
+	13, // [13:13] is the sub-list for method output_type
+	13, // [13:13] is the sub-list for method input_type
+	13, // [13:13] is the sub-list for extension type_name
+	13, // [13:13] is the sub-list for extension extendee
+	0,  // [0:13] is the sub-list for field type_name
 }
 
 func init() { file_conf_conf_proto_init() }
@@ -714,7 +773,7 @@ func file_conf_conf_proto_init() {
 			}
 		}
 		file_conf_conf_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Server); i {
+			switch v := v.(*TLS); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -726,7 +785,7 @@ func file_conf_conf_proto_init() {
 			}
 		}
 		file_conf_conf_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*BilibiliServer); i {
+			switch v := v.(*Web); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -738,7 +797,7 @@ func file_conf_conf_proto_init() {
 			}
 		}
 		file_conf_conf_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*BilibiliConfig); i {
+			switch v := v.(*GRPC); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -750,7 +809,7 @@ func file_conf_conf_proto_init() {
 			}
 		}
 		file_conf_conf_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Bilibili); i {
+			switch v := v.(*Server); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -762,7 +821,7 @@ func file_conf_conf_proto_init() {
 			}
 		}
 		file_conf_conf_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Registry_Consul); i {
+			switch v := v.(*BilibiliServer); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -774,7 +833,7 @@ func file_conf_conf_proto_init() {
 			}
 		}
 		file_conf_conf_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Registry_Etcd); i {
+			switch v := v.(*BilibiliConfig); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -786,7 +845,7 @@ func file_conf_conf_proto_init() {
 			}
 		}
 		file_conf_conf_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Server_HTTP); i {
+			switch v := v.(*Bilibili); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -798,7 +857,19 @@ func file_conf_conf_proto_init() {
 			}
 		}
 		file_conf_conf_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Server_GRPC); i {
+			switch v := v.(*Registry_Consul); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_conf_conf_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Registry_Etcd); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -816,7 +887,7 @@ func file_conf_conf_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_conf_conf_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   9,
+			NumMessages:   10,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

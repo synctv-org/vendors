@@ -23,10 +23,10 @@ import (
 
 func wireApp(confServer *conf.Server, confRegistry *conf.Registry, bilibiliConfig *conf.BilibiliConfig, logger log.Logger) (*kratos.App, func(), error) {
 	bilibiliService := bilibili.NewBilibiliService(bilibiliConfig)
-	grpcServer := server.NewGRPCServer(confServer, bilibiliService, logger)
+	grpcGatewayServer := server.NewGRPCServer(confServer, bilibiliService, logger)
 	httpServer := server.NewHTTPServer(confServer, bilibiliService, logger)
 	registrar := registry.NewRegistry(confRegistry)
-	app := newApp(logger, grpcServer, httpServer, registrar)
+	app := newApp(logger, grpcGatewayServer, httpServer, registrar)
 	return app, func() {
 	}, nil
 }

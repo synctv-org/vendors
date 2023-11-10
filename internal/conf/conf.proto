@@ -22,23 +22,28 @@ message Registry {
   Etcd etcd = 2;
 }
 
-message Server {
-  message HTTP {
-    string network = 1;
-    string addr = 2;
-    google.protobuf.Duration timeout = 3;
-    string custom_endpoint = 4;
-  }
-  message GRPC {
-    string network = 1;
-    string addr = 2;
-    google.protobuf.Duration timeout = 3;
-    string custom_endpoint = 4;
-  }
+message TLS {
+  string cert_file = 1;
+  string key_file = 2;
+  string ca_file = 3;
+}
 
-  HTTP http = 1;
+message Web {
+  string addr = 1;
+  TLS tls = 2;
+  string custom_endpoint = 3;
+}
+message GRPC {
+  string addr = 1;
+  TLS tls = 2;
+  string custom_endpoint = 3;
+}
+
+message Server {
+  Web web = 1;
   GRPC grpc = 2;
-  string jwt_secret = 3;
+  google.protobuf.Duration timeout = 3;
+  string jwt_secret = 4;
 }
 
 message BilibiliServer {

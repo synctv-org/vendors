@@ -1,49 +1,139 @@
 package server
 
 import (
+	"context"
+	"crypto/tls"
+	"crypto/x509"
+	"fmt"
+	"net/http"
 	"net/url"
+	"os"
+	"strings"
 
 	jwtv4 "github.com/golang-jwt/jwt/v4"
 	bili "github.com/synctv-org/vendors/api/bilibili"
 	"github.com/synctv-org/vendors/internal/conf"
 	"github.com/synctv-org/vendors/service/bilibili"
+	"golang.org/x/net/http2"
+	"golang.org/x/net/http2/h2c"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/auth/jwt"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
-	"github.com/go-kratos/kratos/v2/transport/grpc"
+	ggrpc "github.com/go-kratos/kratos/v2/transport/grpc"
+	ghttp "github.com/go-kratos/kratos/v2/transport/http"
 )
 
 func NewGRPCServer(
 	c *conf.Server,
 	bilibili *bilibili.BilibiliService,
 	logger log.Logger,
-) *grpc.Server {
-	var opts = []grpc.ServerOption{
-		grpc.Middleware(
+) *GrpcGatewayServer {
+	var hopts = []ghttp.ServerOption{
+		ghttp.Middleware(
 			recovery.Recovery(),
 			jwt.Server(func(token *jwtv4.Token) (interface{}, error) {
 				return []byte(c.JwtSecret), nil
 			}, jwt.WithSigningMethod(jwtv4.SigningMethodHS256)),
 		),
+		ghttp.Address(c.Grpc.Addr),
 	}
-	if c.Grpc.Network != "" {
-		opts = append(opts, grpc.Network(c.Grpc.Network))
-	}
-	if c.Grpc.Addr != "" {
-		opts = append(opts, grpc.Address(c.Grpc.Addr))
-	}
-	if c.Grpc.Timeout != nil {
-		opts = append(opts, grpc.Timeout(c.Grpc.Timeout.AsDuration()))
+	if c.Timeout != nil {
+		hopts = append(hopts, ghttp.Timeout(c.Timeout.AsDuration()))
 	}
 	if c.Grpc.CustomEndpoint != "" {
 		u, err := url.Parse(c.Grpc.CustomEndpoint)
 		if err != nil {
 			panic(err)
 		}
-		opts = append(opts, grpc.Endpoint(u))
+		hopts = append(hopts, ghttp.Endpoint(u))
 	}
-	srv := grpc.NewServer(opts...)
-	bili.RegisterBilibiliServer(srv, bilibili)
-	return srv
+
+	var gopts = []ggrpc.ServerOption{
+		ggrpc.Middleware(
+			recovery.Recovery(),
+			jwt.Server(func(token *jwtv4.Token) (interface{}, error) {
+				return []byte(c.JwtSecret), nil
+			}, jwt.WithSigningMethod(jwtv4.SigningMethodHS256)),
+		),
+		ggrpc.Address(c.Grpc.Addr),
+	}
+
+	if c.Grpc.Tls != nil && c.Grpc.Tls.CertFile != "" && c.Grpc.Tls.KeyFile != "" {
+		var rootCAs *x509.CertPool
+		rootCAs, err := x509.SystemCertPool()
+		if err != nil {
+			fmt.Println("Failed to load system root CA:", err)
+			panic(err)
+		}
+		if c.Grpc.Tls.CaFile != "" {
+			b, err := os.ReadFile(c.Grpc.Tls.CaFile)
+			if err != nil {
+				panic(err)
+			}
+			rootCAs.AppendCertsFromPEM(b)
+		}
+
+		cert, err := tls.LoadX509KeyPair(c.Grpc.Tls.CertFile, c.Grpc.Tls.KeyFile)
+		if err != nil {
+			panic(err)
+		}
+		hopts = append(hopts, ghttp.TLSConfig(&tls.Config{
+			RootCAs:      rootCAs,
+			Certificates: []tls.Certificate{cert},
+		}))
+		gopts = append(gopts, ggrpc.TLSConfig(&tls.Config{
+			RootCAs:      rootCAs,
+			Certificates: []tls.Certificate{cert},
+		}))
+	}
+
+	hs := ghttp.NewServer(hopts...)
+
+	if c.Timeout != nil {
+		gopts = append(gopts, ggrpc.Timeout(c.Timeout.AsDuration()))
+	}
+	if c.Grpc.CustomEndpoint != "" {
+		u, err := url.Parse(c.Grpc.CustomEndpoint)
+		if err != nil {
+			panic(err)
+		}
+		gopts = append(gopts, ggrpc.Endpoint(u))
+	}
+
+	gs := ggrpc.NewServer(gopts...)
+	bili.RegisterBilibiliServer(gs, bilibili)
+	bili.RegisterBilibiliHTTPServer(hs, bilibili)
+	return &GrpcGatewayServer{
+		gs: gs,
+		hs: hs,
+	}
+}
+
+func grpcHandlerFunc(gs *ggrpc.Server, other http.Handler) http.Handler {
+	return h2c.NewHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.ProtoMajor == 2 && strings.HasPrefix(r.Header.Get("Content-Type"), "application/grpc") {
+			gs.ServeHTTP(w, r)
+		} else {
+			other.ServeHTTP(w, r)
+		}
+	}), &http2.Server{})
+}
+
+type GrpcGatewayServer struct {
+	gs *ggrpc.Server
+	hs *ghttp.Server
+}
+
+func (s *GrpcGatewayServer) Start(ctx context.Context) error {
+	s.hs.Handler = grpcHandlerFunc(s.gs, s.hs.Handler)
+	return s.hs.Start(ctx)
+}
+
+func (s *GrpcGatewayServer) Stop(ctx context.Context) error {
+	return s.hs.Stop(ctx)
+}
+
+func (s *GrpcGatewayServer) Endpoint() (*url.URL, error) {
+	return s.hs.Endpoint()
 }
