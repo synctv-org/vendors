@@ -259,6 +259,8 @@ components:
                     type: string
                 cid:
                     type: string
+                hevc:
+                    type: boolean
         api.bilibili.GetDashPGCURLResp:
             type: object
             properties:
@@ -277,6 +279,8 @@ components:
                     type: string
                 cid:
                     type: string
+                hevc:
+                    type: boolean
         api.bilibili.GetDashVideoURLResp:
             type: object
             properties:

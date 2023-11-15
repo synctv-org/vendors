@@ -4,7 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"time"
+	"strconv"
+	"strings"
 
 	json "github.com/json-iterator/go"
 	"github.com/zencoder/go-dash/v3/mpd"
@@ -183,12 +184,8 @@ func (c *Client) GetVideoURL(aid uint64, bvid string, cid uint64, conf ...GetVid
 }
 
 type GetDashVideoURLConf struct {
-	HDR            bool
-	Need4K         bool
-	NeedDOLBY      bool
-	NeedDOLBYAudio bool
-	Need8K         bool
-	NeedAV1        bool
+	HDR  bool
+	Hevc bool
 }
 
 type GetDashVideoURLConfig func(*GetDashVideoURLConf)
@@ -199,27 +196,9 @@ func WithHDR(hdr bool) GetDashVideoURLConfig {
 	}
 }
 
-func WithNeed4K(need4k bool) GetDashVideoURLConfig {
+func WithHevc(hevc bool) GetDashVideoURLConfig {
 	return func(c *GetDashVideoURLConf) {
-		c.Need4K = need4k
-	}
-}
-
-func WithNeedDOLBY(needDOLBY bool) GetDashVideoURLConfig {
-	return func(c *GetDashVideoURLConf) {
-		c.NeedDOLBY = needDOLBY
-	}
-}
-
-func WithNeedDOLBYAudio(needDOLBYAudio bool) GetDashVideoURLConfig {
-	return func(c *GetDashVideoURLConf) {
-		c.NeedDOLBYAudio = needDOLBYAudio
-	}
-}
-
-func WithNeed8K(need8k bool) GetDashVideoURLConfig {
-	return func(c *GetDashVideoURLConf) {
-		c.Need8K = need8k
+		c.Hevc = hevc
 	}
 }
 
@@ -234,24 +213,9 @@ func (c *Client) GetDashVideoURL(aid uint64, bvid string, cid uint64, conf ...Ge
 		fnval    uint64 = 16
 		extQuery string
 	)
-	if config.Need4K {
-		fnval = 128
-		extQuery = "&fourk=1"
-	} else if config.Need8K {
-		fnval = 1024
-	}
 
 	if config.HDR {
 		fnval |= 64
-	}
-	if config.NeedDOLBY {
-		fnval |= 512
-	}
-	if config.NeedDOLBYAudio {
-		fnval |= 256
-	}
-	if config.NeedAV1 {
-		fnval |= 2048
 	}
 
 	var url string
@@ -283,11 +247,20 @@ func (c *Client) GetDashVideoURL(aid uint64, bvid string, cid uint64, conf ...Ge
 
 	var as *mpd.AdaptationSet
 	for _, v := range info.Data.Dash.Video {
-		as, err = m.AddNewAdaptationSetVideo(v.MimeType, "progressive", true, v.StartWithSap)
-		if err != nil {
-			return nil, err
+		if as == nil {
+			as, err = m.AddNewAdaptationSetVideo(v.MimeType, "progressive", true, v.StartWithSap)
+			if err != nil {
+				return nil, err
+			}
 		}
-		video, err := as.AddNewRepresentationVideo(v.Bandwidth, v.Codecs, fmt.Sprint(time.Now().UnixMicro()), v.FrameRate, v.Width, v.Height)
+		if config.Hevc {
+			if !strings.Contains(v.Codecs, "hev1") {
+				continue
+			}
+		} else if strings.Contains(v.Codecs, "hev1") {
+			continue
+		}
+		video, err := as.AddNewRepresentationVideo(v.Bandwidth, v.Codecs, strconv.Itoa(v.ID), v.FrameRate, v.Width, v.Height)
 		if err != nil {
 			return nil, err
 		}
@@ -304,11 +277,13 @@ func (c *Client) GetDashVideoURL(aid uint64, bvid string, cid uint64, conf ...Ge
 
 	as = nil
 	for _, a := range info.Data.Dash.Audio {
-		as, err = m.AddNewAdaptationSetAudio(a.MimeType, true, a.StartWithSap, "und")
-		if err != nil {
-			return nil, err
+		if as == nil {
+			as, err = m.AddNewAdaptationSetAudio(a.MimeType, true, a.StartWithSap, "und")
+			if err != nil {
+				return nil, err
+			}
 		}
-		audio, err := as.AddNewRepresentationAudio(44100, a.Bandwidth, a.Codecs, fmt.Sprint(time.Now().UnixMicro()))
+		audio, err := as.AddNewRepresentationAudio(44100, a.Bandwidth, a.Codecs, strconv.Itoa(a.ID))
 		if err != nil {
 			return nil, err
 		}
@@ -465,24 +440,9 @@ func (c *Client) GetDashPGCURL(epid, cid uint64, conf ...GetDashVideoURLConfig) 
 		fnval    uint64 = 16
 		extQuery string
 	)
-	if config.Need4K {
-		fnval = 128
-		extQuery = "&fourk=1"
-	} else if config.Need8K {
-		fnval = 1024
-	}
 
 	if config.HDR {
 		fnval |= 64
-	}
-	if config.NeedDOLBY {
-		fnval |= 512
-	}
-	if config.NeedDOLBYAudio {
-		fnval |= 256
-	}
-	if config.NeedAV1 {
-		fnval |= 2048
 	}
 
 	var url string
@@ -514,11 +474,20 @@ func (c *Client) GetDashPGCURL(epid, cid uint64, conf ...GetDashVideoURLConfig) 
 
 	var as *mpd.AdaptationSet
 	for _, v := range info.Result.Dash.Video {
-		as, err = m.AddNewAdaptationSetVideo(v.MimeType, "progressive", true, v.StartWithSap)
-		if err != nil {
-			return nil, err
+		if as == nil {
+			as, err = m.AddNewAdaptationSetVideo(v.MimeType, "progressive", true, v.StartWithSap)
+			if err != nil {
+				return nil, err
+			}
 		}
-		video, err := as.AddNewRepresentationVideo(v.Bandwidth, v.Codecs, fmt.Sprint(time.Now().UnixMicro()), v.FrameRate, v.Width, v.Height)
+		if config.Hevc {
+			if !strings.Contains(v.Codecs, "hev1") {
+				continue
+			}
+		} else if strings.Contains(v.Codecs, "hev1") {
+			continue
+		}
+		video, err := as.AddNewRepresentationVideo(v.Bandwidth, v.Codecs, strconv.Itoa(v.ID), v.FrameRate, v.Width, v.Height)
 		if err != nil {
 			return nil, err
 		}
@@ -535,11 +504,13 @@ func (c *Client) GetDashPGCURL(epid, cid uint64, conf ...GetDashVideoURLConfig) 
 
 	as = nil
 	for _, a := range info.Result.Dash.Audio {
-		as, err = m.AddNewAdaptationSetAudio(a.MimeType, true, a.StartWithSap, "und")
-		if err != nil {
-			return nil, err
+		if as == nil {
+			as, err = m.AddNewAdaptationSetAudio(a.MimeType, true, a.StartWithSap, "und")
+			if err != nil {
+				return nil, err
+			}
 		}
-		audio, err := as.AddNewRepresentationAudio(44100, a.Bandwidth, a.Codecs, fmt.Sprint(time.Now().UnixMicro()))
+		audio, err := as.AddNewRepresentationAudio(44100, a.Bandwidth, a.Codecs, strconv.Itoa(a.ID))
 		if err != nil {
 			return nil, err
 		}

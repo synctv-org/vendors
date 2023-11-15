@@ -179,6 +179,7 @@ message GetDashVideoURLReq {
   uint64 aid = 2;
   string bvid = 3;
   uint64 cid = 4;
+  bool hevc = 5;
 }
 
 message GetDashVideoURLResp { string mpd = 1; }
@@ -209,6 +210,7 @@ message GetDashPGCURLReq {
   map<string, string> cookies = 1;
   uint64 epid = 2;
   uint64 cid = 3;
+  bool hevc = 5;
 }
 
 message GetDashPGCURLResp { string mpd = 1; }
