@@ -99,6 +99,21 @@ func NewGRPCServer(
 			panic(err)
 		}
 		gopts = append(gopts, ggrpc.Endpoint(u))
+	} else {
+		// fix streamServerInterceptor panic(endpoint is nil)
+		var (
+			u   *url.URL
+			err error
+		)
+		if c.Grpc.Tls != nil {
+			u, err = url.Parse("grpcs://" + c.Grpc.Addr)
+		} else {
+			u, err = url.Parse("grpc://" + c.Grpc.Addr)
+		}
+		if err != nil {
+			panic(err)
+		}
+		gopts = append(gopts, ggrpc.Endpoint(u))
 	}
 
 	gs := ggrpc.NewServer(gopts...)
