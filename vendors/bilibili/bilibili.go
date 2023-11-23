@@ -904,10 +904,10 @@ type Nav struct {
 			TvDueDate          int    `json:"tv_due_date"`
 		} `json:"vip"`
 		Wallet struct {
-			Mid           int `json:"mid"`
-			BcoinBalance  int `json:"bcoin_balance"`
-			CouponBalance int `json:"coupon_balance"`
-			CouponDueTime int `json:"coupon_due_time"`
+			Mid           int     `json:"mid"`
+			BcoinBalance  float64 `json:"bcoin_balance"`
+			CouponBalance int     `json:"coupon_balance"`
+			CouponDueTime int     `json:"coupon_due_time"`
 		} `json:"wallet"`
 		HasShop        bool   `json:"has_shop"`
 		ShopURL        string `json:"shop_url"`
