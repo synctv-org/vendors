@@ -69,7 +69,7 @@ func TestGetDashVideoURL(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	m, err := c.GetDashVideoURL(0, "BV1y7411Q7Eq", 171776208)
+	m, _, err := c.GetDashVideoURL(0, "BV1y7411Q7Eq", 171776208)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -85,7 +85,7 @@ func TestGetDashVideoURLMPDFile(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	m, err := c.GetDashVideoURL(0, "BV1y7411Q7Eq", 171776208)
+	m, _, err := c.GetDashVideoURL(0, "BV1y7411Q7Eq", 171776208)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -101,7 +101,7 @@ func TestEditAndGetDashVideoURLMPDFile(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	m, err := c.GetDashVideoURL(0, "BV1y7411Q7Eq", 171776208)
+	m, _, err := c.GetDashVideoURL(0, "BV1y7411Q7Eq", 171776208)
 	if err != nil {
 		t.Fatal(err)
 	}

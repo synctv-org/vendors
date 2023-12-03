@@ -129,8 +129,7 @@ func (s *BilibiliService) GetDashVideoURL(ctx context.Context, req *pb.GetDashVi
 		return nil, err
 	}
 	opt := make([]bilibili.GetDashVideoURLConfig, 0)
-	opt = append(opt, bilibili.WithHevc(req.Hevc))
-	m, err := c.GetDashVideoURL(req.Aid, req.Bvid, req.Cid, opt...)
+	m, m2, err := c.GetDashVideoURL(req.Aid, req.Bvid, req.Cid, opt...)
 	if err != nil {
 		return nil, err
 	}
@@ -138,8 +137,13 @@ func (s *BilibiliService) GetDashVideoURL(ctx context.Context, req *pb.GetDashVi
 	if err != nil {
 		return nil, err
 	}
+	str2, err := m2.WriteToString()
+	if err != nil {
+		return nil, err
+	}
 	return &pb.GetDashVideoURLResp{
-		Mpd: str,
+		Mpd:     str,
+		HevcMpd: str2,
 	}, nil
 }
 
@@ -217,8 +221,7 @@ func (s *BilibiliService) GetDashPGCURL(ctx context.Context, req *pb.GetDashPGCU
 		return nil, err
 	}
 	opt := make([]bilibili.GetDashVideoURLConfig, 0)
-	opt = append(opt, bilibili.WithHevc(req.Hevc))
-	m, err := c.GetDashPGCURL(req.Epid, req.Cid, opt...)
+	m, m2, err := c.GetDashPGCURL(req.Epid, req.Cid, opt...)
 	if err != nil {
 		return nil, err
 	}
@@ -226,8 +229,13 @@ func (s *BilibiliService) GetDashPGCURL(ctx context.Context, req *pb.GetDashPGCU
 	if err != nil {
 		return nil, err
 	}
+	str2, err := m2.WriteToString()
+	if err != nil {
+		return nil, err
+	}
 	return &pb.GetDashPGCURLResp{
-		Mpd: str,
+		Mpd:     str,
+		HevcMpd: str2,
 	}, nil
 }
 

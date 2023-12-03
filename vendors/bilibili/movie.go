@@ -184,8 +184,7 @@ func (c *Client) GetVideoURL(aid uint64, bvid string, cid uint64, conf ...GetVid
 }
 
 type GetDashVideoURLConf struct {
-	HDR  bool
-	Hevc bool
+	HDR bool
 }
 
 type GetDashVideoURLConfig func(*GetDashVideoURLConf)
@@ -196,14 +195,8 @@ func WithHDR(hdr bool) GetDashVideoURLConfig {
 	}
 }
 
-func WithHevc(hevc bool) GetDashVideoURLConfig {
-	return func(c *GetDashVideoURLConf) {
-		c.Hevc = hevc
-	}
-}
-
 // https://github.com/SocialSisterYi/bilibili-API-collect/blob/master/docs/video/videostream_url.md
-func (c *Client) GetDashVideoURL(aid uint64, bvid string, cid uint64, conf ...GetDashVideoURLConfig) (*mpd.MPD, error) {
+func (c *Client) GetDashVideoURL(aid uint64, bvid string, cid uint64, conf ...GetDashVideoURLConfig) (*mpd.MPD, *mpd.MPD, error) {
 	config := &GetDashVideoURLConf{}
 	for _, v := range conf {
 		v(config)
@@ -224,80 +217,89 @@ func (c *Client) GetDashVideoURL(aid uint64, bvid string, cid uint64, conf ...Ge
 	} else if bvid != "" {
 		url = fmt.Sprintf("https://api.bilibili.com/x/player/wbi/playurl?bvid=%s&cid=%d&fnver=0&platform=pc&fnval=%d%s", bvid, cid, fnval, extQuery)
 	} else {
-		return nil, fmt.Errorf("aid and bvid are both empty")
+		return nil, nil, fmt.Errorf("aid and bvid are both empty")
 	}
 	req, err := c.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	defer resp.Body.Close()
 	info := dashResp{}
 	err = json.NewDecoder(resp.Body).Decode(&info)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	if info.Code != 0 {
-		return nil, errors.New(info.Message)
+		return nil, nil, errors.New(info.Message)
 	}
 	m := mpd.NewMPD(mpd.DASH_PROFILE_ONDEMAND, fmt.Sprintf("PT%.2fS", info.Data.Dash.Duration), fmt.Sprintf("PT%.2fS", info.Data.Dash.MinBufferTime))
-
-	var as *mpd.AdaptationSet
+	hevcM := mpd.NewMPD(mpd.DASH_PROFILE_ONDEMAND, fmt.Sprintf("PT%.2fS", info.Data.Dash.Duration), fmt.Sprintf("PT%.2fS", info.Data.Dash.MinBufferTime))
+	var as, mAs, hevcMAs *mpd.AdaptationSet
 	for _, v := range info.Data.Dash.Video {
 		if as == nil {
-			as, err = m.AddNewAdaptationSetVideo(v.MimeType, "progressive", true, v.StartWithSap)
+			mAs, err = m.AddNewAdaptationSetVideo(v.MimeType, "progressive", true, v.StartWithSap)
 			if err != nil {
-				return nil, err
+				return nil, nil, err
+			}
+			hevcMAs, err = hevcM.AddNewAdaptationSetVideo(v.MimeType, "progressive", true, v.StartWithSap)
+			if err != nil {
+				return nil, nil, err
 			}
 		}
-		if config.Hevc {
-			if !strings.Contains(v.Codecs, "hev1") {
-				continue
-			}
-		} else if strings.Contains(v.Codecs, "hev1") {
-			continue
+		if strings.Contains(v.Codecs, "hev1") {
+			as = hevcMAs
+		} else {
+			as = mAs
 		}
 		video, err := as.AddNewRepresentationVideo(v.Bandwidth, v.Codecs, strconv.Itoa(v.ID), v.FrameRate, v.Width, v.Height)
 		if err != nil {
-			return nil, err
+			return nil, nil, err
 		}
 		video.Sar = &v.Sar
 		err = video.AddNewBaseURL(v.BaseURL)
 		if err != nil {
-			return nil, err
+			return nil, nil, err
 		}
 		_, err = video.AddNewSegmentBase(v.SegmentBase.IndexRange, v.SegmentBase.Initialization)
 		if err != nil {
-			return nil, err
+			return nil, nil, err
 		}
 	}
 
-	as = nil
+	var ass []*mpd.AdaptationSet
 	for _, a := range info.Data.Dash.Audio {
-		if as == nil {
-			as, err = m.AddNewAdaptationSetAudio(a.MimeType, true, a.StartWithSap, "und")
+		if ass == nil {
+			mAs, err = m.AddNewAdaptationSetAudio(a.MimeType, true, a.StartWithSap, "und")
 			if err != nil {
-				return nil, err
+				return nil, nil, err
+			}
+			hevcMAs, err = hevcM.AddNewAdaptationSetAudio(a.MimeType, true, a.StartWithSap, "und")
+			if err != nil {
+				return nil, nil, err
+			}
+			ass = append(ass, mAs, hevcMAs)
+		}
+		for _, as := range ass {
+			audio, err := as.AddNewRepresentationAudio(44100, a.Bandwidth, a.Codecs, strconv.Itoa(a.ID))
+			if err != nil {
+				return nil, nil, err
+			}
+			audio.Sar = &a.Sar
+			err = audio.AddNewBaseURL(a.BaseURL)
+			if err != nil {
+				return nil, nil, err
+			}
+			_, err = audio.AddNewSegmentBase(a.SegmentBase.IndexRange, a.SegmentBase.Initialization)
+			if err != nil {
+				return nil, nil, err
 			}
 		}
-		audio, err := as.AddNewRepresentationAudio(44100, a.Bandwidth, a.Codecs, strconv.Itoa(a.ID))
-		if err != nil {
-			return nil, err
-		}
-		audio.Sar = &a.Sar
-		err = audio.AddNewBaseURL(a.BaseURL)
-		if err != nil {
-			return nil, err
-		}
-		_, err = audio.AddNewSegmentBase(a.SegmentBase.IndexRange, a.SegmentBase.Initialization)
-		if err != nil {
-			return nil, err
-		}
 	}
-	return m, nil
+	return m, nil, nil
 }
 
 type Subtitle struct {
@@ -430,7 +432,7 @@ func (c *Client) GetPGCURL(epid, cid uint64, conf ...GetVideoURLConfig) (*VideoU
 	}, nil
 }
 
-func (c *Client) GetDashPGCURL(epid, cid uint64, conf ...GetDashVideoURLConfig) (*mpd.MPD, error) {
+func (c *Client) GetDashPGCURL(epid, cid uint64, conf ...GetDashVideoURLConfig) (*mpd.MPD, *mpd.MPD, error) {
 	config := &GetDashVideoURLConf{}
 	for _, v := range conf {
 		v(config)
@@ -451,78 +453,87 @@ func (c *Client) GetDashPGCURL(epid, cid uint64, conf ...GetDashVideoURLConfig) 
 	} else if cid != 0 {
 		url = fmt.Sprintf("https://api.bilibili.com/pgc/player/web/playurl?cid=%d&fnval=%d%s", epid, fnval, extQuery)
 	} else {
-		return nil, fmt.Errorf("edId and season_id are both empty")
+		return nil, nil, fmt.Errorf("edId and season_id are both empty")
 	}
 	req, err := c.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	defer resp.Body.Close()
 	info := dashPGCResp{}
 	err = json.NewDecoder(resp.Body).Decode(&info)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	if info.Code != 0 {
-		return nil, errors.New(info.Message)
+		return nil, nil, errors.New(info.Message)
 	}
 	m := mpd.NewMPD(mpd.DASH_PROFILE_ONDEMAND, fmt.Sprintf("PT%.2fS", info.Result.Dash.Duration), fmt.Sprintf("PT%.2fS", info.Result.Dash.MinBufferTime))
-
-	var as *mpd.AdaptationSet
+	hevcM := mpd.NewMPD(mpd.DASH_PROFILE_ONDEMAND, fmt.Sprintf("PT%.2fS", info.Result.Dash.Duration), fmt.Sprintf("PT%.2fS", info.Result.Dash.MinBufferTime))
+	var as, mAs, hevcMAs *mpd.AdaptationSet
 	for _, v := range info.Result.Dash.Video {
 		if as == nil {
-			as, err = m.AddNewAdaptationSetVideo(v.MimeType, "progressive", true, v.StartWithSap)
+			mAs, err = m.AddNewAdaptationSetVideo(v.MimeType, "progressive", true, v.StartWithSap)
 			if err != nil {
-				return nil, err
+				return nil, nil, err
+			}
+			hevcMAs, err = hevcM.AddNewAdaptationSetVideo(v.MimeType, "progressive", true, v.StartWithSap)
+			if err != nil {
+				return nil, nil, err
 			}
 		}
-		if config.Hevc {
-			if !strings.Contains(v.Codecs, "hev1") {
-				continue
-			}
-		} else if strings.Contains(v.Codecs, "hev1") {
-			continue
+		if strings.Contains(v.Codecs, "hev1") {
+			as = hevcMAs
+		} else {
+			as = mAs
 		}
 		video, err := as.AddNewRepresentationVideo(v.Bandwidth, v.Codecs, strconv.Itoa(v.ID), v.FrameRate, v.Width, v.Height)
 		if err != nil {
-			return nil, err
+			return nil, nil, err
 		}
 		video.Sar = &v.Sar
 		err = video.AddNewBaseURL(v.BaseURL)
 		if err != nil {
-			return nil, err
+			return nil, nil, err
 		}
 		_, err = video.AddNewSegmentBase(v.SegmentBase.IndexRange, v.SegmentBase.Initialization)
 		if err != nil {
-			return nil, err
+			return nil, nil, err
 		}
 	}
 
-	as = nil
+	var ass []*mpd.AdaptationSet
 	for _, a := range info.Result.Dash.Audio {
-		if as == nil {
-			as, err = m.AddNewAdaptationSetAudio(a.MimeType, true, a.StartWithSap, "und")
+		if ass == nil {
+			mAs, err = m.AddNewAdaptationSetAudio(a.MimeType, true, a.StartWithSap, "und")
 			if err != nil {
-				return nil, err
+				return nil, nil, err
+			}
+			hevcMAs, err = m.AddNewAdaptationSetAudio(a.MimeType, true, a.StartWithSap, "und")
+			if err != nil {
+				return nil, nil, err
+			}
+			ass = append(ass, mAs, hevcMAs)
+		}
+		for _, as := range ass {
+			audio, err := as.AddNewRepresentationAudio(44100, a.Bandwidth, a.Codecs, strconv.Itoa(a.ID))
+			if err != nil {
+				return nil, nil, err
+			}
+			audio.Sar = &a.Sar
+			err = audio.AddNewBaseURL(a.BaseURL)
+			if err != nil {
+				return nil, nil, err
+			}
+			_, err = audio.AddNewSegmentBase(a.SegmentBase.IndexRange, a.SegmentBase.Initialization)
+			if err != nil {
+				return nil, nil, err
 			}
 		}
-		audio, err := as.AddNewRepresentationAudio(44100, a.Bandwidth, a.Codecs, strconv.Itoa(a.ID))
-		if err != nil {
-			return nil, err
-		}
-		audio.Sar = &a.Sar
-		err = audio.AddNewBaseURL(a.BaseURL)
-		if err != nil {
-			return nil, err
-		}
-		_, err = audio.AddNewSegmentBase(a.SegmentBase.IndexRange, a.SegmentBase.Initialization)
-		if err != nil {
-			return nil, err
-		}
 	}
-	return m, nil
+	return m, nil, nil
 }
