@@ -69,11 +69,16 @@ func TestGetDashVideoURL(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	m, _, err := c.GetDashVideoURL(0, "BV1y7411Q7Eq", 171776208)
+	m, m2, err := c.GetDashVideoURL(0, "BV1y7411Q7Eq", 171776208)
 	if err != nil {
 		t.Fatal(err)
 	}
 	for _, as := range m.GetCurrentPeriod().AdaptationSets {
+		for _, r := range as.Representations {
+			t.Log(r.BaseURL)
+		}
+	}
+	for _, as := range m2.GetCurrentPeriod().AdaptationSets {
 		for _, r := range as.Representations {
 			t.Log(r.BaseURL)
 		}

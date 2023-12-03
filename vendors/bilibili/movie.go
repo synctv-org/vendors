@@ -299,7 +299,7 @@ func (c *Client) GetDashVideoURL(aid uint64, bvid string, cid uint64, conf ...Ge
 			}
 		}
 	}
-	return m, nil, nil
+	return m, hevcM, nil
 }
 
 type Subtitle struct {
@@ -535,5 +535,5 @@ func (c *Client) GetDashPGCURL(epid, cid uint64, conf ...GetDashVideoURLConfig) 
 			}
 		}
 	}
-	return m, nil, nil
+	return m, hevcM, nil
 }
