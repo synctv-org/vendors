@@ -56,17 +56,22 @@ func (c *Client) NewRequest(method, path string, data any) (req *http.Request, e
 	if err != nil {
 		return nil, err
 	}
-	var body *bytes.Buffer
 	if data != nil {
-		body = new(bytes.Buffer)
+		body := new(bytes.Buffer)
 		if err := json.NewEncoder(body).Encode(data); err != nil {
 			return nil, err
 		}
+		req, err = http.NewRequestWithContext(c.ctx, method, result, body)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		req, err = http.NewRequestWithContext(c.ctx, method, result, nil)
+		if err != nil {
+			return nil, err
+		}
 	}
-	req, err = http.NewRequestWithContext(c.ctx, method, result, body)
-	if err != nil {
-		return nil, err
-	}
+
 	if c.token != "" {
 		req.Header.Set("Authorization", c.token)
 	}

@@ -15,6 +15,11 @@ service Alist {
       body : "*"
     };
   };
+  rpc Me(MeReq) returns (MeResp) {
+    option (google.api.http) = {
+      get : "/me"
+    };
+  };
   rpc FsGet(FsGetReq) returns (FsGetResp) {
     option (google.api.http) = {
       post : "/fs/get"
@@ -34,8 +39,6 @@ service Alist {
     };
   };
 }
-
-message Empty {}
 
 message LoginReq {
   string host = 1;
@@ -132,4 +135,21 @@ message FsOtherResp {
   string drive_id = 1;
   string file_id = 2;
   VideoPreviewPlayInfo video_preview_play_info = 3;
+}
+
+message MeReq {
+  string host = 1;
+  string token = 2;
+}
+
+message MeResp {
+  uint64 id = 1;
+  string username = 2;
+  string password = 3;
+  string base_path = 4;
+  uint64 role = 5;
+  bool disabled = 6;
+  uint64 permission = 7;
+  string sso_id = 8;
+  bool otp = 9;
 }

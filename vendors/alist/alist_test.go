@@ -67,3 +67,15 @@ func TestFsList(t *testing.T) {
 		t.Logf("path: %s, list: %+v", v.path, list)
 	}
 }
+
+func TestMe(t *testing.T) {
+	client, err := alist.NewClient("https://al.nn.ci/", "")
+	if err != nil {
+		t.Fatalf("NewClient error: %v", err)
+	}
+	me, err := client.Me()
+	if err != nil {
+		t.Fatalf("Me error: %v", err)
+	}
+	t.Logf("me: %+v", me)
+}

@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 
 const (
 	Alist_Login_FullMethodName   = "/api.alist.Alist/Login"
+	Alist_Me_FullMethodName      = "/api.alist.Alist/Me"
 	Alist_FsGet_FullMethodName   = "/api.alist.Alist/FsGet"
 	Alist_FsList_FullMethodName  = "/api.alist.Alist/FsList"
 	Alist_FsOther_FullMethodName = "/api.alist.Alist/FsOther"
@@ -30,6 +31,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AlistClient interface {
 	Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error)
+	Me(ctx context.Context, in *MeReq, opts ...grpc.CallOption) (*MeResp, error)
 	FsGet(ctx context.Context, in *FsGetReq, opts ...grpc.CallOption) (*FsGetResp, error)
 	FsList(ctx context.Context, in *FsListReq, opts ...grpc.CallOption) (*FsListResp, error)
 	FsOther(ctx context.Context, in *FsOtherReq, opts ...grpc.CallOption) (*FsOtherResp, error)
@@ -46,6 +48,15 @@ func NewAlistClient(cc grpc.ClientConnInterface) AlistClient {
 func (c *alistClient) Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error) {
 	out := new(LoginResp)
 	err := c.cc.Invoke(ctx, Alist_Login_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *alistClient) Me(ctx context.Context, in *MeReq, opts ...grpc.CallOption) (*MeResp, error) {
+	out := new(MeResp)
+	err := c.cc.Invoke(ctx, Alist_Me_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -84,6 +95,7 @@ func (c *alistClient) FsOther(ctx context.Context, in *FsOtherReq, opts ...grpc.
 // for forward compatibility
 type AlistServer interface {
 	Login(context.Context, *LoginReq) (*LoginResp, error)
+	Me(context.Context, *MeReq) (*MeResp, error)
 	FsGet(context.Context, *FsGetReq) (*FsGetResp, error)
 	FsList(context.Context, *FsListReq) (*FsListResp, error)
 	FsOther(context.Context, *FsOtherReq) (*FsOtherResp, error)
@@ -96,6 +108,9 @@ type UnimplementedAlistServer struct {
 
 func (UnimplementedAlistServer) Login(context.Context, *LoginReq) (*LoginResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
+}
+func (UnimplementedAlistServer) Me(context.Context, *MeReq) (*MeResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Me not implemented")
 }
 func (UnimplementedAlistServer) FsGet(context.Context, *FsGetReq) (*FsGetResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FsGet not implemented")
@@ -133,6 +148,24 @@ func _Alist_Login_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AlistServer).Login(ctx, req.(*LoginReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Alist_Me_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MeReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AlistServer).Me(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Alist_Me_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AlistServer).Me(ctx, req.(*MeReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -201,6 +234,10 @@ var Alist_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Login",
 			Handler:    _Alist_Login_Handler,
+		},
+		{
+			MethodName: "Me",
+			Handler:    _Alist_Me_Handler,
 		},
 		{
 			MethodName: "FsGet",

@@ -23,17 +23,20 @@ const OperationAlistFsGet = "/api.alist.Alist/FsGet"
 const OperationAlistFsList = "/api.alist.Alist/FsList"
 const OperationAlistFsOther = "/api.alist.Alist/FsOther"
 const OperationAlistLogin = "/api.alist.Alist/Login"
+const OperationAlistMe = "/api.alist.Alist/Me"
 
 type AlistHTTPServer interface {
 	FsGet(context.Context, *FsGetReq) (*FsGetResp, error)
 	FsList(context.Context, *FsListReq) (*FsListResp, error)
 	FsOther(context.Context, *FsOtherReq) (*FsOtherResp, error)
 	Login(context.Context, *LoginReq) (*LoginResp, error)
+	Me(context.Context, *MeReq) (*MeResp, error)
 }
 
 func RegisterAlistHTTPServer(s *http.Server, srv AlistHTTPServer) {
 	r := s.Route("/")
 	r.POST("/auth/login", _Alist_Login0_HTTP_Handler(srv))
+	r.GET("/me", _Alist_Me0_HTTP_Handler(srv))
 	r.POST("/fs/get", _Alist_FsGet0_HTTP_Handler(srv))
 	r.POST("/fs/list", _Alist_FsList0_HTTP_Handler(srv))
 	r.POST("/fs/other", _Alist_FsOther0_HTTP_Handler(srv))
@@ -57,6 +60,25 @@ func _Alist_Login0_HTTP_Handler(srv AlistHTTPServer) func(ctx http.Context) erro
 			return err
 		}
 		reply := out.(*LoginResp)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Alist_Me0_HTTP_Handler(srv AlistHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in MeReq
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationAlistMe)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.Me(ctx, req.(*MeReq))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*MeResp)
 		return ctx.Result(200, reply)
 	}
 }
@@ -132,6 +154,7 @@ type AlistHTTPClient interface {
 	FsList(ctx context.Context, req *FsListReq, opts ...http.CallOption) (rsp *FsListResp, err error)
 	FsOther(ctx context.Context, req *FsOtherReq, opts ...http.CallOption) (rsp *FsOtherResp, err error)
 	Login(ctx context.Context, req *LoginReq, opts ...http.CallOption) (rsp *LoginResp, err error)
+	Me(ctx context.Context, req *MeReq, opts ...http.CallOption) (rsp *MeResp, err error)
 }
 
 type AlistHTTPClientImpl struct {
@@ -188,6 +211,19 @@ func (c *AlistHTTPClientImpl) Login(ctx context.Context, in *LoginReq, opts ...h
 	opts = append(opts, http.Operation(OperationAlistLogin))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *AlistHTTPClientImpl) Me(ctx context.Context, in *MeReq, opts ...http.CallOption) (*MeResp, error) {
+	var out MeResp
+	pattern := "/me"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationAlistMe))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

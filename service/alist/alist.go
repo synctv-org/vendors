@@ -29,6 +29,28 @@ func (a *AlistService) Login(ctx context.Context, req *pb.LoginReq) (*pb.LoginRe
 	}, nil
 }
 
+func (a *AlistService) Me(ctx context.Context, req *pb.MeReq) (*pb.MeResp, error) {
+	cli, err := alist.NewClient(req.Host, req.Token, alist.WithContext(ctx))
+	if err != nil {
+		return nil, err
+	}
+	r, err := cli.Me()
+	if err != nil {
+		return nil, err
+	}
+	return &pb.MeResp{
+		Id:         r.ID,
+		Username:   r.Username,
+		Password:   r.Password,
+		BasePath:   r.BasePath,
+		Role:       r.Role,
+		Disabled:   r.Disabled,
+		Permission: r.Permission,
+		SsoId:      r.SsoID,
+		Otp:        r.Otp,
+	}, nil
+}
+
 func (a *AlistService) FsGet(ctx context.Context, req *pb.FsGetReq) (*pb.FsGetResp, error) {
 	cli, err := alist.NewClient(req.Host, req.Token, alist.WithContext(ctx))
 	if err != nil {

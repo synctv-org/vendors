@@ -128,3 +128,17 @@ type FsRemoveReq struct {
 }
 
 type FsRemoveResp = AlistResp[any]
+
+type MeResp = AlistResp[meResp]
+
+type meResp struct {
+	ID         uint64 `json:"id"`
+	Username   string `json:"username"`
+	Password   string `json:"password"`
+	BasePath   string `json:"base_path"`
+	Role       uint64 `json:"role"`
+	Disabled   bool   `json:"disabled"`
+	Permission uint64 `json:"permission"`
+	SsoID      string `json:"sso_id"`
+	Otp        bool   `json:"otp"`
+}

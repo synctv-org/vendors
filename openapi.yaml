@@ -318,6 +318,27 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.alist.FsOtherResp'
+    /me:
+        get:
+            tags:
+                - Alist
+            operationId: Alist_Me
+            parameters:
+                - name: host
+                  in: query
+                  schema:
+                    type: string
+                - name: token
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.alist.MeResp'
 components:
     schemas:
         api.alist.FsGetReq:
@@ -458,6 +479,27 @@ components:
             properties:
                 token:
                     type: string
+        api.alist.MeResp:
+            type: object
+            properties:
+                id:
+                    type: string
+                username:
+                    type: string
+                password:
+                    type: string
+                basePath:
+                    type: string
+                role:
+                    type: string
+                disabled:
+                    type: boolean
+                permission:
+                    type: string
+                ssoId:
+                    type: string
+                otp:
+                    type: boolean
         api.alist.VideoPreviewPlayInfo_LiveTranscodingSubtitleTaskList:
             type: object
             properties:
