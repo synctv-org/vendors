@@ -4,7 +4,7 @@ import (
 	"context"
 
 	pb "github.com/synctv-org/vendors/api/bilibili"
-	"github.com/synctv-org/vendors/internal/conf"
+	"github.com/synctv-org/vendors/conf"
 	"github.com/synctv-org/vendors/utils"
 	"github.com/synctv-org/vendors/vendors/bilibili"
 )

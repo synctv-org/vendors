@@ -3,7 +3,7 @@ package registry
 import (
 	"github.com/go-kratos/kratos/v2/registry"
 	"github.com/google/wire"
-	"github.com/synctv-org/vendors/internal/conf"
+	"github.com/synctv-org/vendors/conf"
 )
 
 var ProviderSet = wire.NewSet(NewRegistry)

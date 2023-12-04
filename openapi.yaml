@@ -3,7 +3,7 @@
 
 openapi: 3.0.3
 info:
-    title: Bilibili API
+    title: ""
     version: 0.0.1
 paths:
     /api/bilibili/get_dash_pgc_url:
@@ -246,8 +246,254 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.bilibili.UserInfoResp'
+    /auth/login:
+        post:
+            tags:
+                - Alist
+            operationId: Alist_Login
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.alist.LoginReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.alist.LoginResp'
+    /fs/get:
+        post:
+            tags:
+                - Alist
+            operationId: Alist_FsGet
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.alist.FsGetReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.alist.FsGetResp'
+    /fs/list:
+        post:
+            tags:
+                - Alist
+            operationId: Alist_FsList
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.alist.FsListReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.alist.FsListResp'
+    /fs/other:
+        post:
+            tags:
+                - Alist
+            operationId: Alist_FsOther
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.alist.FsOtherReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.alist.FsOtherResp'
 components:
     schemas:
+        api.alist.FsGetReq:
+            type: object
+            properties:
+                host:
+                    type: string
+                token:
+                    type: string
+                path:
+                    type: string
+                password:
+                    type: string
+        api.alist.FsGetResp:
+            type: object
+            properties:
+                name:
+                    type: string
+                size:
+                    type: string
+                isDir:
+                    type: boolean
+                modified:
+                    type: string
+                created:
+                    type: string
+                sign:
+                    type: string
+                thumb:
+                    type: string
+                type:
+                    type: string
+                hashinfo:
+                    type: string
+                rawUrl:
+                    type: string
+                readme:
+                    type: string
+                provider:
+                    type: string
+        api.alist.FsListReq:
+            type: object
+            properties:
+                host:
+                    type: string
+                token:
+                    type: string
+                path:
+                    type: string
+                password:
+                    type: string
+                page:
+                    type: string
+                perPage:
+                    type: string
+                refresh:
+                    type: boolean
+        api.alist.FsListResp:
+            type: object
+            properties:
+                content:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.alist.FsListResp_FsListContent'
+                total:
+                    type: string
+                readme:
+                    type: string
+                write:
+                    type: boolean
+                provider:
+                    type: string
+        api.alist.FsListResp_FsListContent:
+            type: object
+            properties:
+                name:
+                    type: string
+                size:
+                    type: string
+                isDir:
+                    type: boolean
+                modified:
+                    type: string
+                sign:
+                    type: string
+                thumb:
+                    type: string
+                type:
+                    type: string
+        api.alist.FsOtherReq:
+            type: object
+            properties:
+                host:
+                    type: string
+                token:
+                    type: string
+                path:
+                    type: string
+                method:
+                    type: string
+                password:
+                    type: string
+        api.alist.FsOtherResp:
+            type: object
+            properties:
+                driveId:
+                    type: string
+                fileId:
+                    type: string
+                videoPreviewPlayInfo:
+                    $ref: '#/components/schemas/api.alist.FsOtherResp_VideoPreviewPlayInfo'
+        api.alist.FsOtherResp_VideoPreviewPlayInfo:
+            type: object
+            properties:
+                category:
+                    type: string
+                liveTranscodingSubtitleTaskList:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.alist.VideoPreviewPlayInfo_LiveTranscodingSubtitleTaskList'
+                liveTranscodingTaskList:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.alist.VideoPreviewPlayInfo_LiveTranscodingTaskList'
+                meta:
+                    $ref: '#/components/schemas/api.alist.VideoPreviewPlayInfo_Meta'
+        api.alist.LoginReq:
+            type: object
+            properties:
+                host:
+                    type: string
+                username:
+                    type: string
+                password:
+                    type: string
+        api.alist.LoginResp:
+            type: object
+            properties:
+                token:
+                    type: string
+        api.alist.VideoPreviewPlayInfo_LiveTranscodingSubtitleTaskList:
+            type: object
+            properties:
+                language:
+                    type: string
+                status:
+                    type: string
+                url:
+                    type: string
+        api.alist.VideoPreviewPlayInfo_LiveTranscodingTaskList:
+            type: object
+            properties:
+                stage:
+                    type: string
+                status:
+                    type: string
+                templateHeight:
+                    type: string
+                templateId:
+                    type: string
+                templateName:
+                    type: string
+                templateWidth:
+                    type: string
+                url:
+                    type: string
+        api.alist.VideoPreviewPlayInfo_Meta:
+            type: object
+            properties:
+                duration:
+                    type: number
+                    format: double
+                height:
+                    type: string
+                width:
+                    type: string
         api.bilibili.GetDashPGCURLReq:
             type: object
             properties:
@@ -491,4 +737,5 @@ components:
                 url:
                     type: string
 tags:
+    - name: Alist
     - name: Bilibili

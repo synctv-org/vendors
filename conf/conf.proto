@@ -55,3 +55,13 @@ message BilibiliServer {
 message BilibiliConfig {}
 
 message Bilibili { BilibiliServer bilibili = 1; }
+
+message AlistConfig {}
+
+message AlistServer {
+  Server server = 1;
+  Registry registry = 2;
+  AlistConfig config = 3;
+}
+
+message Alist { AlistServer alist = 1; }

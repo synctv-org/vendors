@@ -9,7 +9,7 @@ package main
 import (
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/synctv-org/vendors/internal/conf"
+	"github.com/synctv-org/vendors/conf"
 	"github.com/synctv-org/vendors/internal/registry"
 	"github.com/synctv-org/vendors/internal/server/bilibili"
 	"github.com/synctv-org/vendors/service/bilibili"

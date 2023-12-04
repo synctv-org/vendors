@@ -3,7 +3,7 @@ package registry
 import (
 	"github.com/go-kratos/kratos/contrib/registry/etcd/v2"
 	"github.com/go-kratos/kratos/v2/registry"
-	"github.com/synctv-org/vendors/internal/conf"
+	"github.com/synctv-org/vendors/conf"
 	clientv3 "go.etcd.io/etcd/client/v3"
 )
 

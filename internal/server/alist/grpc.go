@@ -11,9 +11,9 @@ import (
 	"strings"
 
 	jwtv4 "github.com/golang-jwt/jwt/v4"
-	bili "github.com/synctv-org/vendors/api/bilibili"
+	bili "github.com/synctv-org/vendors/api/alist"
 	"github.com/synctv-org/vendors/conf"
-	"github.com/synctv-org/vendors/service/bilibili"
+	"github.com/synctv-org/vendors/service/alist"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 
@@ -27,7 +27,7 @@ import (
 
 func NewGRPCServer(
 	c *conf.Server,
-	bilibili *bilibili.BilibiliService,
+	alist *alist.AlistService,
 	logger log.Logger,
 ) *GrpcGatewayServer {
 	middlewares := []middleware.Middleware{recovery.Recovery()}
@@ -115,8 +115,8 @@ func NewGRPCServer(
 	}
 
 	gs := ggrpc.NewServer(gopts...)
-	bili.RegisterBilibiliServer(gs, bilibili)
-	bili.RegisterBilibiliHTTPServer(hs, bilibili)
+	bili.RegisterAlistServer(gs, alist)
+	bili.RegisterAlistHTTPServer(hs, alist)
 	return &GrpcGatewayServer{
 		gs: gs,
 		hs: hs,

@@ -1,7 +1,7 @@
 package server
 
 import (
-	"github.com/synctv-org/vendors/internal/conf"
+	"github.com/synctv-org/vendors/conf"
 	"github.com/synctv-org/vendors/service/bilibili"
 
 	"github.com/go-kratos/kratos/v2/log"

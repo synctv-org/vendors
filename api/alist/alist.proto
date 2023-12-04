@@ -1,0 +1,135 @@
+syntax = "proto3";
+
+package api.alist;
+
+option go_package = "github.com/synctv-org/vendors/api/alist;alist";
+option java_multiple_files = true;
+option java_package = "api.alist";
+
+import "google/api/annotations.proto";
+
+service Alist {
+  rpc Login(LoginReq) returns (LoginResp) {
+    option (google.api.http) = {
+      post : "/auth/login"
+      body : "*"
+    };
+  };
+  rpc FsGet(FsGetReq) returns (FsGetResp) {
+    option (google.api.http) = {
+      post : "/fs/get"
+      body : "*"
+    };
+  };
+  rpc FsList(FsListReq) returns (FsListResp) {
+    option (google.api.http) = {
+      post : "/fs/list"
+      body : "*"
+    };
+  };
+  rpc FsOther(FsOtherReq) returns (FsOtherResp) {
+    option (google.api.http) = {
+      post : "/fs/other"
+      body : "*"
+    };
+  };
+}
+
+message Empty {}
+
+message LoginReq {
+  string host = 1;
+  string username = 2;
+  string password = 3;
+}
+
+message LoginResp { string token = 1; }
+
+message FsGetReq {
+  string host = 1;
+  string token = 2;
+  string path = 3;
+  string password = 4;
+}
+
+message FsGetResp {
+  string name = 1;
+  uint64 size = 2;
+  bool is_dir = 3;
+  uint64 modified = 4;
+  uint64 created = 5;
+  string sign = 6;
+  string thumb = 7;
+  uint64 type = 8;
+  string hashinfo = 9;
+  string raw_url = 10;
+  string readme = 11;
+  string provider = 12;
+}
+
+message FsListReq {
+  string host = 1;
+  string token = 2;
+  string path = 3;
+  string password = 4;
+  uint64 page = 5;
+  uint64 per_page = 6;
+  bool refresh = 7;
+}
+
+message FsListResp {
+  message FsListContent {
+    string name = 1;
+    uint64 size = 2;
+    bool is_dir = 3;
+    uint64 modified = 4;
+    string sign = 6;
+    string thumb = 7;
+    uint64 type = 8;
+  }
+  repeated FsListContent content = 1;
+  uint64 total = 2;
+  string readme = 3;
+  bool write = 4;
+  string provider = 5;
+}
+
+message FsOtherReq {
+  string host = 1;
+  string token = 2;
+  string path = 3;
+  string method = 4;
+  string password = 5;
+}
+
+message FsOtherResp {
+  message VideoPreviewPlayInfo {
+    string category = 1;
+    message LiveTranscodingSubtitleTaskList {
+      string language = 1;
+      string status = 2;
+      string url = 3;
+    }
+    repeated LiveTranscodingSubtitleTaskList
+        live_transcoding_subtitle_task_list = 2;
+    message LiveTranscodingTaskList {
+      string stage = 1;
+      string status = 2;
+      uint64 template_height = 3;
+      string template_id = 4;
+      string template_name = 5;
+      uint64 template_width = 6;
+      string url = 7;
+    }
+    repeated LiveTranscodingTaskList live_transcoding_task_list = 3;
+    message Meta {
+      double duration = 1;
+      uint64 height = 2;
+      uint64 width = 3;
+    }
+    Meta meta = 4;
+  }
+  string drive_id = 1;
+  string file_id = 2;
+  VideoPreviewPlayInfo video_preview_play_info = 3;
+}

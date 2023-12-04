@@ -5,7 +5,7 @@ import (
 
 	consul "github.com/go-kratos/kratos/contrib/registry/consul/v2"
 	"github.com/hashicorp/consul/api"
-	"github.com/synctv-org/vendors/internal/conf"
+	"github.com/synctv-org/vendors/conf"
 )
 
 func newConsul(c *conf.Registry_Consul) registry.Registrar {

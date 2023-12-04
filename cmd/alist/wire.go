@@ -8,14 +8,14 @@ package main
 import (
 	"github.com/synctv-org/vendors/conf"
 	reg "github.com/synctv-org/vendors/internal/registry"
-	server "github.com/synctv-org/vendors/internal/server/bilibili"
-	"github.com/synctv-org/vendors/service/bilibili"
+	server "github.com/synctv-org/vendors/internal/server/alist"
+	"github.com/synctv-org/vendors/service/alist"
 
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
 )
 
-func wireApp(*conf.Server, *conf.Registry, *conf.BilibiliConfig, log.Logger) (*kratos.App, func(), error) {
-	panic(wire.Build(server.ProviderSet, bilibili.ProviderSet, reg.ProviderSet, newApp))
+func wireApp(*conf.Server, *conf.Registry, *conf.AlistConfig, log.Logger) (*kratos.App, func(), error) {
+	panic(wire.Build(server.ProviderSet, alist.ProviderSet, reg.ProviderSet, newApp))
 }
