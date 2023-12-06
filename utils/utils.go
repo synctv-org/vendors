@@ -7,15 +7,18 @@ const (
 )
 
 var (
-	noRedirectHttpClient = &http.Client{
-		CheckRedirect: func(req *http.Request, via []*http.Request) error {
-			return http.ErrUseLastResponse
-		},
-	}
+	noRedirectHttpClient = NoRedirectClient(&http.Client{})
 )
 
 func NoRedirectHttpClient() *http.Client {
 	return noRedirectHttpClient
+}
+
+func NoRedirectClient(client *http.Client) *http.Client {
+	client.CheckRedirect = func(req *http.Request, via []*http.Request) error {
+		return http.ErrUseLastResponse
+	}
+	return client
 }
 
 func MapToHttpCookies(m map[string]string) []*http.Cookie {

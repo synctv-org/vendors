@@ -51,8 +51,8 @@ func (c *Client) SetToken(token string) {
 	c.token = token
 }
 
-func (c *Client) NewRequest(method, path string, data any) (req *http.Request, err error) {
-	result, err := url.JoinPath(c.host, path)
+func (c *Client) NewRequest(method, relative string, data any) (req *http.Request, err error) {
+	result, err := url.JoinPath(c.host, relative)
 	if err != nil {
 		return nil, err
 	}
@@ -65,6 +65,7 @@ func (c *Client) NewRequest(method, path string, data any) (req *http.Request, e
 		if err != nil {
 			return nil, err
 		}
+		req.Header.Set("Content-Type", "application/json;charset=UTF-8")
 	} else {
 		req, err = http.NewRequestWithContext(c.ctx, method, result, nil)
 		if err != nil {
@@ -75,7 +76,6 @@ func (c *Client) NewRequest(method, path string, data any) (req *http.Request, e
 	if c.token != "" {
 		req.Header.Set("Authorization", c.token)
 	}
-	req.Header.Set("Content-Type", "application/json;charset=UTF-8")
 	req.Header.Set("Origin", c.host)
 	req.Header.Set("Referer", c.host)
 	return req, nil

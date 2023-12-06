@@ -38,3 +38,5 @@ bin/
 *.swp
 
 /configs
+
+*_init_test.go
