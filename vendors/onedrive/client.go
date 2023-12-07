@@ -61,8 +61,12 @@ func NewClient(clientID, clientSecret, redirectURL string, opt ...ClientOption) 
 	return &c
 }
 
+func (c *Client) Token() (*oauth2.Token, error) {
+	return c.tk.Token()
+}
+
 func (c *Client) HttpClient() (*http.Client, error) {
-	t, err := c.tk.Token()
+	t, err := c.Token()
 	if err != nil {
 		return nil, err
 	}
@@ -91,7 +95,7 @@ func (c *Client) NewRequest(method, relative string, data any) (req *http.Reques
 		if err != nil {
 			return nil, err
 		}
-		req.Header.Set("Content-Type", "application/json;charset=UTF-8")
+		req.Header.Set("Content-Type", "application/json")
 	} else {
 		req, err = http.NewRequestWithContext(c.ctx, method, result, nil)
 		if err != nil {

@@ -7,6 +7,7 @@ require (
 	github.com/go-kratos/kratos/contrib/registry/etcd/v2 v2.0.0-20231113102135-421dbc7dae0f
 	github.com/go-kratos/kratos/v2 v2.7.1
 	github.com/golang-jwt/jwt/v4 v4.5.0
+	github.com/google/uuid v1.4.0
 	github.com/google/wire v0.5.0
 	github.com/hashicorp/consul/api v1.26.1
 	github.com/json-iterator/go v1.1.12
@@ -33,7 +34,6 @@ require (
 	github.com/go-playground/form/v4 v4.2.1 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
-	github.com/google/uuid v1.4.0 // indirect
 	github.com/gorilla/mux v1.8.1 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
