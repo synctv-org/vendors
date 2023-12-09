@@ -126,3 +126,18 @@ func TestEditAndGetDashVideoURLMPDFile(t *testing.T) {
 	}
 	t.Log(s)
 }
+
+func TestGetSubtitles(t *testing.T) {
+	// need to login
+	c, err := bilibili.NewClient(nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	subs, err := c.GetSubtitles(0, "BV1sw411Q7dr", 1248205613)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, sub := range subs {
+		t.Log(sub)
+	}
+}

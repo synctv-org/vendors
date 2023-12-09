@@ -307,6 +307,7 @@ type Subtitle struct {
 	URL  string `json:"url"`
 }
 
+// https://api.bilibili.com/x/player/wbi/v2?bvid=BV1sw411Q7dr&cid=1248205613
 func (c *Client) GetSubtitles(aid uint64, bvid string, cid uint64) ([]*Subtitle, error) {
 	var url string
 	if aid != 0 {
@@ -379,6 +380,7 @@ func (c *Client) ParsePGCPage(epid, season_id uint64) (*VideoPageInfo, error) {
 
 	for i, v := range info.Result.Episodes {
 		r.VideoInfos[i] = &VideoInfo{
+			Bvid:       v.Bvid,
 			Epid:       v.EpID,
 			Name:       v.ShareCopy,
 			CoverImage: v.Cover,

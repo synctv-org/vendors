@@ -14,12 +14,12 @@ type buvid struct {
 	b3, b4 string
 }
 
-var buvidCache = refreshcache.NewRefreshCache[buvid](func() (buvid, error) {
+var buvidCache = refreshcache.NewRefreshCache[*buvid](func() (*buvid, error) {
 	b3, b4, err := newBuvid()
 	if err != nil {
-		return buvid{}, err
+		return nil, err
 	}
-	return buvid{
+	return &buvid{
 		b3: b3,
 		b4: b4,
 	}, nil
