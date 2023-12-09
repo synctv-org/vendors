@@ -444,7 +444,7 @@ type seasonInfo struct {
 			} `json:"badge_info"`
 			BadgeType int    `json:"badge_type"`
 			Bvid      string `json:"bvid"`
-			Cid       uint   `json:"cid"`
+			Cid       uint64 `json:"cid"`
 			Cover     string `json:"cover"`
 			Dimension struct {
 				Height int `json:"height"`

@@ -382,6 +382,7 @@ func (c *Client) ParsePGCPage(epid, season_id uint64) (*VideoPageInfo, error) {
 		r.VideoInfos[i] = &VideoInfo{
 			Bvid:       v.Bvid,
 			Epid:       v.EpID,
+			Cid:        v.Cid,
 			Name:       v.ShareCopy,
 			CoverImage: v.Cover,
 		}
