@@ -516,7 +516,7 @@ func (c *Client) GetDashPGCURL(epid, cid uint64, conf ...GetDashVideoURLConfig) 
 			if err != nil {
 				return nil, nil, err
 			}
-			hevcMAs, err = m.AddNewAdaptationSetAudio(a.MimeType, true, a.StartWithSap, "und")
+			hevcMAs, err = hevcM.AddNewAdaptationSetAudio(a.MimeType, true, a.StartWithSap, "und")
 			if err != nil {
 				return nil, nil, err
 			}
