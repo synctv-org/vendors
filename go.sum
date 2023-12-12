@@ -226,6 +226,8 @@ github.com/zijiren233/gencontainer v0.0.0-20231108115721-8d4bb333a5bc h1:uKhMt52
 github.com/zijiren233/gencontainer v0.0.0-20231108115721-8d4bb333a5bc/go.mod h1:V5oL7PrZxgisuLCblFWd89Jg99O8vM1n58llcxZ2hDY=
 github.com/zijiren233/gencontainer v0.0.0-20231211155903-104d264ea2a6 h1:JHXq5UhZSSPpBRsJ49XovUzy5+o8ssdSfT1NhCIMRo0=
 github.com/zijiren233/gencontainer v0.0.0-20231211155903-104d264ea2a6/go.mod h1:V5oL7PrZxgisuLCblFWd89Jg99O8vM1n58llcxZ2hDY=
+github.com/zijiren233/gencontainer v0.0.0-20231212054144-37b16bf11399 h1:3yWNkkPUIbSGXNvbzMu8eSS9apGGBsPvnVQVIIFUEsc=
+github.com/zijiren233/gencontainer v0.0.0-20231212054144-37b16bf11399/go.mod h1:V5oL7PrZxgisuLCblFWd89Jg99O8vM1n58llcxZ2hDY=
 go.etcd.io/etcd/api/v3 v3.5.10 h1:szRajuUUbLyppkhs9K6BRtjY37l66XQQmw7oZRANE4k=
 go.etcd.io/etcd/api/v3 v3.5.10/go.mod h1:TidfmT4Uycad3NM/o25fG3J07odo4GBB9hoxaodFCtI=
 go.etcd.io/etcd/api/v3 v3.5.11 h1:B54KwXbWDHyD3XYAwprxNzTe7vlhR69LuBgZnMVvS7E=
