@@ -33,3 +33,11 @@ func TestGetItem(t *testing.T) {
 	}
 	t.Logf("%+v", flr)
 }
+
+func TestMe(t *testing.T) {
+	flr, err := cli.Me()
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("%+v", flr)
+}

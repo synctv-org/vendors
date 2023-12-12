@@ -10,9 +10,10 @@ import (
 )
 
 type Client struct {
-	host string
-	ctx  context.Context
-	key  string
+	host   string
+	ctx    context.Context
+	key    string
+	userID string
 }
 
 type ClientOption func(*Client)
@@ -29,6 +30,12 @@ func WithKey(key string) ClientOption {
 	}
 }
 
+func WithUserID(userID string) ClientOption {
+	return func(c *Client) {
+		c.userID = userID
+	}
+}
+
 func NewClient(host string, opt ...ClientOption) *Client {
 	c := Client{
 		host: host,
@@ -42,6 +49,10 @@ func NewClient(host string, opt ...ClientOption) *Client {
 
 func (c *Client) SetKey(key string) {
 	c.key = key
+}
+
+func (c *Client) SetUserID(userID string) {
+	c.userID = userID
 }
 
 func (c *Client) NewRequest(method, relative string, data any, querys ...map[string]string) (req *http.Request, err error) {

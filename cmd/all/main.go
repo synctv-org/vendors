@@ -13,8 +13,6 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	"github.com/go-kratos/kratos/v2/registry"
-	"github.com/go-kratos/kratos/v2/transport"
-	"github.com/go-kratos/kratos/v2/transport/http"
 
 	_ "go.uber.org/automaxprocs"
 )
@@ -36,14 +34,7 @@ func init() {
 	flag.StringVar(&Name, "name", "", "server name")
 }
 
-func newApp(logger log.Logger, gs *utils.GrpcGatewayServer, hs *http.Server, r registry.Registrar) *kratos.App {
-	s := make([]transport.Server, 0, 2)
-	if gs != nil {
-		s = append(s, gs)
-	}
-	if hs != nil {
-		s = append(s, hs)
-	}
+func newApp(logger log.Logger, gs *utils.GrpcGatewayServer, r registry.Registrar) *kratos.App {
 	return kratos.New(
 		kratos.ID(id),
 		kratos.Name(Name),
@@ -51,7 +42,7 @@ func newApp(logger log.Logger, gs *utils.GrpcGatewayServer, hs *http.Server, r r
 		kratos.Metadata(map[string]string{}),
 		kratos.Logger(logger),
 		kratos.Server(
-			s...,
+			gs,
 		),
 		kratos.Registrar(r),
 	)
@@ -78,12 +69,12 @@ func main() {
 	if err := c.Load(); err != nil {
 		panic(err)
 	}
-	var bc conf.BilibiliServer
+	var bc conf.AllServer
 	if err := c.Scan(&bc); err != nil {
 		panic(err)
 	}
 
-	app, cleanup, err := wireApp(bc.Bilibili.Server, bc.Bilibili.Registry, bc.Bilibili.Config, logger)
+	app, cleanup, err := wireApp(bc.All.Server, bc.All.Registry, bc.All.Alist, bc.All.Bilibili, bc.All.Emby, logger)
 	if err != nil {
 		panic(err)
 	}

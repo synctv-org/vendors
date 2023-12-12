@@ -398,5 +398,65 @@ type MediaItem struct {
 
 type GetItemResp struct {
 	Items            []MediaItem `json:"Items"`
-	TotalRecordCount int         `json:"TotalRecordCount"`
+	TotalRecordCount uint64      `json:"TotalRecordCount"`
+}
+
+type MeResp struct {
+	Name                      string    `json:"Name"`
+	ServerID                  string    `json:"ServerId"`
+	Prefix                    string    `json:"Prefix"`
+	DateCreated               time.Time `json:"DateCreated"`
+	ID                        string    `json:"Id"`
+	HasPassword               bool      `json:"HasPassword"`
+	HasConfiguredPassword     bool      `json:"HasConfiguredPassword"`
+	HasConfiguredEasyPassword bool      `json:"HasConfiguredEasyPassword"`
+	LastLoginDate             time.Time `json:"LastLoginDate"`
+	LastActivityDate          time.Time `json:"LastActivityDate"`
+	Policy                    struct {
+		IsAdministrator                 bool   `json:"IsAdministrator"`
+		IsHidden                        bool   `json:"IsHidden"`
+		IsHiddenRemotely                bool   `json:"IsHiddenRemotely"`
+		IsHiddenFromUnusedDevices       bool   `json:"IsHiddenFromUnusedDevices"`
+		IsDisabled                      bool   `json:"IsDisabled"`
+		IsTagBlockingModeInclusive      bool   `json:"IsTagBlockingModeInclusive"`
+		EnableUserPreferenceAccess      bool   `json:"EnableUserPreferenceAccess"`
+		EnableRemoteControlOfOtherUsers bool   `json:"EnableRemoteControlOfOtherUsers"`
+		EnableSharedDeviceControl       bool   `json:"EnableSharedDeviceControl"`
+		EnableRemoteAccess              bool   `json:"EnableRemoteAccess"`
+		EnableLiveTvManagement          bool   `json:"EnableLiveTvManagement"`
+		EnableLiveTvAccess              bool   `json:"EnableLiveTvAccess"`
+		EnableMediaPlayback             bool   `json:"EnableMediaPlayback"`
+		EnableAudioPlaybackTranscoding  bool   `json:"EnableAudioPlaybackTranscoding"`
+		EnableVideoPlaybackTranscoding  bool   `json:"EnableVideoPlaybackTranscoding"`
+		EnablePlaybackRemuxing          bool   `json:"EnablePlaybackRemuxing"`
+		EnableContentDeletion           bool   `json:"EnableContentDeletion"`
+		EnableContentDownloading        bool   `json:"EnableContentDownloading"`
+		EnableSubtitleDownloading       bool   `json:"EnableSubtitleDownloading"`
+		EnableSubtitleManagement        bool   `json:"EnableSubtitleManagement"`
+		EnableSyncTranscoding           bool   `json:"EnableSyncTranscoding"`
+		EnableMediaConversion           bool   `json:"EnableMediaConversion"`
+		EnableAllChannels               bool   `json:"EnableAllChannels"`
+		EnableAllFolders                bool   `json:"EnableAllFolders"`
+		InvalidLoginAttemptCount        int    `json:"InvalidLoginAttemptCount"`
+		EnablePublicSharing             bool   `json:"EnablePublicSharing"`
+		RemoteClientBitrateLimit        int    `json:"RemoteClientBitrateLimit"`
+		AuthenticationProviderID        string `json:"AuthenticationProviderId"`
+		SimultaneousStreamLimit         int    `json:"SimultaneousStreamLimit"`
+		EnableAllDevices                bool   `json:"EnableAllDevices"`
+	} `json:"Policy"`
+	Configuration struct {
+		PlayDefaultAudioTrack      bool     `json:"PlayDefaultAudioTrack"`
+		DisplayMissingEpisodes     bool     `json:"DisplayMissingEpisodes"`
+		SubtitleMode               string   `json:"SubtitleMode"`
+		EnableLocalPassword        bool     `json:"EnableLocalPassword"`
+		OrderedViews               []string `json:"OrderedViews"`
+		LatestItemsExcludes        []string `json:"LatestItemsExcludes"`
+		MyMediaExcludes            []string `json:"MyMediaExcludes"`
+		HidePlayedInLatest         bool     `json:"HidePlayedInLatest"`
+		RememberAudioSelections    bool     `json:"RememberAudioSelections"`
+		RememberSubtitleSelections bool     `json:"RememberSubtitleSelections"`
+		EnableNextEpisodeAutoPlay  bool     `json:"EnableNextEpisodeAutoPlay"`
+		ResumeRewindSeconds        int      `json:"ResumeRewindSeconds"`
+		IntroSkipMode              string   `json:"IntroSkipMode"`
+	} `json:"Configuration,omitempty"`
 }

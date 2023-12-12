@@ -1,21 +1,17 @@
 package server
 
 import (
-	"context"
 	"crypto/tls"
 	"crypto/x509"
 	"fmt"
-	"net/http"
 	"net/url"
 	"os"
-	"strings"
 
 	jwtv4 "github.com/golang-jwt/jwt/v4"
-	bili "github.com/synctv-org/vendors/api/bilibili"
+	bilibiliApi "github.com/synctv-org/vendors/api/bilibili"
 	"github.com/synctv-org/vendors/conf"
 	"github.com/synctv-org/vendors/service/bilibili"
-	"golang.org/x/net/http2"
-	"golang.org/x/net/http2/h2c"
+	"github.com/synctv-org/vendors/utils"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware"
@@ -29,7 +25,7 @@ func NewGRPCServer(
 	c *conf.Server,
 	bilibili *bilibili.BilibiliService,
 	logger log.Logger,
-) *GrpcGatewayServer {
+) *utils.GrpcGatewayServer {
 	middlewares := []middleware.Middleware{recovery.Recovery()}
 	if c.JwtSecret != "" {
 		jwtSecret := []byte(c.JwtSecret)
@@ -115,38 +111,7 @@ func NewGRPCServer(
 	}
 
 	gs := ggrpc.NewServer(gopts...)
-	bili.RegisterBilibiliServer(gs, bilibili)
-	bili.RegisterBilibiliHTTPServer(hs, bilibili)
-	return &GrpcGatewayServer{
-		gs: gs,
-		hs: hs,
-	}
-}
-
-func grpcHandlerFunc(gs *ggrpc.Server, other http.Handler) http.Handler {
-	return h2c.NewHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.ProtoMajor == 2 && strings.HasPrefix(r.Header.Get("Content-Type"), "application/grpc") {
-			gs.ServeHTTP(w, r)
-		} else {
-			other.ServeHTTP(w, r)
-		}
-	}), &http2.Server{})
-}
-
-type GrpcGatewayServer struct {
-	gs *ggrpc.Server
-	hs *ghttp.Server
-}
-
-func (s *GrpcGatewayServer) Start(ctx context.Context) error {
-	s.hs.Handler = grpcHandlerFunc(s.gs, s.hs.Handler)
-	return s.hs.Start(ctx)
-}
-
-func (s *GrpcGatewayServer) Stop(ctx context.Context) error {
-	return s.hs.Stop(ctx)
-}
-
-func (s *GrpcGatewayServer) Endpoint() (*url.URL, error) {
-	return s.hs.Endpoint()
+	bilibiliApi.RegisterBilibiliServer(gs, bilibili)
+	bilibiliApi.RegisterBilibiliHTTPServer(hs, bilibili)
+	return utils.NewGrpcGatewayServer(gs, hs)
 }

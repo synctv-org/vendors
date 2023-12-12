@@ -1,0 +1,93 @@
+syntax = "proto3";
+
+package api.emby;
+
+option go_package = "github.com/synctv-org/vendors/api/emby;emby";
+option java_multiple_files = true;
+option java_package = "api.emby";
+
+import "google/api/annotations.proto";
+
+service Emby {
+  rpc Login(LoginReq) returns (LoginResp) {
+    option (google.api.http) = {
+      post : "/emby/Login"
+      body : "*"
+    };
+  }
+
+  rpc Me(MeReq) returns (MeResp) {
+    option (google.api.http) = {
+      post : "/emby/Users/Me"
+      body : "*"
+    };
+  }
+
+  rpc GetItems(GetItemsReq) returns (GetItemsResp) {
+    option (google.api.http) = {
+      post : "/emby/Items"
+      body : "*"
+    };
+  }
+
+  rpc GetItem(GetItemReq) returns (Item) {
+    option (google.api.http) = {
+      post : "/emby/Items/{itemId}"
+      body : "*"
+    };
+  }
+}
+
+message Empty {}
+
+message LoginReq {
+  string host = 1;
+  string username = 2;
+  string password = 3;
+}
+
+message LoginResp {
+  string token = 1;
+  string userId = 2;
+}
+
+message MeReq {
+  string host = 1;
+  string token = 2;
+  string userId = 3;
+}
+
+message MeResp {
+  string id = 1;
+  string name = 2;
+  string serverId = 3;
+}
+
+message GetItemsReq {
+  string host = 1;
+  string token = 2;
+  string parentId = 3;
+}
+
+message Item {
+  string name = 1;
+  string id = 2;
+  string type = 3;
+  string parentId = 4;
+  string seriesName = 5;
+  string seriesId = 6;
+  string seasonName = 7;
+  string seasonId = 8;
+  bool isFolder = 9;
+}
+
+message GetItemsResp {
+  repeated Item items = 1;
+  uint64 totalRecordCount = 2;
+}
+
+message GetItemReq {
+  string host = 1;
+  string token = 2;
+  string itemId = 3;
+}

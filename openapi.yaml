@@ -264,6 +264,84 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.alist.LoginResp'
+    /emby/Items:
+        post:
+            tags:
+                - Emby
+            operationId: Emby_GetItems
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.emby.GetItemsReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.emby.GetItemsResp'
+    /emby/Items/{itemId}:
+        post:
+            tags:
+                - Emby
+            operationId: Emby_GetItem
+            parameters:
+                - name: itemId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.emby.GetItemReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.emby.Item'
+    /emby/Login:
+        post:
+            tags:
+                - Emby
+            operationId: Emby_Login
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.emby.LoginReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.emby.LoginResp'
+    /emby/Users/Me:
+        post:
+            tags:
+                - Emby
+            operationId: Emby_Me
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.emby.MeReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.emby.MeResp'
     /fs/get:
         post:
             tags:
@@ -778,6 +856,89 @@ components:
                     type: string
                 url:
                     type: string
+        api.emby.GetItemReq:
+            type: object
+            properties:
+                host:
+                    type: string
+                token:
+                    type: string
+                itemId:
+                    type: string
+        api.emby.GetItemsReq:
+            type: object
+            properties:
+                host:
+                    type: string
+                token:
+                    type: string
+                parentId:
+                    type: string
+        api.emby.GetItemsResp:
+            type: object
+            properties:
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.emby.Item'
+                totalRecordCount:
+                    type: string
+        api.emby.Item:
+            type: object
+            properties:
+                name:
+                    type: string
+                id:
+                    type: string
+                type:
+                    type: string
+                parentId:
+                    type: string
+                seriesName:
+                    type: string
+                seriesId:
+                    type: string
+                seasonName:
+                    type: string
+                seasonId:
+                    type: string
+                isFolder:
+                    type: boolean
+        api.emby.LoginReq:
+            type: object
+            properties:
+                host:
+                    type: string
+                username:
+                    type: string
+                password:
+                    type: string
+        api.emby.LoginResp:
+            type: object
+            properties:
+                token:
+                    type: string
+                userId:
+                    type: string
+        api.emby.MeReq:
+            type: object
+            properties:
+                host:
+                    type: string
+                token:
+                    type: string
+                userId:
+                    type: string
+        api.emby.MeResp:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
+                serverId:
+                    type: string
 tags:
     - name: Alist
     - name: Bilibili
+    - name: Emby

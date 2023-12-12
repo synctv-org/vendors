@@ -336,69 +336,6 @@ func (x *Server) GetJwtSecret() string {
 	return ""
 }
 
-type BilibiliServer struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Server   *Server         `protobuf:"bytes,1,opt,name=server,proto3" json:"server,omitempty"`
-	Registry *Registry       `protobuf:"bytes,2,opt,name=registry,proto3" json:"registry,omitempty"`
-	Config   *BilibiliConfig `protobuf:"bytes,3,opt,name=config,proto3" json:"config,omitempty"`
-}
-
-func (x *BilibiliServer) Reset() {
-	*x = BilibiliServer{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_conf_proto_msgTypes[5]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *BilibiliServer) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*BilibiliServer) ProtoMessage() {}
-
-func (x *BilibiliServer) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_proto_msgTypes[5]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use BilibiliServer.ProtoReflect.Descriptor instead.
-func (*BilibiliServer) Descriptor() ([]byte, []int) {
-	return file_conf_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *BilibiliServer) GetServer() *Server {
-	if x != nil {
-		return x.Server
-	}
-	return nil
-}
-
-func (x *BilibiliServer) GetRegistry() *Registry {
-	if x != nil {
-		return x.Registry
-	}
-	return nil
-}
-
-func (x *BilibiliServer) GetConfig() *BilibiliConfig {
-	if x != nil {
-		return x.Config
-	}
-	return nil
-}
-
 type BilibiliConfig struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -408,7 +345,7 @@ type BilibiliConfig struct {
 func (x *BilibiliConfig) Reset() {
 	*x = BilibiliConfig{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_conf_proto_msgTypes[6]
+		mi := &file_conf_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -421,7 +358,7 @@ func (x *BilibiliConfig) String() string {
 func (*BilibiliConfig) ProtoMessage() {}
 
 func (x *BilibiliConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_proto_msgTypes[6]
+	mi := &file_conf_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -434,34 +371,34 @@ func (x *BilibiliConfig) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BilibiliConfig.ProtoReflect.Descriptor instead.
 func (*BilibiliConfig) Descriptor() ([]byte, []int) {
-	return file_conf_proto_rawDescGZIP(), []int{6}
+	return file_conf_proto_rawDescGZIP(), []int{5}
 }
 
-type Bilibili struct {
+type BilibiliServer struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Bilibili *BilibiliServer `protobuf:"bytes,1,opt,name=bilibili,proto3" json:"bilibili,omitempty"`
+	Bilibili *BilibiliServer_Bilibili `protobuf:"bytes,1,opt,name=bilibili,proto3" json:"bilibili,omitempty"`
 }
 
-func (x *Bilibili) Reset() {
-	*x = Bilibili{}
+func (x *BilibiliServer) Reset() {
+	*x = BilibiliServer{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_conf_proto_msgTypes[7]
+		mi := &file_conf_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
 }
 
-func (x *Bilibili) String() string {
+func (x *BilibiliServer) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Bilibili) ProtoMessage() {}
+func (*BilibiliServer) ProtoMessage() {}
 
-func (x *Bilibili) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_proto_msgTypes[7]
+func (x *BilibiliServer) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -472,12 +409,12 @@ func (x *Bilibili) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Bilibili.ProtoReflect.Descriptor instead.
-func (*Bilibili) Descriptor() ([]byte, []int) {
-	return file_conf_proto_rawDescGZIP(), []int{7}
+// Deprecated: Use BilibiliServer.ProtoReflect.Descriptor instead.
+func (*BilibiliServer) Descriptor() ([]byte, []int) {
+	return file_conf_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *Bilibili) GetBilibili() *BilibiliServer {
+func (x *BilibiliServer) GetBilibili() *BilibiliServer_Bilibili {
 	if x != nil {
 		return x.Bilibili
 	}
@@ -493,7 +430,7 @@ type AlistConfig struct {
 func (x *AlistConfig) Reset() {
 	*x = AlistConfig{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_conf_proto_msgTypes[8]
+		mi := &file_conf_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -506,7 +443,7 @@ func (x *AlistConfig) String() string {
 func (*AlistConfig) ProtoMessage() {}
 
 func (x *AlistConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_proto_msgTypes[8]
+	mi := &file_conf_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -519,7 +456,7 @@ func (x *AlistConfig) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AlistConfig.ProtoReflect.Descriptor instead.
 func (*AlistConfig) Descriptor() ([]byte, []int) {
-	return file_conf_proto_rawDescGZIP(), []int{8}
+	return file_conf_proto_rawDescGZIP(), []int{7}
 }
 
 type AlistServer struct {
@@ -527,15 +464,13 @@ type AlistServer struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Server   *Server      `protobuf:"bytes,1,opt,name=server,proto3" json:"server,omitempty"`
-	Registry *Registry    `protobuf:"bytes,2,opt,name=registry,proto3" json:"registry,omitempty"`
-	Config   *AlistConfig `protobuf:"bytes,3,opt,name=config,proto3" json:"config,omitempty"`
+	Alist *AlistServer_Alist `protobuf:"bytes,1,opt,name=alist,proto3" json:"alist,omitempty"`
 }
 
 func (x *AlistServer) Reset() {
 	*x = AlistServer{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_conf_proto_msgTypes[9]
+		mi := &file_conf_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -548,7 +483,7 @@ func (x *AlistServer) String() string {
 func (*AlistServer) ProtoMessage() {}
 
 func (x *AlistServer) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_proto_msgTypes[9]
+	mi := &file_conf_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -561,40 +496,64 @@ func (x *AlistServer) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AlistServer.ProtoReflect.Descriptor instead.
 func (*AlistServer) Descriptor() ([]byte, []int) {
+	return file_conf_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *AlistServer) GetAlist() *AlistServer_Alist {
+	if x != nil {
+		return x.Alist
+	}
+	return nil
+}
+
+type EmbyConfig struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *EmbyConfig) Reset() {
+	*x = EmbyConfig{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_conf_proto_msgTypes[9]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *EmbyConfig) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EmbyConfig) ProtoMessage() {}
+
+func (x *EmbyConfig) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_proto_msgTypes[9]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EmbyConfig.ProtoReflect.Descriptor instead.
+func (*EmbyConfig) Descriptor() ([]byte, []int) {
 	return file_conf_proto_rawDescGZIP(), []int{9}
 }
 
-func (x *AlistServer) GetServer() *Server {
-	if x != nil {
-		return x.Server
-	}
-	return nil
-}
-
-func (x *AlistServer) GetRegistry() *Registry {
-	if x != nil {
-		return x.Registry
-	}
-	return nil
-}
-
-func (x *AlistServer) GetConfig() *AlistConfig {
-	if x != nil {
-		return x.Config
-	}
-	return nil
-}
-
-type Alist struct {
+type EmbyServer struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Alist *AlistServer `protobuf:"bytes,1,opt,name=alist,proto3" json:"alist,omitempty"`
+	Emby *EmbyServer_Emby `protobuf:"bytes,1,opt,name=emby,proto3" json:"emby,omitempty"`
 }
 
-func (x *Alist) Reset() {
-	*x = Alist{}
+func (x *EmbyServer) Reset() {
+	*x = EmbyServer{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_conf_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -602,13 +561,13 @@ func (x *Alist) Reset() {
 	}
 }
 
-func (x *Alist) String() string {
+func (x *EmbyServer) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Alist) ProtoMessage() {}
+func (*EmbyServer) ProtoMessage() {}
 
-func (x *Alist) ProtoReflect() protoreflect.Message {
+func (x *EmbyServer) ProtoReflect() protoreflect.Message {
 	mi := &file_conf_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -620,14 +579,61 @@ func (x *Alist) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Alist.ProtoReflect.Descriptor instead.
-func (*Alist) Descriptor() ([]byte, []int) {
+// Deprecated: Use EmbyServer.ProtoReflect.Descriptor instead.
+func (*EmbyServer) Descriptor() ([]byte, []int) {
 	return file_conf_proto_rawDescGZIP(), []int{10}
 }
 
-func (x *Alist) GetAlist() *AlistServer {
+func (x *EmbyServer) GetEmby() *EmbyServer_Emby {
 	if x != nil {
-		return x.Alist
+		return x.Emby
+	}
+	return nil
+}
+
+type AllServer struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	All *AllServer_All `protobuf:"bytes,1,opt,name=all,proto3" json:"all,omitempty"`
+}
+
+func (x *AllServer) Reset() {
+	*x = AllServer{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_conf_proto_msgTypes[11]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *AllServer) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AllServer) ProtoMessage() {}
+
+func (x *AllServer) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_proto_msgTypes[11]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AllServer.ProtoReflect.Descriptor instead.
+func (*AllServer) Descriptor() ([]byte, []int) {
+	return file_conf_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *AllServer) GetAll() *AllServer_All {
+	if x != nil {
+		return x.All
 	}
 	return nil
 }
@@ -646,7 +652,7 @@ type Registry_Consul struct {
 func (x *Registry_Consul) Reset() {
 	*x = Registry_Consul{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_conf_proto_msgTypes[11]
+		mi := &file_conf_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -659,7 +665,7 @@ func (x *Registry_Consul) String() string {
 func (*Registry_Consul) ProtoMessage() {}
 
 func (x *Registry_Consul) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_proto_msgTypes[11]
+	mi := &file_conf_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -717,7 +723,7 @@ type Registry_Etcd struct {
 func (x *Registry_Etcd) Reset() {
 	*x = Registry_Etcd{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_conf_proto_msgTypes[12]
+		mi := &file_conf_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -730,7 +736,7 @@ func (x *Registry_Etcd) String() string {
 func (*Registry_Etcd) ProtoMessage() {}
 
 func (x *Registry_Etcd) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_proto_msgTypes[12]
+	mi := &file_conf_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -770,6 +776,274 @@ func (x *Registry_Etcd) GetPassword() string {
 func (x *Registry_Etcd) GetTimeout() *durationpb.Duration {
 	if x != nil {
 		return x.Timeout
+	}
+	return nil
+}
+
+type BilibiliServer_Bilibili struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Server   *Server         `protobuf:"bytes,1,opt,name=server,proto3" json:"server,omitempty"`
+	Registry *Registry       `protobuf:"bytes,2,opt,name=registry,proto3" json:"registry,omitempty"`
+	Config   *BilibiliConfig `protobuf:"bytes,3,opt,name=config,proto3" json:"config,omitempty"`
+}
+
+func (x *BilibiliServer_Bilibili) Reset() {
+	*x = BilibiliServer_Bilibili{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_conf_proto_msgTypes[14]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *BilibiliServer_Bilibili) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BilibiliServer_Bilibili) ProtoMessage() {}
+
+func (x *BilibiliServer_Bilibili) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_proto_msgTypes[14]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BilibiliServer_Bilibili.ProtoReflect.Descriptor instead.
+func (*BilibiliServer_Bilibili) Descriptor() ([]byte, []int) {
+	return file_conf_proto_rawDescGZIP(), []int{6, 0}
+}
+
+func (x *BilibiliServer_Bilibili) GetServer() *Server {
+	if x != nil {
+		return x.Server
+	}
+	return nil
+}
+
+func (x *BilibiliServer_Bilibili) GetRegistry() *Registry {
+	if x != nil {
+		return x.Registry
+	}
+	return nil
+}
+
+func (x *BilibiliServer_Bilibili) GetConfig() *BilibiliConfig {
+	if x != nil {
+		return x.Config
+	}
+	return nil
+}
+
+type AlistServer_Alist struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Server   *Server      `protobuf:"bytes,1,opt,name=server,proto3" json:"server,omitempty"`
+	Registry *Registry    `protobuf:"bytes,2,opt,name=registry,proto3" json:"registry,omitempty"`
+	Config   *AlistConfig `protobuf:"bytes,3,opt,name=config,proto3" json:"config,omitempty"`
+}
+
+func (x *AlistServer_Alist) Reset() {
+	*x = AlistServer_Alist{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_conf_proto_msgTypes[15]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *AlistServer_Alist) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AlistServer_Alist) ProtoMessage() {}
+
+func (x *AlistServer_Alist) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_proto_msgTypes[15]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AlistServer_Alist.ProtoReflect.Descriptor instead.
+func (*AlistServer_Alist) Descriptor() ([]byte, []int) {
+	return file_conf_proto_rawDescGZIP(), []int{8, 0}
+}
+
+func (x *AlistServer_Alist) GetServer() *Server {
+	if x != nil {
+		return x.Server
+	}
+	return nil
+}
+
+func (x *AlistServer_Alist) GetRegistry() *Registry {
+	if x != nil {
+		return x.Registry
+	}
+	return nil
+}
+
+func (x *AlistServer_Alist) GetConfig() *AlistConfig {
+	if x != nil {
+		return x.Config
+	}
+	return nil
+}
+
+type EmbyServer_Emby struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Server   *Server     `protobuf:"bytes,1,opt,name=server,proto3" json:"server,omitempty"`
+	Registry *Registry   `protobuf:"bytes,2,opt,name=registry,proto3" json:"registry,omitempty"`
+	Config   *EmbyConfig `protobuf:"bytes,3,opt,name=config,proto3" json:"config,omitempty"`
+}
+
+func (x *EmbyServer_Emby) Reset() {
+	*x = EmbyServer_Emby{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_conf_proto_msgTypes[16]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *EmbyServer_Emby) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EmbyServer_Emby) ProtoMessage() {}
+
+func (x *EmbyServer_Emby) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_proto_msgTypes[16]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EmbyServer_Emby.ProtoReflect.Descriptor instead.
+func (*EmbyServer_Emby) Descriptor() ([]byte, []int) {
+	return file_conf_proto_rawDescGZIP(), []int{10, 0}
+}
+
+func (x *EmbyServer_Emby) GetServer() *Server {
+	if x != nil {
+		return x.Server
+	}
+	return nil
+}
+
+func (x *EmbyServer_Emby) GetRegistry() *Registry {
+	if x != nil {
+		return x.Registry
+	}
+	return nil
+}
+
+func (x *EmbyServer_Emby) GetConfig() *EmbyConfig {
+	if x != nil {
+		return x.Config
+	}
+	return nil
+}
+
+type AllServer_All struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Server   *Server         `protobuf:"bytes,1,opt,name=server,proto3" json:"server,omitempty"`
+	Registry *Registry       `protobuf:"bytes,2,opt,name=registry,proto3" json:"registry,omitempty"`
+	Bilibili *BilibiliConfig `protobuf:"bytes,3,opt,name=bilibili,proto3" json:"bilibili,omitempty"`
+	Alist    *AlistConfig    `protobuf:"bytes,4,opt,name=alist,proto3" json:"alist,omitempty"`
+	Emby     *EmbyConfig     `protobuf:"bytes,5,opt,name=emby,proto3" json:"emby,omitempty"`
+}
+
+func (x *AllServer_All) Reset() {
+	*x = AllServer_All{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_conf_proto_msgTypes[17]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *AllServer_All) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AllServer_All) ProtoMessage() {}
+
+func (x *AllServer_All) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_proto_msgTypes[17]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AllServer_All.ProtoReflect.Descriptor instead.
+func (*AllServer_All) Descriptor() ([]byte, []int) {
+	return file_conf_proto_rawDescGZIP(), []int{11, 0}
+}
+
+func (x *AllServer_All) GetServer() *Server {
+	if x != nil {
+		return x.Server
+	}
+	return nil
+}
+
+func (x *AllServer_All) GetRegistry() *Registry {
+	if x != nil {
+		return x.Registry
+	}
+	return nil
+}
+
+func (x *AllServer_All) GetBilibili() *BilibiliConfig {
+	if x != nil {
+		return x.Bilibili
+	}
+	return nil
+}
+
+func (x *AllServer_All) GetAlist() *AlistConfig {
+	if x != nil {
+		return x.Alist
+	}
+	return nil
+}
+
+func (x *AllServer_All) GetEmby() *EmbyConfig {
+	if x != nil {
+		return x.Emby
 	}
 	return nil
 }
@@ -834,8 +1108,14 @@ var file_conf_proto_rawDesc = []byte{
 	0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x07, 0x74, 0x69, 0x6d, 0x65, 0x6f, 0x75,
 	0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x6a, 0x77, 0x74, 0x5f, 0x73, 0x65, 0x63, 0x72, 0x65, 0x74, 0x18,
 	0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x6a, 0x77, 0x74, 0x53, 0x65, 0x63, 0x72, 0x65, 0x74,
-	0x22, 0xa2, 0x01, 0x0a, 0x0e, 0x42, 0x69, 0x6c, 0x69, 0x62, 0x69, 0x6c, 0x69, 0x53, 0x65, 0x72,
-	0x76, 0x65, 0x72, 0x12, 0x2a, 0x0a, 0x06, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x18, 0x01, 0x20,
+	0x22, 0x10, 0x0a, 0x0e, 0x42, 0x69, 0x6c, 0x69, 0x62, 0x69, 0x6c, 0x69, 0x43, 0x6f, 0x6e, 0x66,
+	0x69, 0x67, 0x22, 0xf0, 0x01, 0x0a, 0x0e, 0x42, 0x69, 0x6c, 0x69, 0x62, 0x69, 0x6c, 0x69, 0x53,
+	0x65, 0x72, 0x76, 0x65, 0x72, 0x12, 0x3f, 0x0a, 0x08, 0x62, 0x69, 0x6c, 0x69, 0x62, 0x69, 0x6c,
+	0x69, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x6b, 0x72, 0x61, 0x74, 0x6f, 0x73,
+	0x2e, 0x61, 0x70, 0x69, 0x2e, 0x42, 0x69, 0x6c, 0x69, 0x62, 0x69, 0x6c, 0x69, 0x53, 0x65, 0x72,
+	0x76, 0x65, 0x72, 0x2e, 0x42, 0x69, 0x6c, 0x69, 0x62, 0x69, 0x6c, 0x69, 0x52, 0x08, 0x62, 0x69,
+	0x6c, 0x69, 0x62, 0x69, 0x6c, 0x69, 0x1a, 0x9c, 0x01, 0x0a, 0x08, 0x42, 0x69, 0x6c, 0x69, 0x62,
+	0x69, 0x6c, 0x69, 0x12, 0x2a, 0x0a, 0x06, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x18, 0x01, 0x20,
 	0x01, 0x28, 0x0b, 0x32, 0x12, 0x2e, 0x6b, 0x72, 0x61, 0x74, 0x6f, 0x73, 0x2e, 0x61, 0x70, 0x69,
 	0x2e, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x52, 0x06, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x12,
 	0x30, 0x0a, 0x08, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x18, 0x02, 0x20, 0x01, 0x28,
@@ -844,29 +1124,58 @@ var file_conf_proto_rawDesc = []byte{
 	0x79, 0x12, 0x32, 0x0a, 0x06, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x18, 0x03, 0x20, 0x01, 0x28,
 	0x0b, 0x32, 0x1a, 0x2e, 0x6b, 0x72, 0x61, 0x74, 0x6f, 0x73, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x42,
 	0x69, 0x6c, 0x69, 0x62, 0x69, 0x6c, 0x69, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x52, 0x06, 0x63,
-	0x6f, 0x6e, 0x66, 0x69, 0x67, 0x22, 0x10, 0x0a, 0x0e, 0x42, 0x69, 0x6c, 0x69, 0x62, 0x69, 0x6c,
-	0x69, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x22, 0x42, 0x0a, 0x08, 0x42, 0x69, 0x6c, 0x69, 0x62,
-	0x69, 0x6c, 0x69, 0x12, 0x36, 0x0a, 0x08, 0x62, 0x69, 0x6c, 0x69, 0x62, 0x69, 0x6c, 0x69, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x6b, 0x72, 0x61, 0x74, 0x6f, 0x73, 0x2e, 0x61,
-	0x70, 0x69, 0x2e, 0x42, 0x69, 0x6c, 0x69, 0x62, 0x69, 0x6c, 0x69, 0x53, 0x65, 0x72, 0x76, 0x65,
-	0x72, 0x52, 0x08, 0x62, 0x69, 0x6c, 0x69, 0x62, 0x69, 0x6c, 0x69, 0x22, 0x0d, 0x0a, 0x0b, 0x41,
-	0x6c, 0x69, 0x73, 0x74, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x22, 0x9c, 0x01, 0x0a, 0x0b, 0x41,
-	0x6c, 0x69, 0x73, 0x74, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x12, 0x2a, 0x0a, 0x06, 0x73, 0x65,
+	0x6f, 0x6e, 0x66, 0x69, 0x67, 0x22, 0x0d, 0x0a, 0x0b, 0x41, 0x6c, 0x69, 0x73, 0x74, 0x43, 0x6f,
+	0x6e, 0x66, 0x69, 0x67, 0x22, 0xdb, 0x01, 0x0a, 0x0b, 0x41, 0x6c, 0x69, 0x73, 0x74, 0x53, 0x65,
+	0x72, 0x76, 0x65, 0x72, 0x12, 0x33, 0x0a, 0x05, 0x61, 0x6c, 0x69, 0x73, 0x74, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x1d, 0x2e, 0x6b, 0x72, 0x61, 0x74, 0x6f, 0x73, 0x2e, 0x61, 0x70, 0x69,
+	0x2e, 0x41, 0x6c, 0x69, 0x73, 0x74, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2e, 0x41, 0x6c, 0x69,
+	0x73, 0x74, 0x52, 0x05, 0x61, 0x6c, 0x69, 0x73, 0x74, 0x1a, 0x96, 0x01, 0x0a, 0x05, 0x41, 0x6c,
+	0x69, 0x73, 0x74, 0x12, 0x2a, 0x0a, 0x06, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x12, 0x2e, 0x6b, 0x72, 0x61, 0x74, 0x6f, 0x73, 0x2e, 0x61, 0x70, 0x69,
+	0x2e, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x52, 0x06, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x12,
+	0x30, 0x0a, 0x08, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x14, 0x2e, 0x6b, 0x72, 0x61, 0x74, 0x6f, 0x73, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x52,
+	0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x52, 0x08, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72,
+	0x79, 0x12, 0x2f, 0x0a, 0x06, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x18, 0x03, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x17, 0x2e, 0x6b, 0x72, 0x61, 0x74, 0x6f, 0x73, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x41,
+	0x6c, 0x69, 0x73, 0x74, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x52, 0x06, 0x63, 0x6f, 0x6e, 0x66,
+	0x69, 0x67, 0x22, 0x0c, 0x0a, 0x0a, 0x45, 0x6d, 0x62, 0x79, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67,
+	0x22, 0xd4, 0x01, 0x0a, 0x0a, 0x45, 0x6d, 0x62, 0x79, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x12,
+	0x2f, 0x0a, 0x04, 0x65, 0x6d, 0x62, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1b, 0x2e,
+	0x6b, 0x72, 0x61, 0x74, 0x6f, 0x73, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x45, 0x6d, 0x62, 0x79, 0x53,
+	0x65, 0x72, 0x76, 0x65, 0x72, 0x2e, 0x45, 0x6d, 0x62, 0x79, 0x52, 0x04, 0x65, 0x6d, 0x62, 0x79,
+	0x1a, 0x94, 0x01, 0x0a, 0x04, 0x45, 0x6d, 0x62, 0x79, 0x12, 0x2a, 0x0a, 0x06, 0x73, 0x65, 0x72,
+	0x76, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x12, 0x2e, 0x6b, 0x72, 0x61, 0x74,
+	0x6f, 0x73, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x52, 0x06, 0x73,
+	0x65, 0x72, 0x76, 0x65, 0x72, 0x12, 0x30, 0x0a, 0x08, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72,
+	0x79, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x6b, 0x72, 0x61, 0x74, 0x6f, 0x73,
+	0x2e, 0x61, 0x70, 0x69, 0x2e, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x52, 0x08, 0x72,
+	0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x12, 0x2e, 0x0a, 0x06, 0x63, 0x6f, 0x6e, 0x66, 0x69,
+	0x67, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x16, 0x2e, 0x6b, 0x72, 0x61, 0x74, 0x6f, 0x73,
+	0x2e, 0x61, 0x70, 0x69, 0x2e, 0x45, 0x6d, 0x62, 0x79, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x52,
+	0x06, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x22, 0xb1, 0x02, 0x0a, 0x09, 0x41, 0x6c, 0x6c, 0x53,
+	0x65, 0x72, 0x76, 0x65, 0x72, 0x12, 0x2b, 0x0a, 0x03, 0x61, 0x6c, 0x6c, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x0b, 0x32, 0x19, 0x2e, 0x6b, 0x72, 0x61, 0x74, 0x6f, 0x73, 0x2e, 0x61, 0x70, 0x69, 0x2e,
+	0x41, 0x6c, 0x6c, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2e, 0x41, 0x6c, 0x6c, 0x52, 0x03, 0x61,
+	0x6c, 0x6c, 0x1a, 0xf6, 0x01, 0x0a, 0x03, 0x41, 0x6c, 0x6c, 0x12, 0x2a, 0x0a, 0x06, 0x73, 0x65,
 	0x72, 0x76, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x12, 0x2e, 0x6b, 0x72, 0x61,
 	0x74, 0x6f, 0x73, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x52, 0x06,
 	0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x12, 0x30, 0x0a, 0x08, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74,
 	0x72, 0x79, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x6b, 0x72, 0x61, 0x74, 0x6f,
 	0x73, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x52, 0x08,
-	0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x12, 0x2f, 0x0a, 0x06, 0x63, 0x6f, 0x6e, 0x66,
-	0x69, 0x67, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x17, 0x2e, 0x6b, 0x72, 0x61, 0x74, 0x6f,
-	0x73, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x41, 0x6c, 0x69, 0x73, 0x74, 0x43, 0x6f, 0x6e, 0x66, 0x69,
-	0x67, 0x52, 0x06, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x22, 0x36, 0x0a, 0x05, 0x41, 0x6c, 0x69,
-	0x73, 0x74, 0x12, 0x2d, 0x0a, 0x05, 0x61, 0x6c, 0x69, 0x73, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x0b, 0x32, 0x17, 0x2e, 0x6b, 0x72, 0x61, 0x74, 0x6f, 0x73, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x41,
-	0x6c, 0x69, 0x73, 0x74, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x52, 0x05, 0x61, 0x6c, 0x69, 0x73,
-	0x74, 0x42, 0x1c, 0x5a, 0x1a, 0x76, 0x65, 0x6e, 0x64, 0x6f, 0x72, 0x73, 0x2f, 0x69, 0x6e, 0x74,
-	0x65, 0x72, 0x6e, 0x61, 0x6c, 0x2f, 0x63, 0x6f, 0x6e, 0x66, 0x3b, 0x63, 0x6f, 0x6e, 0x66, 0x62,
-	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x12, 0x36, 0x0a, 0x08, 0x62, 0x69, 0x6c, 0x69,
+	0x62, 0x69, 0x6c, 0x69, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x6b, 0x72, 0x61,
+	0x74, 0x6f, 0x73, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x42, 0x69, 0x6c, 0x69, 0x62, 0x69, 0x6c, 0x69,
+	0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x52, 0x08, 0x62, 0x69, 0x6c, 0x69, 0x62, 0x69, 0x6c, 0x69,
+	0x12, 0x2d, 0x0a, 0x05, 0x61, 0x6c, 0x69, 0x73, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x17, 0x2e, 0x6b, 0x72, 0x61, 0x74, 0x6f, 0x73, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x41, 0x6c, 0x69,
+	0x73, 0x74, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x52, 0x05, 0x61, 0x6c, 0x69, 0x73, 0x74, 0x12,
+	0x2a, 0x0a, 0x04, 0x65, 0x6d, 0x62, 0x79, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x16, 0x2e,
+	0x6b, 0x72, 0x61, 0x74, 0x6f, 0x73, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x45, 0x6d, 0x62, 0x79, 0x43,
+	0x6f, 0x6e, 0x66, 0x69, 0x67, 0x52, 0x04, 0x65, 0x6d, 0x62, 0x79, 0x42, 0x1c, 0x5a, 0x1a, 0x76,
+	0x65, 0x6e, 0x64, 0x6f, 0x72, 0x73, 0x2f, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x6e, 0x61, 0x6c, 0x2f,
+	0x63, 0x6f, 0x6e, 0x66, 0x3b, 0x63, 0x6f, 0x6e, 0x66, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x33,
 }
 
 var (
@@ -881,46 +1190,61 @@ func file_conf_proto_rawDescGZIP() []byte {
 	return file_conf_proto_rawDescData
 }
 
-var file_conf_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
+var file_conf_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
 var file_conf_proto_goTypes = []interface{}{
-	(*Registry)(nil),            // 0: kratos.api.Registry
-	(*TLS)(nil),                 // 1: kratos.api.TLS
-	(*Web)(nil),                 // 2: kratos.api.Web
-	(*GRPC)(nil),                // 3: kratos.api.GRPC
-	(*Server)(nil),              // 4: kratos.api.Server
-	(*BilibiliServer)(nil),      // 5: kratos.api.BilibiliServer
-	(*BilibiliConfig)(nil),      // 6: kratos.api.BilibiliConfig
-	(*Bilibili)(nil),            // 7: kratos.api.Bilibili
-	(*AlistConfig)(nil),         // 8: kratos.api.AlistConfig
-	(*AlistServer)(nil),         // 9: kratos.api.AlistServer
-	(*Alist)(nil),               // 10: kratos.api.Alist
-	(*Registry_Consul)(nil),     // 11: kratos.api.Registry.Consul
-	(*Registry_Etcd)(nil),       // 12: kratos.api.Registry.Etcd
-	(*durationpb.Duration)(nil), // 13: google.protobuf.Duration
+	(*Registry)(nil),                // 0: kratos.api.Registry
+	(*TLS)(nil),                     // 1: kratos.api.TLS
+	(*Web)(nil),                     // 2: kratos.api.Web
+	(*GRPC)(nil),                    // 3: kratos.api.GRPC
+	(*Server)(nil),                  // 4: kratos.api.Server
+	(*BilibiliConfig)(nil),          // 5: kratos.api.BilibiliConfig
+	(*BilibiliServer)(nil),          // 6: kratos.api.BilibiliServer
+	(*AlistConfig)(nil),             // 7: kratos.api.AlistConfig
+	(*AlistServer)(nil),             // 8: kratos.api.AlistServer
+	(*EmbyConfig)(nil),              // 9: kratos.api.EmbyConfig
+	(*EmbyServer)(nil),              // 10: kratos.api.EmbyServer
+	(*AllServer)(nil),               // 11: kratos.api.AllServer
+	(*Registry_Consul)(nil),         // 12: kratos.api.Registry.Consul
+	(*Registry_Etcd)(nil),           // 13: kratos.api.Registry.Etcd
+	(*BilibiliServer_Bilibili)(nil), // 14: kratos.api.BilibiliServer.Bilibili
+	(*AlistServer_Alist)(nil),       // 15: kratos.api.AlistServer.Alist
+	(*EmbyServer_Emby)(nil),         // 16: kratos.api.EmbyServer.Emby
+	(*AllServer_All)(nil),           // 17: kratos.api.AllServer.All
+	(*durationpb.Duration)(nil),     // 18: google.protobuf.Duration
 }
 var file_conf_proto_depIdxs = []int32{
-	11, // 0: kratos.api.Registry.consul:type_name -> kratos.api.Registry.Consul
-	12, // 1: kratos.api.Registry.etcd:type_name -> kratos.api.Registry.Etcd
+	12, // 0: kratos.api.Registry.consul:type_name -> kratos.api.Registry.Consul
+	13, // 1: kratos.api.Registry.etcd:type_name -> kratos.api.Registry.Etcd
 	1,  // 2: kratos.api.Web.tls:type_name -> kratos.api.TLS
 	1,  // 3: kratos.api.GRPC.tls:type_name -> kratos.api.TLS
 	2,  // 4: kratos.api.Server.web:type_name -> kratos.api.Web
 	3,  // 5: kratos.api.Server.grpc:type_name -> kratos.api.GRPC
-	13, // 6: kratos.api.Server.timeout:type_name -> google.protobuf.Duration
-	4,  // 7: kratos.api.BilibiliServer.server:type_name -> kratos.api.Server
-	0,  // 8: kratos.api.BilibiliServer.registry:type_name -> kratos.api.Registry
-	6,  // 9: kratos.api.BilibiliServer.config:type_name -> kratos.api.BilibiliConfig
-	5,  // 10: kratos.api.Bilibili.bilibili:type_name -> kratos.api.BilibiliServer
-	4,  // 11: kratos.api.AlistServer.server:type_name -> kratos.api.Server
-	0,  // 12: kratos.api.AlistServer.registry:type_name -> kratos.api.Registry
-	8,  // 13: kratos.api.AlistServer.config:type_name -> kratos.api.AlistConfig
-	9,  // 14: kratos.api.Alist.alist:type_name -> kratos.api.AlistServer
-	13, // 15: kratos.api.Registry.Consul.timeout:type_name -> google.protobuf.Duration
-	13, // 16: kratos.api.Registry.Etcd.timeout:type_name -> google.protobuf.Duration
-	17, // [17:17] is the sub-list for method output_type
-	17, // [17:17] is the sub-list for method input_type
-	17, // [17:17] is the sub-list for extension type_name
-	17, // [17:17] is the sub-list for extension extendee
-	0,  // [0:17] is the sub-list for field type_name
+	18, // 6: kratos.api.Server.timeout:type_name -> google.protobuf.Duration
+	14, // 7: kratos.api.BilibiliServer.bilibili:type_name -> kratos.api.BilibiliServer.Bilibili
+	15, // 8: kratos.api.AlistServer.alist:type_name -> kratos.api.AlistServer.Alist
+	16, // 9: kratos.api.EmbyServer.emby:type_name -> kratos.api.EmbyServer.Emby
+	17, // 10: kratos.api.AllServer.all:type_name -> kratos.api.AllServer.All
+	18, // 11: kratos.api.Registry.Consul.timeout:type_name -> google.protobuf.Duration
+	18, // 12: kratos.api.Registry.Etcd.timeout:type_name -> google.protobuf.Duration
+	4,  // 13: kratos.api.BilibiliServer.Bilibili.server:type_name -> kratos.api.Server
+	0,  // 14: kratos.api.BilibiliServer.Bilibili.registry:type_name -> kratos.api.Registry
+	5,  // 15: kratos.api.BilibiliServer.Bilibili.config:type_name -> kratos.api.BilibiliConfig
+	4,  // 16: kratos.api.AlistServer.Alist.server:type_name -> kratos.api.Server
+	0,  // 17: kratos.api.AlistServer.Alist.registry:type_name -> kratos.api.Registry
+	7,  // 18: kratos.api.AlistServer.Alist.config:type_name -> kratos.api.AlistConfig
+	4,  // 19: kratos.api.EmbyServer.Emby.server:type_name -> kratos.api.Server
+	0,  // 20: kratos.api.EmbyServer.Emby.registry:type_name -> kratos.api.Registry
+	9,  // 21: kratos.api.EmbyServer.Emby.config:type_name -> kratos.api.EmbyConfig
+	4,  // 22: kratos.api.AllServer.All.server:type_name -> kratos.api.Server
+	0,  // 23: kratos.api.AllServer.All.registry:type_name -> kratos.api.Registry
+	5,  // 24: kratos.api.AllServer.All.bilibili:type_name -> kratos.api.BilibiliConfig
+	7,  // 25: kratos.api.AllServer.All.alist:type_name -> kratos.api.AlistConfig
+	9,  // 26: kratos.api.AllServer.All.emby:type_name -> kratos.api.EmbyConfig
+	27, // [27:27] is the sub-list for method output_type
+	27, // [27:27] is the sub-list for method input_type
+	27, // [27:27] is the sub-list for extension type_name
+	27, // [27:27] is the sub-list for extension extendee
+	0,  // [0:27] is the sub-list for field type_name
 }
 
 func init() { file_conf_proto_init() }
@@ -990,18 +1314,6 @@ func file_conf_proto_init() {
 			}
 		}
 		file_conf_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*BilibiliServer); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_conf_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*BilibiliConfig); i {
 			case 0:
 				return &v.state
@@ -1013,8 +1325,8 @@ func file_conf_proto_init() {
 				return nil
 			}
 		}
-		file_conf_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Bilibili); i {
+		file_conf_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*BilibiliServer); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1025,7 +1337,7 @@ func file_conf_proto_init() {
 				return nil
 			}
 		}
-		file_conf_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
+		file_conf_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*AlistConfig); i {
 			case 0:
 				return &v.state
@@ -1037,7 +1349,7 @@ func file_conf_proto_init() {
 				return nil
 			}
 		}
-		file_conf_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
+		file_conf_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*AlistServer); i {
 			case 0:
 				return &v.state
@@ -1049,8 +1361,20 @@ func file_conf_proto_init() {
 				return nil
 			}
 		}
+		file_conf_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*EmbyConfig); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 		file_conf_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Alist); i {
+			switch v := v.(*EmbyServer); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1062,7 +1386,7 @@ func file_conf_proto_init() {
 			}
 		}
 		file_conf_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Registry_Consul); i {
+			switch v := v.(*AllServer); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1074,7 +1398,67 @@ func file_conf_proto_init() {
 			}
 		}
 		file_conf_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Registry_Consul); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_conf_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Registry_Etcd); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_conf_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*BilibiliServer_Bilibili); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_conf_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*AlistServer_Alist); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_conf_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*EmbyServer_Emby); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_conf_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*AllServer_All); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1092,7 +1476,7 @@ func file_conf_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_conf_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   13,
+			NumMessages:   18,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
