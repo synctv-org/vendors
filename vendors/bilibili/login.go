@@ -178,7 +178,7 @@ const (
 )
 
 func NewSMS(ctx context.Context, tel, token, challenge, validate string) (captchaKey string, err error) {
-	b, err := getBuvidCookies()
+	b, err := getBuvidCookies(ctx)
 	if err != nil {
 		return "", err
 	}

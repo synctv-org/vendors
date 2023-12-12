@@ -30,19 +30,19 @@ func WithContext(ctx context.Context) ClientConfig {
 }
 
 func NewClient(cookies []*http.Cookie, conf ...ClientConfig) (*Client, error) {
-	b, err := getBuvidCookies()
-	if err != nil {
-		return nil, err
-	}
 	cli := &Client{
 		httpClient: http.DefaultClient,
 		cookies:    cookies,
 		ctx:        context.Background(),
-		buvid:      b,
 	}
 	for _, v := range conf {
 		v(cli)
 	}
+	b, err := getBuvidCookies(cli.ctx)
+	if err != nil {
+		return nil, err
+	}
+	cli.buvid = b
 	return cli, nil
 }
 
@@ -74,7 +74,7 @@ func (c *Client) NewRequest(method, url string, body io.Reader, conf ...RequestO
 		v(config)
 	}
 	if config.wbi {
-		url, err = signAndGenerateURL(url)
+		url, err = signAndGenerateURL(c.ctx, url)
 		if err != nil {
 			return nil, err
 		}

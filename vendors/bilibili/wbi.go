@@ -1,6 +1,7 @@
 package bilibili
 
 import (
+	"context"
 	"crypto/md5"
 	"encoding/hex"
 	"errors"
@@ -23,8 +24,8 @@ var (
 		61, 26, 17, 0, 1, 60, 51, 30, 4, 22, 25, 54, 21, 56, 59, 6, 63, 57, 62, 11,
 		36, 20, 34, 44, 52,
 	}
-	wbiCache = refreshcache.NewRefreshCache[key](func() (key, error) {
-		imgKey, subKey, err := getWbiKeys()
+	wbiCache = refreshcache.NewRefreshCache[key](func(ctx context.Context, args ...any) (key, error) {
+		imgKey, subKey, err := getWbiKeys(ctx)
 		if err != nil {
 			return key{}, err
 		}
@@ -36,12 +37,12 @@ type key struct {
 	imgKey, subKey string
 }
 
-func signAndGenerateURL(urlStr string) (string, error) {
+func signAndGenerateURL(ctx context.Context, urlStr string) (string, error) {
 	urlObj, err := url.Parse(urlStr)
 	if err != nil {
 		return "", err
 	}
-	key, err := wbiCache.Get()
+	key, err := wbiCache.Get(ctx)
 	if err != nil {
 		return "", err
 	}
@@ -103,8 +104,8 @@ func sanitizeString(s string) string {
 	return s
 }
 
-func getWbiKeys() (string, string, error) {
-	req, err := http.NewRequest(http.MethodGet, "https://api.bilibili.com/x/web-interface/nav", nil)
+func getWbiKeys(ctx context.Context) (string, string, error) {
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, "https://api.bilibili.com/x/web-interface/nav", nil)
 	if err != nil {
 		return "", "", err
 	}

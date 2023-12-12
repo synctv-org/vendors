@@ -214,6 +214,8 @@ github.com/zencoder/go-dash/v3 v3.0.3 h1:xqwGJ2fJCSArwONGx6sY26Z1lxQ7zTURoxdRjCp
 github.com/zencoder/go-dash/v3 v3.0.3/go.mod h1:30R5bKy1aUYY45yesjtZ9l8trNc2TwNqbS17WVQmCzk=
 github.com/zijiren233/gencontainer v0.0.0-20231108115721-8d4bb333a5bc h1:uKhMt523JSG72nIoFb2LZWLRtCH2JGWlKhIWez6ciwY=
 github.com/zijiren233/gencontainer v0.0.0-20231108115721-8d4bb333a5bc/go.mod h1:V5oL7PrZxgisuLCblFWd89Jg99O8vM1n58llcxZ2hDY=
+github.com/zijiren233/gencontainer v0.0.0-20231211155903-104d264ea2a6 h1:JHXq5UhZSSPpBRsJ49XovUzy5+o8ssdSfT1NhCIMRo0=
+github.com/zijiren233/gencontainer v0.0.0-20231211155903-104d264ea2a6/go.mod h1:V5oL7PrZxgisuLCblFWd89Jg99O8vM1n58llcxZ2hDY=
 go.etcd.io/etcd/api/v3 v3.5.10 h1:szRajuUUbLyppkhs9K6BRtjY37l66XQQmw7oZRANE4k=
 go.etcd.io/etcd/api/v3 v3.5.10/go.mod h1:TidfmT4Uycad3NM/o25fG3J07odo4GBB9hoxaodFCtI=
 go.etcd.io/etcd/client/pkg/v3 v3.5.10 h1:kfYIdQftBnbAq8pUWFXfpuuxFSKzlmM5cSn76JByiT0=

@@ -1,6 +1,7 @@
 package bilibili
 
 import (
+	"context"
 	"errors"
 	"net/http"
 	"time"
@@ -14,8 +15,8 @@ type buvid struct {
 	b3, b4 string
 }
 
-var buvidCache = refreshcache.NewRefreshCache[*buvid](func() (*buvid, error) {
-	b3, b4, err := newBuvid()
+var buvidCache = refreshcache.NewRefreshCache[*buvid](func(ctx context.Context, args ...any) (*buvid, error) {
+	b3, b4, err := newBuvid(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -25,8 +26,8 @@ var buvidCache = refreshcache.NewRefreshCache[*buvid](func() (*buvid, error) {
 	}, nil
 }, time.Hour)
 
-func getBuvidCookies() ([]*http.Cookie, error) {
-	buvid, err := buvidCache.Get()
+func getBuvidCookies(ctx context.Context) ([]*http.Cookie, error) {
+	buvid, err := buvidCache.Get(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -51,8 +52,8 @@ type spiResp struct {
 	Message string `json:"message"`
 }
 
-func newBuvid() (string, string, error) {
-	r, err := http.NewRequest(http.MethodGet, "https://api.bilibili.com/x/frontend/finger/spi", nil)
+func newBuvid(ctx context.Context) (string, string, error) {
+	r, err := http.NewRequestWithContext(ctx, http.MethodGet, "https://api.bilibili.com/x/frontend/finger/spi", nil)
 	if err != nil {
 		return "", "", err
 	}
