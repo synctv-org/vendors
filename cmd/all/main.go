@@ -5,7 +5,6 @@ import (
 	"os"
 
 	"github.com/synctv-org/vendors/conf"
-	"github.com/synctv-org/vendors/utils"
 
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/config"
@@ -13,6 +12,7 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	"github.com/go-kratos/kratos/v2/registry"
+	"github.com/go-kratos/kratos/v2/transport"
 
 	_ "go.uber.org/automaxprocs"
 )
@@ -34,7 +34,7 @@ func init() {
 	flag.StringVar(&Name, "name", "", "server name")
 }
 
-func newApp(logger log.Logger, gs *utils.GrpcGatewayServer, r registry.Registrar) *kratos.App {
+func newApp(logger log.Logger, gs transport.Server, r registry.Registrar) *kratos.App {
 	return kratos.New(
 		kratos.ID(id),
 		kratos.Name(Name),

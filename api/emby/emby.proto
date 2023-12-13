@@ -36,6 +36,20 @@ service Emby {
       body : "*"
     };
   }
+
+  rpc GetSystemInfo(Empty) returns (SystemInfoResp) {
+    option (google.api.http) = {
+      post : "/emby/System/Info"
+      body : "*"
+    };
+  }
+
+  rpc FsList(FsListReq) returns (FsListResp) {
+    option (google.api.http) = {
+      post : "/emby/FileSystem/Paths"
+      body : "*"
+    };
+  }
 }
 
 message Empty {}
@@ -90,4 +104,53 @@ message GetItemReq {
   string host = 1;
   string token = 2;
   string itemId = 3;
+}
+
+message SystemInfoResp {
+  string systemUpdateLevel = 1;
+  string operatingSystemDisplayName = 2;
+  string packageName = 3;
+  bool hasPendingRestart = 4;
+  bool isShuttingDown = 5;
+  bool supportsLibraryMonitor = 6;
+  int32 webSocketPortNumber = 7;
+  bool canSelfRestart = 8;
+  bool canSelfUpdate = 9;
+  bool canLaunchWebBrowser = 10;
+  string programDataPath = 11;
+  string itemsByNamePath = 12;
+  string cachePath = 13;
+  string logPath = 14;
+  string internalMetadataPath = 15;
+  string transcodingTempPath = 16;
+  int32 httpServerPortNumber = 17;
+  bool supportsHttps = 18;
+  int32 httpsPortNumber = 19;
+  bool hasUpdateAvailable = 20;
+  bool supportsAutoRunAtStartup = 21;
+  bool hardwareAccelerationRequiresPremiere = 22;
+  string localAddress = 23;
+  string wanAddress = 24;
+  string serverName = 25;
+  string version = 26;
+  string operatingSystem = 27;
+  string id = 28;
+}
+
+message FsListReq {
+  string host = 1;
+  string token = 2;
+  string path = 3;
+  uint64 startIndex = 4;
+  uint64 limit = 5;
+}
+
+message Path {
+  string name = 1;
+  string path = 2;
+}
+
+message FsListResp {
+  repeated Path paths = 1;
+  repeated Item items = 2;
 }

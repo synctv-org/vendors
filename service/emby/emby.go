@@ -2,6 +2,8 @@ package emby
 
 import (
 	"context"
+	"errors"
+	"strconv"
 
 	pb "github.com/synctv-org/vendors/api/emby"
 	"github.com/synctv-org/vendors/conf"
@@ -84,4 +86,79 @@ func (a *EmbyService) GetItem(ctx context.Context, req *pb.GetItemReq) (*pb.Item
 		SeriesName: r.SeriesName,
 		SeriesId:   r.SeriesId,
 	}, nil
+}
+
+func (a *EmbyService) FsList(ctx context.Context, req *pb.FsListReq) (*pb.FsListResp, error) {
+	cli := emby.NewClient(req.Host, emby.WithContext(ctx), emby.WithKey(req.Token))
+	opts := make([]emby.GetItemsOptionFunc, 0)
+	if req.StartIndex != 0 {
+		opts = append(opts, emby.WithStartIndex(req.StartIndex))
+	}
+	if req.Limit != 0 {
+		opts = append(opts, emby.WithLimit(req.Limit))
+	}
+	r, err := cli.GetItems(req.Path, opts...)
+	if err != nil {
+		return nil, err
+	}
+	var items []*pb.Item
+	for _, item := range r.Items {
+		items = append(items, &pb.Item{
+			Id:         item.Id,
+			Name:       item.Name,
+			Type:       item.Type,
+			IsFolder:   item.IsFolder,
+			ParentId:   item.ParentId,
+			SeasonName: item.SeasonName,
+			SeasonId:   item.SeasonId,
+			SeriesName: item.SeriesName,
+			SeriesId:   item.SeriesId,
+		})
+	}
+	paths, err := genPath(cli, req.Path)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.FsListResp{
+		Items: items,
+		Paths: paths,
+	}, nil
+}
+
+func genPath(cli *emby.Client, id string) ([]*pb.Path, error) {
+	var paths []*pb.Path
+	for {
+		if id == "1" || id == "" {
+			break
+		}
+		item, err := cli.GetItem(id)
+		if err != nil {
+			return nil, err
+		}
+		if !item.IsFolder {
+			return nil, errors.New("not a folder")
+		}
+		paths = append([]*pb.Path{
+			{
+				Name: item.Name,
+				Path: item.Id,
+			},
+		}, paths...)
+		switch item.Type {
+		case "Series", "Folder":
+			i, err := strconv.Atoi(item.ParentId)
+			if err != nil {
+				return nil, err
+			}
+			id = strconv.Itoa(i + 1)
+		default:
+			id = item.ParentId
+		}
+	}
+	return append([]*pb.Path{
+		{
+			Name: "Home",
+			Path: "1",
+		},
+	}, paths...), nil
 }

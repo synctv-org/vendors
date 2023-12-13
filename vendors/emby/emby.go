@@ -460,3 +460,44 @@ type MeResp struct {
 		IntroSkipMode              string   `json:"IntroSkipMode"`
 	} `json:"Configuration,omitempty"`
 }
+
+type SystemInfoResp struct {
+	SystemUpdateLevel                    string             `json:"SystemUpdateLevel"`
+	OperatingSystemDisplayName           string             `json:"OperatingSystemDisplayName"`
+	PackageName                          string             `json:"PackageName"`
+	HasPendingRestart                    bool               `json:"HasPendingRestart"`
+	IsShuttingDown                       bool               `json:"IsShuttingDown"`
+	SupportsLibraryMonitor               bool               `json:"SupportsLibraryMonitor"`
+	WebSocketPortNumber                  int32              `json:"WebSocketPortNumber"`
+	CompletedInstallations               []InstallationInfo `json:"CompletedInstallations"`
+	CanSelfRestart                       bool               `json:"CanSelfRestart"`
+	CanSelfUpdate                        bool               `json:"CanSelfUpdate"`
+	CanLaunchWebBrowser                  bool               `json:"CanLaunchWebBrowser"`
+	ProgramDataPath                      string             `json:"ProgramDataPath"`
+	ItemsByNamePath                      string             `json:"ItemsByNamePath"`
+	CachePath                            string             `json:"CachePath"`
+	LogPath                              string             `json:"LogPath"`
+	InternalMetadataPath                 string             `json:"InternalMetadataPath"`
+	TranscodingTempPath                  string             `json:"TranscodingTempPath"`
+	HttpServerPortNumber                 int32              `json:"HttpServerPortNumber"`
+	SupportsHttps                        bool               `json:"SupportsHttps"`
+	HttpsPortNumber                      int32              `json:"HttpsPortNumber"`
+	HasUpdateAvailable                   bool               `json:"HasUpdateAvailable"`
+	SupportsAutoRunAtStartup             bool               `json:"SupportsAutoRunAtStartup"`
+	HardwareAccelerationRequiresPremiere bool               `json:"HardwareAccelerationRequiresPremiere"`
+	LocalAddress                         string             `json:"LocalAddress"`
+	WanAddress                           string             `json:"WanAddress"`
+	ServerName                           string             `json:"ServerName"`
+	Version                              string             `json:"Version"`
+	OperatingSystem                      string             `json:"OperatingSystem"`
+	Id                                   string             `json:"Id"`
+}
+
+type InstallationInfo struct {
+	Id              string  `json:"Id"`
+	Name            string  `json:"Name"`
+	AssemblyGuid    string  `json:"AssemblyGuid"`
+	Version         string  `json:"Version"`
+	UpdateClass     string  `json:"UpdateClass"`
+	PercentComplete float64 `json:"PercentComplete,omitempty"`
+}

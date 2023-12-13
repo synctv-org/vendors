@@ -8,12 +8,8 @@ import (
 	"os"
 
 	jwtv4 "github.com/golang-jwt/jwt/v4"
-	alistApi "github.com/synctv-org/vendors/api/alist"
-	bilibiliApi "github.com/synctv-org/vendors/api/bilibili"
 	embyApi "github.com/synctv-org/vendors/api/emby"
 	"github.com/synctv-org/vendors/conf"
-	"github.com/synctv-org/vendors/service/alist"
-	"github.com/synctv-org/vendors/service/bilibili"
 	"github.com/synctv-org/vendors/service/emby"
 	"github.com/synctv-org/vendors/utils"
 
@@ -21,18 +17,15 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware"
 	"github.com/go-kratos/kratos/v2/middleware/auth/jwt"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
-	"github.com/go-kratos/kratos/v2/transport"
 	ggrpc "github.com/go-kratos/kratos/v2/transport/grpc"
 	ghttp "github.com/go-kratos/kratos/v2/transport/http"
 )
 
 func NewGRPCServer(
 	c *conf.Server,
-	bilibili *bilibili.BilibiliService,
-	alist *alist.AlistService,
 	emby *emby.EmbyService,
 	logger log.Logger,
-) transport.Server {
+) *utils.GrpcGatewayServer {
 	middlewares := []middleware.Middleware{recovery.Recovery()}
 	if c.JwtSecret != "" {
 		jwtSecret := []byte(c.JwtSecret)
@@ -118,10 +111,6 @@ func NewGRPCServer(
 	}
 
 	gs := ggrpc.NewServer(gopts...)
-	alistApi.RegisterAlistServer(gs, alist)
-	alistApi.RegisterAlistHTTPServer(hs, alist)
-	bilibiliApi.RegisterBilibiliServer(gs, bilibili)
-	bilibiliApi.RegisterBilibiliHTTPServer(hs, bilibili)
 	embyApi.RegisterEmbyServer(gs, emby)
 	embyApi.RegisterEmbyHTTPServer(hs, emby)
 	return utils.NewGrpcGatewayServer(gs, hs)

@@ -264,6 +264,24 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.alist.LoginResp'
+    /emby/FileSystem/Paths:
+        post:
+            tags:
+                - Emby
+            operationId: Emby_FsList
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.emby.FsListReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.emby.FsListResp'
     /emby/Items:
         post:
             tags:
@@ -324,6 +342,24 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.emby.LoginResp'
+    /emby/System/Info:
+        post:
+            tags:
+                - Emby
+            operationId: Emby_GetSystemInfo
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.emby.Empty'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.emby.SystemInfoResp'
     /emby/Users/Me:
         post:
             tags:
@@ -856,6 +892,33 @@ components:
                     type: string
                 url:
                     type: string
+        api.emby.Empty:
+            type: object
+            properties: {}
+        api.emby.FsListReq:
+            type: object
+            properties:
+                host:
+                    type: string
+                token:
+                    type: string
+                path:
+                    type: string
+                startIndex:
+                    type: string
+                limit:
+                    type: string
+        api.emby.FsListResp:
+            type: object
+            properties:
+                paths:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.emby.Path'
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.emby.Item'
         api.emby.GetItemReq:
             type: object
             properties:
@@ -937,6 +1000,75 @@ components:
                 name:
                     type: string
                 serverId:
+                    type: string
+        api.emby.Path:
+            type: object
+            properties:
+                name:
+                    type: string
+                path:
+                    type: string
+        api.emby.SystemInfoResp:
+            type: object
+            properties:
+                systemUpdateLevel:
+                    type: string
+                operatingSystemDisplayName:
+                    type: string
+                packageName:
+                    type: string
+                hasPendingRestart:
+                    type: boolean
+                isShuttingDown:
+                    type: boolean
+                supportsLibraryMonitor:
+                    type: boolean
+                webSocketPortNumber:
+                    type: integer
+                    format: int32
+                canSelfRestart:
+                    type: boolean
+                canSelfUpdate:
+                    type: boolean
+                canLaunchWebBrowser:
+                    type: boolean
+                programDataPath:
+                    type: string
+                itemsByNamePath:
+                    type: string
+                cachePath:
+                    type: string
+                logPath:
+                    type: string
+                internalMetadataPath:
+                    type: string
+                transcodingTempPath:
+                    type: string
+                httpServerPortNumber:
+                    type: integer
+                    format: int32
+                supportsHttps:
+                    type: boolean
+                httpsPortNumber:
+                    type: integer
+                    format: int32
+                hasUpdateAvailable:
+                    type: boolean
+                supportsAutoRunAtStartup:
+                    type: boolean
+                hardwareAccelerationRequiresPremiere:
+                    type: boolean
+                localAddress:
+                    type: string
+                wanAddress:
+                    type: string
+                serverName:
+                    type: string
+                version:
+                    type: string
+                operatingSystem:
+                    type: string
+                id:
                     type: string
 tags:
     - name: Alist

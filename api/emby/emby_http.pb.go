@@ -19,14 +19,18 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
+const OperationEmbyFsList = "/api.emby.Emby/FsList"
 const OperationEmbyGetItem = "/api.emby.Emby/GetItem"
 const OperationEmbyGetItems = "/api.emby.Emby/GetItems"
+const OperationEmbyGetSystemInfo = "/api.emby.Emby/GetSystemInfo"
 const OperationEmbyLogin = "/api.emby.Emby/Login"
 const OperationEmbyMe = "/api.emby.Emby/Me"
 
 type EmbyHTTPServer interface {
+	FsList(context.Context, *FsListReq) (*FsListResp, error)
 	GetItem(context.Context, *GetItemReq) (*Item, error)
 	GetItems(context.Context, *GetItemsReq) (*GetItemsResp, error)
+	GetSystemInfo(context.Context, *Empty) (*SystemInfoResp, error)
 	Login(context.Context, *LoginReq) (*LoginResp, error)
 	Me(context.Context, *MeReq) (*MeResp, error)
 }
@@ -37,6 +41,8 @@ func RegisterEmbyHTTPServer(s *http.Server, srv EmbyHTTPServer) {
 	r.POST("/emby/Users/Me", _Emby_Me1_HTTP_Handler(srv))
 	r.POST("/emby/Items", _Emby_GetItems0_HTTP_Handler(srv))
 	r.POST("/emby/Items/{itemId}", _Emby_GetItem0_HTTP_Handler(srv))
+	r.POST("/emby/System/Info", _Emby_GetSystemInfo0_HTTP_Handler(srv))
+	r.POST("/emby/FileSystem/Paths", _Emby_FsList1_HTTP_Handler(srv))
 }
 
 func _Emby_Login1_HTTP_Handler(srv EmbyHTTPServer) func(ctx http.Context) error {
@@ -130,9 +136,55 @@ func _Emby_GetItem0_HTTP_Handler(srv EmbyHTTPServer) func(ctx http.Context) erro
 	}
 }
 
+func _Emby_GetSystemInfo0_HTTP_Handler(srv EmbyHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in Empty
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationEmbyGetSystemInfo)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetSystemInfo(ctx, req.(*Empty))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*SystemInfoResp)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Emby_FsList1_HTTP_Handler(srv EmbyHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in FsListReq
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationEmbyFsList)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.FsList(ctx, req.(*FsListReq))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*FsListResp)
+		return ctx.Result(200, reply)
+	}
+}
+
 type EmbyHTTPClient interface {
+	FsList(ctx context.Context, req *FsListReq, opts ...http.CallOption) (rsp *FsListResp, err error)
 	GetItem(ctx context.Context, req *GetItemReq, opts ...http.CallOption) (rsp *Item, err error)
 	GetItems(ctx context.Context, req *GetItemsReq, opts ...http.CallOption) (rsp *GetItemsResp, err error)
+	GetSystemInfo(ctx context.Context, req *Empty, opts ...http.CallOption) (rsp *SystemInfoResp, err error)
 	Login(ctx context.Context, req *LoginReq, opts ...http.CallOption) (rsp *LoginResp, err error)
 	Me(ctx context.Context, req *MeReq, opts ...http.CallOption) (rsp *MeResp, err error)
 }
@@ -143,6 +195,19 @@ type EmbyHTTPClientImpl struct {
 
 func NewEmbyHTTPClient(client *http.Client) EmbyHTTPClient {
 	return &EmbyHTTPClientImpl{client}
+}
+
+func (c *EmbyHTTPClientImpl) FsList(ctx context.Context, in *FsListReq, opts ...http.CallOption) (*FsListResp, error) {
+	var out FsListResp
+	pattern := "/emby/FileSystem/Paths"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationEmbyFsList))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
 }
 
 func (c *EmbyHTTPClientImpl) GetItem(ctx context.Context, in *GetItemReq, opts ...http.CallOption) (*Item, error) {
@@ -163,6 +228,19 @@ func (c *EmbyHTTPClientImpl) GetItems(ctx context.Context, in *GetItemsReq, opts
 	pattern := "/emby/Items"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationEmbyGetItems))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *EmbyHTTPClientImpl) GetSystemInfo(ctx context.Context, in *Empty, opts ...http.CallOption) (*SystemInfoResp, error) {
+	var out SystemInfoResp
+	pattern := "/emby/System/Info"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationEmbyGetSystemInfo))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

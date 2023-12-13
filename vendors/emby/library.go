@@ -43,34 +43,32 @@ func (c *Client) GetItem(id string) (*MediaItem, error) {
 	return &fsGetResp.Items[0], nil
 }
 
-// visual path:
-// CollectionFolder:
-//
-//	1/{Id}
-//	Home/{Name}
-//
-// Series:
-//
-//	1/{ParentId}/{Id}
-//	Home/{GetItem(ParentId).Name}/{Name}
-//
-// Season:
-//
-//	1/{GetItem(SeriesId).ParentId}/{SeriesId}/{Id}
-//	Home/{GetItem(GetItem(SeriesId).ParentId).Name}/{SeriesName}/{Name}
-//
-// Episode:
-//
-//	1/{GetItem(SeriesId).ParentId}/{SeriesId}/{SeasonId}/{Id}
-//	Home/{GetItem(GetItem(SeriesId).ParentId).Name}/{SeriesName}/{SeasonName}/{Name}
-func (c *Client) GetItems(id string) (*GetItemResp, error) {
+type GetItemsOptionFunc func(map[string]string)
+
+func WithStartIndex(startIndex uint64) GetItemsOptionFunc {
+	return func(o map[string]string) {
+		o["StartIndex"] = fmt.Sprintf("%d", startIndex)
+	}
+}
+
+func WithLimit(limit uint64) GetItemsOptionFunc {
+	return func(o map[string]string) {
+		o["Limit"] = fmt.Sprintf("%d", limit)
+	}
+}
+
+func (c *Client) GetItems(id string, opt ...GetItemsOptionFunc) (*GetItemResp, error) {
 	if id == "" || id == "0" {
 		id = "1"
 	}
-	req, err := c.NewRequest(http.MethodGet, "/emby/Items", nil, map[string]string{
+	o := map[string]string{
 		"ParentId": id,
 		"Fields":   "MediaSources,ParentId",
-	})
+	}
+	for _, f := range opt {
+		f(o)
+	}
+	req, err := c.NewRequest(http.MethodGet, "/emby/Items", nil, o)
 	if err != nil {
 		return nil, err
 	}

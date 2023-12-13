@@ -234,8 +234,6 @@ github.com/yuin/goldmark v1.2.1/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9dec
 github.com/yuin/goldmark v1.4.13/go.mod h1:6yULJ656Px+3vBD8DxQVa3kxgyrAnzto9xy5taEt/CY=
 github.com/zencoder/go-dash/v3 v3.0.3 h1:xqwGJ2fJCSArwONGx6sY26Z1lxQ7zTURoxdRjCpuodM=
 github.com/zencoder/go-dash/v3 v3.0.3/go.mod h1:30R5bKy1aUYY45yesjtZ9l8trNc2TwNqbS17WVQmCzk=
-github.com/zijiren233/gencontainer v0.0.0-20231212054144-37b16bf11399 h1:3yWNkkPUIbSGXNvbzMu8eSS9apGGBsPvnVQVIIFUEsc=
-github.com/zijiren233/gencontainer v0.0.0-20231212054144-37b16bf11399/go.mod h1:V5oL7PrZxgisuLCblFWd89Jg99O8vM1n58llcxZ2hDY=
 github.com/zijiren233/gencontainer v0.0.0-20231213075414-f7f4c8261dca h1:mYxvu0DgfUFviM0GRqRIwC+nXBGZNV/WLnndTYGSwPA=
 github.com/zijiren233/gencontainer v0.0.0-20231213075414-f7f4c8261dca/go.mod h1:V5oL7PrZxgisuLCblFWd89Jg99O8vM1n58llcxZ2hDY=
 go.etcd.io/etcd/api/v3 v3.5.11 h1:B54KwXbWDHyD3XYAwprxNzTe7vlhR69LuBgZnMVvS7E=
