@@ -12,7 +12,7 @@ require (
 	github.com/hashicorp/consul/api v1.26.1
 	github.com/json-iterator/go v1.1.12
 	github.com/zencoder/go-dash/v3 v3.0.3
-	github.com/zijiren233/gencontainer v0.0.0-20231212054144-37b16bf11399
+	github.com/zijiren233/gencontainer v0.0.0-20231213075414-f7f4c8261dca
 	go.etcd.io/etcd/client/v3 v3.5.11
 	go.uber.org/automaxprocs v1.5.3
 	golang.org/x/net v0.19.0

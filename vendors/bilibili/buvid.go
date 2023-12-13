@@ -15,7 +15,7 @@ type buvid struct {
 	b3, b4 string
 }
 
-var buvidCache = refreshcache.NewRefreshCache[*buvid](func(ctx context.Context, args ...any) (*buvid, error) {
+var buvidCache = refreshcache.NewRefreshCache[*buvid](func(ctx context.Context, args ...struct{}) (*buvid, error) {
 	b3, b4, err := newBuvid(ctx)
 	if err != nil {
 		return nil, err

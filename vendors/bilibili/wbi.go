@@ -24,7 +24,7 @@ var (
 		61, 26, 17, 0, 1, 60, 51, 30, 4, 22, 25, 54, 21, 56, 59, 6, 63, 57, 62, 11,
 		36, 20, 34, 44, 52,
 	}
-	wbiCache = refreshcache.NewRefreshCache[key](func(ctx context.Context, args ...any) (key, error) {
+	wbiCache = refreshcache.NewRefreshCache[key](func(ctx context.Context, args ...struct{}) (key, error) {
 		imgKey, subKey, err := getWbiKeys(ctx)
 		if err != nil {
 			return key{}, err
