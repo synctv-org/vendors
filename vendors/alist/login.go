@@ -8,12 +8,33 @@ import (
 	json "github.com/json-iterator/go"
 )
 
-func Login(ctx context.Context, host string, data LoginReq) (string, error) {
+type LoginOptions struct {
+	Hashed bool
+}
+
+type LoginOpt func(*LoginOptions)
+
+func WithHashed() LoginOpt {
+	return func(o *LoginOptions) {
+		o.Hashed = true
+	}
+}
+
+func Login(ctx context.Context, host string, data LoginReq, opts ...LoginOpt) (string, error) {
+	var opt LoginOptions
+	for _, o := range opts {
+		o(&opt)
+	}
 	cli, err := NewClient(host, "", WithContext(ctx))
 	if err != nil {
 		return "", err
 	}
-	req, err := cli.NewRequest(http.MethodPost, "/api/auth/login", &data)
+	var req *http.Request
+	if opt.Hashed {
+		req, err = cli.NewRequest(http.MethodPost, "/api/auth/login/hash", &data)
+	} else {
+		req, err = cli.NewRequest(http.MethodPost, "/api/auth/login", &data)
+	}
 	if err != nil {
 		return "", err
 	}
@@ -33,8 +54,8 @@ func Login(ctx context.Context, host string, data LoginReq) (string, error) {
 	return r.Data.Token, nil
 }
 
-func (c *Client) Login(data LoginReq) error {
-	s, err := Login(c.ctx, c.host, data)
+func (c *Client) Login(data LoginReq, opts ...LoginOpt) error {
+	s, err := Login(c.ctx, c.host, data, opts...)
 	if err != nil {
 		return err
 	}

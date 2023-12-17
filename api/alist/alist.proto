@@ -44,6 +44,7 @@ message LoginReq {
   string host = 1;
   string username = 2;
   string password = 3;
+  bool hashed = 4;
 }
 
 message LoginResp { string token = 1; }

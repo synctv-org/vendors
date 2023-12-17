@@ -17,10 +17,14 @@ func NewAlistService(c *conf.AlistConfig) *AlistService {
 }
 
 func (a *AlistService) Login(ctx context.Context, req *pb.LoginReq) (*pb.LoginResp, error) {
+	opts := []alist.LoginOpt{}
+	if req.Hashed {
+		opts = append(opts, alist.WithHashed())
+	}
 	s, err := alist.Login(ctx, req.Host, alist.LoginReq{
 		Username: req.Username,
 		Password: req.Password,
-	})
+	}, opts...)
 	if err != nil {
 		return nil, err
 	}

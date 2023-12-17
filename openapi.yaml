@@ -588,6 +588,8 @@ components:
                     type: string
                 password:
                     type: string
+                hashed:
+                    type: boolean
         api.alist.LoginResp:
             type: object
             properties:
