@@ -30,7 +30,7 @@ type EmbyHTTPServer interface {
 	FsList(context.Context, *FsListReq) (*FsListResp, error)
 	GetItem(context.Context, *GetItemReq) (*Item, error)
 	GetItems(context.Context, *GetItemsReq) (*GetItemsResp, error)
-	GetSystemInfo(context.Context, *Empty) (*SystemInfoResp, error)
+	GetSystemInfo(context.Context, *SystemInfoReq) (*SystemInfoResp, error)
 	Login(context.Context, *LoginReq) (*LoginResp, error)
 	Me(context.Context, *MeReq) (*MeResp, error)
 }
@@ -138,7 +138,7 @@ func _Emby_GetItem0_HTTP_Handler(srv EmbyHTTPServer) func(ctx http.Context) erro
 
 func _Emby_GetSystemInfo0_HTTP_Handler(srv EmbyHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in Empty
+		var in SystemInfoReq
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
@@ -147,7 +147,7 @@ func _Emby_GetSystemInfo0_HTTP_Handler(srv EmbyHTTPServer) func(ctx http.Context
 		}
 		http.SetOperation(ctx, OperationEmbyGetSystemInfo)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.GetSystemInfo(ctx, req.(*Empty))
+			return srv.GetSystemInfo(ctx, req.(*SystemInfoReq))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -184,7 +184,7 @@ type EmbyHTTPClient interface {
 	FsList(ctx context.Context, req *FsListReq, opts ...http.CallOption) (rsp *FsListResp, err error)
 	GetItem(ctx context.Context, req *GetItemReq, opts ...http.CallOption) (rsp *Item, err error)
 	GetItems(ctx context.Context, req *GetItemsReq, opts ...http.CallOption) (rsp *GetItemsResp, err error)
-	GetSystemInfo(ctx context.Context, req *Empty, opts ...http.CallOption) (rsp *SystemInfoResp, err error)
+	GetSystemInfo(ctx context.Context, req *SystemInfoReq, opts ...http.CallOption) (rsp *SystemInfoResp, err error)
 	Login(ctx context.Context, req *LoginReq, opts ...http.CallOption) (rsp *LoginResp, err error)
 	Me(ctx context.Context, req *MeReq, opts ...http.CallOption) (rsp *MeResp, err error)
 }
@@ -236,7 +236,7 @@ func (c *EmbyHTTPClientImpl) GetItems(ctx context.Context, in *GetItemsReq, opts
 	return &out, err
 }
 
-func (c *EmbyHTTPClientImpl) GetSystemInfo(ctx context.Context, in *Empty, opts ...http.CallOption) (*SystemInfoResp, error) {
+func (c *EmbyHTTPClientImpl) GetSystemInfo(ctx context.Context, in *SystemInfoReq, opts ...http.CallOption) (*SystemInfoResp, error) {
 	var out SystemInfoResp
 	pattern := "/emby/System/Info"
 	path := binding.EncodeURL(pattern, in, false)

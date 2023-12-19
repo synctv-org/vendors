@@ -35,7 +35,7 @@ type EmbyClient interface {
 	Me(ctx context.Context, in *MeReq, opts ...grpc.CallOption) (*MeResp, error)
 	GetItems(ctx context.Context, in *GetItemsReq, opts ...grpc.CallOption) (*GetItemsResp, error)
 	GetItem(ctx context.Context, in *GetItemReq, opts ...grpc.CallOption) (*Item, error)
-	GetSystemInfo(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*SystemInfoResp, error)
+	GetSystemInfo(ctx context.Context, in *SystemInfoReq, opts ...grpc.CallOption) (*SystemInfoResp, error)
 	FsList(ctx context.Context, in *FsListReq, opts ...grpc.CallOption) (*FsListResp, error)
 }
 
@@ -83,7 +83,7 @@ func (c *embyClient) GetItem(ctx context.Context, in *GetItemReq, opts ...grpc.C
 	return out, nil
 }
 
-func (c *embyClient) GetSystemInfo(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*SystemInfoResp, error) {
+func (c *embyClient) GetSystemInfo(ctx context.Context, in *SystemInfoReq, opts ...grpc.CallOption) (*SystemInfoResp, error) {
 	out := new(SystemInfoResp)
 	err := c.cc.Invoke(ctx, Emby_GetSystemInfo_FullMethodName, in, out, opts...)
 	if err != nil {
@@ -109,7 +109,7 @@ type EmbyServer interface {
 	Me(context.Context, *MeReq) (*MeResp, error)
 	GetItems(context.Context, *GetItemsReq) (*GetItemsResp, error)
 	GetItem(context.Context, *GetItemReq) (*Item, error)
-	GetSystemInfo(context.Context, *Empty) (*SystemInfoResp, error)
+	GetSystemInfo(context.Context, *SystemInfoReq) (*SystemInfoResp, error)
 	FsList(context.Context, *FsListReq) (*FsListResp, error)
 	mustEmbedUnimplementedEmbyServer()
 }
@@ -130,7 +130,7 @@ func (UnimplementedEmbyServer) GetItems(context.Context, *GetItemsReq) (*GetItem
 func (UnimplementedEmbyServer) GetItem(context.Context, *GetItemReq) (*Item, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetItem not implemented")
 }
-func (UnimplementedEmbyServer) GetSystemInfo(context.Context, *Empty) (*SystemInfoResp, error) {
+func (UnimplementedEmbyServer) GetSystemInfo(context.Context, *SystemInfoReq) (*SystemInfoResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetSystemInfo not implemented")
 }
 func (UnimplementedEmbyServer) FsList(context.Context, *FsListReq) (*FsListResp, error) {
@@ -222,7 +222,7 @@ func _Emby_GetItem_Handler(srv interface{}, ctx context.Context, dec func(interf
 }
 
 func _Emby_GetSystemInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Empty)
+	in := new(SystemInfoReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -234,7 +234,7 @@ func _Emby_GetSystemInfo_Handler(srv interface{}, ctx context.Context, dec func(
 		FullMethod: Emby_GetSystemInfo_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(EmbyServer).GetSystemInfo(ctx, req.(*Empty))
+		return srv.(EmbyServer).GetSystemInfo(ctx, req.(*SystemInfoReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }

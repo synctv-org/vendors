@@ -162,3 +162,41 @@ func genPath(cli *emby.Client, id string) ([]*pb.Path, error) {
 		},
 	}, paths...), nil
 }
+
+func (a *EmbyService) GetSystemInfo(ctx context.Context, req *pb.SystemInfoReq) (*pb.SystemInfoResp, error) {
+	cli := emby.NewClient(req.Host, emby.WithContext(ctx), emby.WithKey(req.Token))
+	r, err := cli.SystemInfo()
+	if err != nil {
+		return nil, err
+	}
+	return &pb.SystemInfoResp{
+		SystemUpdateLevel:                    r.SystemUpdateLevel,
+		OperatingSystemDisplayName:           r.OperatingSystemDisplayName,
+		PackageName:                          r.PackageName,
+		HasPendingRestart:                    r.HasPendingRestart,
+		IsShuttingDown:                       r.IsShuttingDown,
+		SupportsLibraryMonitor:               r.SupportsLibraryMonitor,
+		WebSocketPortNumber:                  r.WebSocketPortNumber,
+		CanSelfRestart:                       r.CanSelfRestart,
+		CanSelfUpdate:                        r.CanSelfUpdate,
+		CanLaunchWebBrowser:                  r.CanLaunchWebBrowser,
+		ProgramDataPath:                      r.ProgramDataPath,
+		ItemsByNamePath:                      r.ItemsByNamePath,
+		CachePath:                            r.CachePath,
+		LogPath:                              r.LogPath,
+		InternalMetadataPath:                 r.InternalMetadataPath,
+		TranscodingTempPath:                  r.TranscodingTempPath,
+		HttpServerPortNumber:                 r.HttpServerPortNumber,
+		SupportsHttps:                        r.SupportsHttps,
+		HttpsPortNumber:                      r.HttpsPortNumber,
+		HasUpdateAvailable:                   r.HasUpdateAvailable,
+		SupportsAutoRunAtStartup:             r.SupportsAutoRunAtStartup,
+		HardwareAccelerationRequiresPremiere: r.HardwareAccelerationRequiresPremiere,
+		LocalAddress:                         r.LocalAddress,
+		WanAddress:                           r.WanAddress,
+		ServerName:                           r.ServerName,
+		Version:                              r.Version,
+		OperatingSystem:                      r.OperatingSystem,
+		Id:                                   r.Id,
+	}, nil
+}

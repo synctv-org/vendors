@@ -351,7 +351,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/api.emby.Empty'
+                            $ref: '#/components/schemas/api.emby.SystemInfoReq'
                 required: true
             responses:
                 "200":
@@ -894,9 +894,6 @@ components:
                     type: string
                 url:
                     type: string
-        api.emby.Empty:
-            type: object
-            properties: {}
         api.emby.FsListReq:
             type: object
             properties:
@@ -1009,6 +1006,13 @@ components:
                 name:
                     type: string
                 path:
+                    type: string
+        api.emby.SystemInfoReq:
+            type: object
+            properties:
+                host:
+                    type: string
+                token:
                     type: string
         api.emby.SystemInfoResp:
             type: object

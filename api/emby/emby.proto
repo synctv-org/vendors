@@ -37,7 +37,7 @@ service Emby {
     };
   }
 
-  rpc GetSystemInfo(Empty) returns (SystemInfoResp) {
+  rpc GetSystemInfo(SystemInfoReq) returns (SystemInfoResp) {
     option (google.api.http) = {
       post : "/emby/System/Info"
       body : "*"
@@ -51,8 +51,6 @@ service Emby {
     };
   }
 }
-
-message Empty {}
 
 message LoginReq {
   string host = 1;
@@ -104,6 +102,11 @@ message GetItemReq {
   string host = 1;
   string token = 2;
   string itemId = 3;
+}
+
+message SystemInfoReq {
+  string host = 1;
+  string token = 2;
 }
 
 message SystemInfoResp {
