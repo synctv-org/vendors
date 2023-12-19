@@ -81,6 +81,29 @@ message GetItemsReq {
   string parentId = 3;
 }
 
+message MediaStreamInfo {
+  string codec = 1;
+  string language = 2;
+  string type = 3;
+  string title = 4;
+  string displayTitle = 5;
+  string displayLanguage = 6;
+  bool isDefault = 7;
+  uint64 index = 8;
+  string protocol = 9;
+}
+
+message MediaSourceInfo {
+  string id = 1;
+  string name = 2;
+  string path = 3;
+  string container = 4;
+  string protocol = 5;
+  uint64 defaultSubtitleStreamIndex = 6;
+  uint64 defaultAudioStreamIndex = 7;
+  repeated MediaStreamInfo mediaStreamInfo = 8;
+}
+
 message Item {
   string name = 1;
   string id = 2;
@@ -91,6 +114,7 @@ message Item {
   string seasonName = 7;
   string seasonId = 8;
   bool isFolder = 9;
+  repeated MediaSourceInfo mediaSourceInfo = 10;
 }
 
 message GetItemsResp {

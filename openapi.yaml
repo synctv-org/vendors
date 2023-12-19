@@ -968,6 +968,10 @@ components:
                     type: string
                 isFolder:
                     type: boolean
+                mediaSourceInfo:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.emby.MediaSourceInfo'
         api.emby.LoginReq:
             type: object
             properties:
@@ -1001,6 +1005,48 @@ components:
                 name:
                     type: string
                 serverId:
+                    type: string
+        api.emby.MediaSourceInfo:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
+                path:
+                    type: string
+                container:
+                    type: string
+                protocol:
+                    type: string
+                defaultSubtitleStreamIndex:
+                    type: string
+                defaultAudioStreamIndex:
+                    type: string
+                mediaStreamInfo:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.emby.MediaStreamInfo'
+        api.emby.MediaStreamInfo:
+            type: object
+            properties:
+                codec:
+                    type: string
+                language:
+                    type: string
+                type:
+                    type: string
+                title:
+                    type: string
+                displayTitle:
+                    type: string
+                displayLanguage:
+                    type: string
+                isDefault:
+                    type: boolean
+                index:
+                    type: string
+                protocol:
                     type: string
         api.emby.Path:
             type: object

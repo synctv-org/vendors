@@ -96,309 +96,359 @@ type LoginResp struct {
 
 type LibraryResp struct {
 	Items []struct {
-		Name                  string        `json:"Name"`
-		ServerID              string        `json:"ServerId"`
-		ID                    string        `json:"Id"`
-		GUID                  string        `json:"Guid"`
-		Etag                  string        `json:"Etag"`
-		DateCreated           time.Time     `json:"DateCreated"`
-		CanDelete             bool          `json:"CanDelete"`
-		CanDownload           bool          `json:"CanDownload"`
-		PresentationUniqueKey string        `json:"PresentationUniqueKey"`
-		SortName              string        `json:"SortName"`
-		ForcedSortName        string        `json:"ForcedSortName"`
-		ExternalUrls          []interface{} `json:"ExternalUrls"`
-		Path                  string        `json:"Path"`
-		Taglines              []interface{} `json:"Taglines"`
-		FileName              string        `json:"FileName"`
-		RemoteTrailers        []interface{} `json:"RemoteTrailers"`
+		Name                  string    `json:"Name"`
+		ServerID              string    `json:"ServerId"`
+		ID                    string    `json:"Id"`
+		GUID                  string    `json:"Guid"`
+		Etag                  string    `json:"Etag"`
+		DateCreated           time.Time `json:"DateCreated"`
+		CanDelete             bool      `json:"CanDelete"`
+		CanDownload           bool      `json:"CanDownload"`
+		PresentationUniqueKey string    `json:"PresentationUniqueKey"`
+		SortName              string    `json:"SortName"`
+		ForcedSortName        string    `json:"ForcedSortName"`
+		Path                  string    `json:"Path"`
+		FileName              string    `json:"FileName"`
 		ProviderIds           struct {
 		} `json:"ProviderIds"`
-		IsFolder                bool          `json:"IsFolder"`
-		ParentID                string        `json:"ParentId"`
-		Type                    string        `json:"Type"`
-		DisplayPreferencesID    string        `json:"DisplayPreferencesId"`
-		CollectionType          string        `json:"CollectionType"`
-		BackdropImageTags       []interface{} `json:"BackdropImageTags"`
-		LockedFields            []interface{} `json:"LockedFields"`
-		LockData                bool          `json:"LockData"`
-		PrimaryImageAspectRatio float64       `json:"PrimaryImageAspectRatio,omitempty"`
+		IsFolder                bool    `json:"IsFolder"`
+		ParentID                string  `json:"ParentId"`
+		Type                    string  `json:"Type"`
+		DisplayPreferencesID    string  `json:"DisplayPreferencesId"`
+		CollectionType          string  `json:"CollectionType"`
+		LockData                bool    `json:"LockData"`
+		PrimaryImageAspectRatio float64 `json:"PrimaryImageAspectRatio,omitempty"`
 		ImageTags               struct {
 			Primary string `json:"Primary"`
 		} `json:"ImageTags,omitempty"`
 	} `json:"Items"`
 	TotalRecordCount int `json:"TotalRecordCount"`
 }
-
-type ExternalUrl struct {
+type ExternalUrls struct {
 	Name string `json:"Name"`
-	Url  string `json:"Url"`
+	URL  string `json:"Url"`
+}
+type MediaStreams struct {
+	Codec                  string  `json:"Codec"`
+	CodecTag               string  `json:"CodecTag"`
+	Language               string  `json:"Language"`
+	ColorTransfer          string  `json:"ColorTransfer"`
+	ColorPrimaries         string  `json:"ColorPrimaries"`
+	ColorSpace             string  `json:"ColorSpace"`
+	Comment                string  `json:"Comment"`
+	StreamStartTimeTicks   int     `json:"StreamStartTimeTicks"`
+	TimeBase               string  `json:"TimeBase"`
+	CodecTimeBase          string  `json:"CodecTimeBase"`
+	Title                  string  `json:"Title"`
+	Extradata              string  `json:"Extradata"`
+	VideoRange             string  `json:"VideoRange"`
+	DisplayTitle           string  `json:"DisplayTitle"`
+	DisplayLanguage        string  `json:"DisplayLanguage"`
+	NalLengthSize          string  `json:"NalLengthSize"`
+	IsInterlaced           bool    `json:"IsInterlaced"`
+	IsAVC                  bool    `json:"IsAVC"`
+	ChannelLayout          string  `json:"ChannelLayout"`
+	BitRate                int     `json:"BitRate"`
+	BitDepth               int     `json:"BitDepth"`
+	RefFrames              int     `json:"RefFrames"`
+	Rotation               int     `json:"Rotation"`
+	Channels               int     `json:"Channels"`
+	SampleRate             int     `json:"SampleRate"`
+	IsDefault              bool    `json:"IsDefault"`
+	IsForced               bool    `json:"IsForced"`
+	Height                 int     `json:"Height"`
+	Width                  int     `json:"Width"`
+	AverageFrameRate       float64 `json:"AverageFrameRate"`
+	RealFrameRate          float64 `json:"RealFrameRate"`
+	Profile                string  `json:"Profile"`
+	Type                   string  `json:"Type"`
+	AspectRatio            string  `json:"AspectRatio"`
+	Index                  uint64  `json:"Index"`
+	IsExternal             bool    `json:"IsExternal"`
+	DeliveryMethod         string  `json:"DeliveryMethod"`
+	DeliveryURL            string  `json:"DeliveryUrl"`
+	IsExternalURL          bool    `json:"IsExternalUrl"`
+	IsTextSubtitleStream   bool    `json:"IsTextSubtitleStream"`
+	SupportsExternalStream bool    `json:"SupportsExternalStream"`
+	Path                   string  `json:"Path"`
+	Protocol               string  `json:"Protocol"`
+	PixelFormat            string  `json:"PixelFormat"`
+	Level                  int     `json:"Level"`
+	IsAnamorphic           bool    `json:"IsAnamorphic"`
+	ItemID                 string  `json:"ItemId"`
+	ServerID               string  `json:"ServerId"`
+	AttachmentSize         int     `json:"AttachmentSize"`
+	MimeType               string  `json:"MimeType"`
+	IsClosedCaptions       bool    `json:"IsClosedCaptions"`
+	SubtitleLocationType   string  `json:"SubtitleLocationType"`
 }
 
-type MediaSourceInfo struct {
-	Protocol                   string `json:"Protocol"`
-	Id                         string `json:"Id"`
-	Path                       string `json:"Path"`
-	EncoderPath                string `json:"EncoderPath"`
-	EncoderProtocol            string `json:"EncoderProtocol"`
-	Type                       string `json:"Type"`
-	Container                  string `json:"Container"`
-	Size                       int    `json:"Size,omitempty"`
-	Name                       string `json:"Name"`
-	IsRemote                   bool   `json:"IsRemote"`
-	RunTimeTicks               int    `json:"RunTimeTicks,omitempty"`
-	SupportsTranscoding        bool   `json:"SupportsTranscoding"`
-	SupportsDirectStream       bool   `json:"SupportsDirectStream"`
-	SupportsDirectPlay         bool   `json:"SupportsDirectPlay"`
-	IsInfiniteStream           bool   `json:"IsInfiniteStream"`
-	RequiresOpening            bool   `json:"RequiresOpening"`
-	OpenToken                  string `json:"OpenToken"`
-	RequiresClosing            bool   `json:"RequiresClosing"`
-	LiveStreamId               string `json:"LiveStreamId"`
-	BufferMs                   int    `json:"BufferMs,omitempty"`
-	RequiresLooping            bool   `json:"RequiresLooping"`
-	SupportsProbing            bool   `json:"SupportsProbing"`
-	Video3DFormat              string `json:"Video3DFormat,omitempty"`
-	MediaStreams               []MediaStream
-	Formats                    []string
-	Bitrate                    int               `json:"Bitrate,omitempty"`
-	Timestamp                  string            `json:"Timestamp"`
-	RequiredHttpHeaders        map[string]string `json:"RequiredHttpHeaders"`
-	TranscodingUrl             string            `json:"TranscodingUrl"`
-	TranscodingSubProtocol     string            `json:"TranscodingSubProtocol"`
-	TranscodingContainer       string            `json:"TranscodingContainer"`
-	AnalyzeDurationMs          int               `json:"AnalyzeDurationMs,omitempty"`
-	ReadAtNativeFramerate      bool              `json:"ReadAtNativeFramerate"`
-	DefaultAudioStreamIndex    int               `json:"DefaultAudioStreamIndex,omitempty"`
-	DefaultSubtitleStreamIndex int               `json:"DefaultSubtitleStreamIndex,omitempty"`
+type RequiredHTTPHeaders struct {
+	AdditionalProp1 string `json:"additionalProp1"`
+	AdditionalProp2 string `json:"additionalProp2"`
+	AdditionalProp3 string `json:"additionalProp3"`
 }
 
-type BaseItemPerson struct {
+type MediaSources struct {
+	Protocol                   string              `json:"Protocol"`
+	ID                         string              `json:"Id"`
+	Path                       string              `json:"Path"`
+	EncoderPath                string              `json:"EncoderPath"`
+	EncoderProtocol            string              `json:"EncoderProtocol"`
+	Type                       string              `json:"Type"`
+	Container                  string              `json:"Container"`
+	Size                       int                 `json:"Size"`
+	Name                       string              `json:"Name"`
+	SortName                   string              `json:"SortName"`
+	IsRemote                   bool                `json:"IsRemote"`
+	RunTimeTicks               int                 `json:"RunTimeTicks"`
+	ContainerStartTimeTicks    int                 `json:"ContainerStartTimeTicks"`
+	SupportsTranscoding        bool                `json:"SupportsTranscoding"`
+	SupportsDirectStream       bool                `json:"SupportsDirectStream"`
+	SupportsDirectPlay         bool                `json:"SupportsDirectPlay"`
+	IsInfiniteStream           bool                `json:"IsInfiniteStream"`
+	RequiresOpening            bool                `json:"RequiresOpening"`
+	OpenToken                  string              `json:"OpenToken"`
+	RequiresClosing            bool                `json:"RequiresClosing"`
+	LiveStreamID               string              `json:"LiveStreamId"`
+	BufferMs                   int                 `json:"BufferMs"`
+	RequiresLooping            bool                `json:"RequiresLooping"`
+	SupportsProbing            bool                `json:"SupportsProbing"`
+	Video3DFormat              string              `json:"Video3DFormat"`
+	MediaStreams               []MediaStreams      `json:"MediaStreams"`
+	Formats                    []string            `json:"Formats"`
+	Bitrate                    int                 `json:"Bitrate"`
+	Timestamp                  string              `json:"Timestamp"`
+	RequiredHTTPHeaders        RequiredHTTPHeaders `json:"RequiredHttpHeaders"`
+	DirectStreamURL            string              `json:"DirectStreamUrl"`
+	TranscodingURL             string              `json:"TranscodingUrl"`
+	TranscodingSubProtocol     string              `json:"TranscodingSubProtocol"`
+	TranscodingContainer       string              `json:"TranscodingContainer"`
+	AnalyzeDurationMs          int                 `json:"AnalyzeDurationMs"`
+	ReadAtNativeFramerate      bool                `json:"ReadAtNativeFramerate"`
+	DefaultAudioStreamIndex    uint64              `json:"DefaultAudioStreamIndex"`
+	DefaultSubtitleStreamIndex uint64              `json:"DefaultSubtitleStreamIndex"`
+	ItemID                     string              `json:"ItemId"`
+	ServerID                   string              `json:"ServerId"`
 }
 
-type NameLongIdPair struct {
-}
-
-type MediaUrl struct {
-	Url  string `json:"Url"`
+type RemoteTrailers struct {
+	URL  string `json:"Url"`
 	Name string `json:"Name"`
 }
-
-type MediaStream struct {
-	Codec                  string  `json:"codec"`
-	CodecTag               string  `json:"codecTag"`
-	Language               string  `json:"language"`
-	ColorTransfer          string  `json:"colorTransfer"`
-	ColorPrimaries         string  `json:"colorPrimaries"`
-	ColorSpace             string  `json:"colorSpace"`
-	Comment                string  `json:"comment"`
-	TimeBase               string  `json:"timeBase"`
-	CodecTimeBase          string  `json:"codecTimeBase"`
-	Title                  string  `json:"title"`
-	Extradata              string  `json:"extradata"`
-	VideoRange             string  `json:"videoRange"`
-	DisplayTitle           string  `json:"displayTitle"`
-	DisplayLanguage        string  `json:"displayLanguage"`
-	NalLengthSize          string  `json:"nalLengthSize"`
-	IsInterlaced           bool    `json:"isInterlaced"`
-	IsAVC                  bool    `json:"isAVC,omitempty"`
-	ChannelLayout          string  `json:"channelLayout"`
-	BitRate                int32   `json:"bitRate,omitempty"`
-	BitDepth               int32   `json:"bitDepth,omitempty"`
-	RefFrames              int32   `json:"refFrames,omitempty"`
-	PacketLength           int32   `json:"packetLength,omitempty"`
-	Channels               int32   `json:"channels,omitempty"`
-	SampleRate             int32   `json:"sampleRate,omitempty"`
-	IsDefault              bool    `json:"isDefault"`
-	IsForced               bool    `json:"isForced"`
-	Height                 int32   `json:"height,omitempty"`
-	Width                  int32   `json:"width,omitempty"`
-	AverageFrameRate       float32 `json:"averageFrameRate,omitempty"`
-	RealFrameRate          float32 `json:"realFrameRate,omitempty"`
-	Profile                string  `json:"profile"`
-	Type                   string  `json:"type"`
-	AspectRatio            string  `json:"aspectRatio"`
-	Index                  int32   `json:"index"`
-	Score                  int32   `json:"score,omitempty"`
-	IsExternal             bool    `json:"isExternal"`
-	DeliveryMethod         string  `json:"deliveryMethod"`
-	DeliveryUrl            string  `json:"deliveryUrl"`
-	IsExternalUrl          bool    `json:"isExternalUrl,omitempty"`
-	IsTextSubtitleStream   bool    `json:"isTextSubtitleStream"`
-	SupportsExternalStream bool    `json:"supportsExternalStream"`
-	Path                   string  `json:"path"`
-	PixelFormat            string  `json:"pixelFormat"`
-	Level                  float64 `json:"level,omitempty"`
-	IsAnamorphic           bool    `json:"isAnamorphic,omitempty"`
+type People struct {
+	Name            string `json:"Name"`
+	ID              string `json:"Id"`
+	Role            string `json:"Role"`
+	Type            string `json:"Type"`
+	PrimaryImageTag string `json:"PrimaryImageTag"`
 }
-
-type UserItemDataDto struct {
-	Rating                float64 `json:"Rating,omitempty"`
-	PlayedPercentage      float64 `json:"PlayedPercentage,omitempty"`
-	UnplayedItemCount     int     `json:"UnplayedItemCount,omitempty"`
-	PlaybackPositionTicks int     `json:"PlaybackPositionTicks"`
-	PlayCount             int     `json:"PlayCount"`
-	IsFavorite            bool    `json:"IsFavorite"`
-	Likes                 bool    `json:"Likes,omitempty"`
-	LastPlayedDate        string  `json:"LastPlayedDate,omitempty"`
-	Played                bool    `json:"Played"`
-	Key                   string  `json:"Key"`
-	ItemId                string  `json:"ItemId"`
+type Studios struct {
+	Name string `json:"Name"`
+	ID   int    `json:"Id"`
 }
-
-type NameIdPair struct {
+type GenreItems struct {
+	Name string `json:"Name"`
+	ID   int    `json:"Id"`
 }
-
-type ChapterInfo struct {
+type TagItems struct {
+	Name string `json:"Name"`
+	ID   int    `json:"Id"`
+}
+type UserData struct {
+	Rating                int       `json:"Rating"`
+	PlayedPercentage      int       `json:"PlayedPercentage"`
+	UnplayedItemCount     int       `json:"UnplayedItemCount"`
+	PlaybackPositionTicks int       `json:"PlaybackPositionTicks"`
+	PlayCount             int       `json:"PlayCount"`
+	IsFavorite            bool      `json:"IsFavorite"`
+	LastPlayedDate        time.Time `json:"LastPlayedDate"`
+	Played                bool      `json:"Played"`
+	Key                   string    `json:"Key"`
+	ItemID                string    `json:"ItemId"`
+	ServerID              string    `json:"ServerId"`
+}
+type ArtistItems struct {
+	Name string `json:"Name"`
+	ID   string `json:"Id"`
+}
+type Composers struct {
+	Name string `json:"Name"`
+	ID   string `json:"Id"`
+}
+type AlbumArtists struct {
+	Name string `json:"Name"`
+	ID   string `json:"Id"`
+}
+type ImageTags struct {
+	AdditionalProp1 string `json:"additionalProp1"`
+	AdditionalProp2 string `json:"additionalProp2"`
+	AdditionalProp3 string `json:"additionalProp3"`
+}
+type Chapters struct {
 	StartPositionTicks int    `json:"StartPositionTicks"`
 	Name               string `json:"Name"`
 	ImageTag           string `json:"ImageTag"`
+	MarkerType         string `json:"MarkerType"`
+	ChapterIndex       int    `json:"ChapterIndex"`
 }
-
-type MediaItem struct {
-	Name                         string `json:"Name"`
-	OriginalTitle                string `json:"OriginalTitle"`
-	ServerId                     string `json:"ServerId"`
-	Id                           string `json:"Id"`
-	Etag                         string `json:"Etag"`
-	PlaylistItemId               string `json:"PlaylistItemId"`
-	DateCreated                  string `json:"DateCreated,omitempty"`
-	ExtraType                    string `json:"ExtraType"`
-	AirsBeforeSeasonNumber       int    `json:"AirsBeforeSeasonNumber,omitempty"`
-	AirsAfterSeasonNumber        int    `json:"AirsAfterSeasonNumber,omitempty"`
-	AirsBeforeEpisodeNumber      int    `json:"AirsBeforeEpisodeNumber,omitempty"`
-	DisplaySpecialsWithSeasons   bool   `json:"DisplaySpecialsWithSeasons,omitempty"`
-	CanDelete                    bool   `json:"CanDelete,omitempty"`
-	CanDownload                  bool   `json:"CanDownload,omitempty"`
-	HasSubtitles                 bool   `json:"HasSubtitles,omitempty"`
-	SupportsResume               bool   `json:"SupportsResume,omitempty"`
-	PreferredMetadataLanguage    string `json:"PreferredMetadataLanguage"`
-	PreferredMetadataCountryCode string `json:"PreferredMetadataCountryCode"`
-	SupportsSync                 bool   `json:"SupportsSync,omitempty"`
-	Container                    string `json:"Container"`
-	SortName                     string `json:"SortName"`
-	ForcedSortName               string `json:"ForcedSortName"`
-	Video3DFormat                string `json:"Video3DFormat,omitempty"`
-	PremiereDate                 string `json:"PremiereDate,omitempty"`
-	ExternalUrls                 []ExternalUrl
-	MediaSources                 []MediaSourceInfo
-	CriticRating                 float64 `json:"CriticRating,omitempty"`
-	GameSystemId                 int     `json:"GameSystemId,omitempty"`
-	GameSystem                   string  `json:"GameSystem"`
-	ProductionLocations          []string
-	Path                         string `json:"Path"`
-	OfficialRating               string `json:"OfficialRating"`
-	CustomRating                 string `json:"CustomRating"`
-	ChannelId                    string `json:"ChannelId"`
-	ChannelName                  string `json:"ChannelName"`
-	Overview                     string `json:"Overview"`
-	Taglines                     []string
-	Genres                       []string
-	CommunityRating              float64 `json:"CommunityRating,omitempty"`
-	RunTimeTicks                 int     `json:"RunTimeTicks,omitempty"`
-	PlayAccess                   string  `json:"PlayAccess"`
-	AspectRatio                  string  `json:"AspectRatio"`
-	ProductionYear               int     `json:"ProductionYear,omitempty"`
-	Number                       string  `json:"Number"`
-	ChannelNumber                string  `json:"ChannelNumber"`
-	IndexNumber                  int     `json:"IndexNumber,omitempty"`
-	IndexNumberEnd               int     `json:"IndexNumberEnd,omitempty"`
-	ParentIndexNumber            int     `json:"ParentIndexNumber,omitempty"`
-	RemoteTrailers               []MediaUrl
-	ProviderIds                  map[string]string `json:"ProviderIds"`
-	IsFolder                     bool              `json:"IsFolder,omitempty"`
-	ParentId                     string            `json:"ParentId"`
-	Type                         string            `json:"Type"`
-	People                       []BaseItemPerson
-	Studios                      []NameLongIdPair
-	GenreItems                   []NameLongIdPair
-	ParentLogoItemId             string `json:"ParentLogoItemId"`
-	ParentBackdropItemId         string `json:"ParentBackdropItemId"`
-	ParentBackdropImageTags      []string
-	LocalTrailerCount            int `json:"LocalTrailerCount,omitempty"`
-	UserData                     UserItemDataDto
-	RecursiveItemCount           int    `json:"RecursiveItemCount,omitempty"`
-	ChildCount                   int    `json:"ChildCount,omitempty"`
-	SeriesName                   string `json:"SeriesName"`
-	SeriesId                     string `json:"SeriesId"`
-	SeasonId                     string `json:"SeasonId"`
-	SpecialFeatureCount          int    `json:"SpecialFeatureCount,omitempty"`
-	DisplayPreferencesId         string `json:"DisplayPreferencesId"`
-	Status                       string `json:"Status"`
-	AirTime                      string `json:"AirTime"`
-	AirDays                      []string
-	Tags                         []string
-	PrimaryImageAspectRatio      float64 `json:"PrimaryImageAspectRatio,omitempty"`
-	Artists                      []string
-	ArtistItems                  []NameIdPair
-	Album                        string `json:"Album"`
-	CollectionType               string `json:"CollectionType"`
-	DisplayOrder                 string `json:"DisplayOrder"`
-	AlbumId                      string `json:"AlbumId"`
-	AlbumPrimaryImageTag         string `json:"AlbumPrimaryImageTag"`
-	SeriesPrimaryImageTag        string `json:"SeriesPrimaryImageTag"`
-	AlbumArtist                  string `json:"AlbumArtist"`
-	AlbumArtists                 []NameIdPair
-	SeasonName                   string `json:"SeasonName"`
-	MediaStreams                 []MediaStream
-	PartCount                    int               `json:"PartCount,omitempty"`
-	ImageTags                    map[string]string `json:"ImageTags"`
-	BackdropImageTags            []string
-	ParentLogoImageTag           string `json:"ParentLogoImageTag"`
-	ParentArtItemId              string `json:"ParentArtItemId"`
-	ParentArtImageTag            string `json:"ParentArtImageTag"`
-	SeriesThumbImageTag          string `json:"SeriesThumbImageTag"`
-	SeriesStudio                 string `json:"SeriesStudio"`
-	ParentThumbItemId            string `json:"ParentThumbItemId"`
-	ParentThumbImageTag          string `json:"ParentThumbImageTag"`
-	ParentPrimaryImageItemId     string `json:"ParentPrimaryImageItemId"`
-	ParentPrimaryImageTag        string `json:"ParentPrimaryImageTag"`
-	Chapters                     []ChapterInfo
-	LocationType                 string `json:"LocationType"`
-	MediaType                    string `json:"MediaType"`
-	EndDate                      string `json:"EndDate,omitempty"`
-	LockedFields                 []string
-	LockData                     bool    `json:"LockData,omitempty"`
-	Width                        int     `json:"Width,omitempty"`
-	Height                       int     `json:"Height,omitempty"`
-	CameraMake                   string  `json:"CameraMake"`
-	CameraModel                  string  `json:"CameraModel"`
-	Software                     string  `json:"Software"`
-	ExposureTime                 float64 `json:"ExposureTime,omitempty"`
-	FocalLength                  float64 `json:"FocalLength,omitempty"`
-	ImageOrientation             string  `json:"ImageOrientation"`
-	Aperture                     float64 `json:"Aperture,omitempty"`
-	ShutterSpeed                 float64 `json:"ShutterSpeed,omitempty"`
-	Latitude                     float64 `json:"Latitude,omitempty"`
-	Longitude                    float64 `json:"Longitude,omitempty"`
-	Altitude                     float64 `json:"Altitude,omitempty"`
-	IsoSpeedRating               int     `json:"IsoSpeedRating,omitempty"`
-	SeriesTimerId                string  `json:"SeriesTimerId"`
-	ChannelPrimaryImageTag       string  `json:"ChannelPrimaryImageTag"`
-	StartDate                    string  `json:"StartDate,omitempty"`
-	CompletionPercentage         float64 `json:"CompletionPercentage,omitempty"`
-	IsRepeat                     bool    `json:"IsRepeat,omitempty"`
-	IsNew                        bool    `json:"IsNew,omitempty"`
-	EpisodeTitle                 string  `json:"EpisodeTitle"`
-	IsMovie                      bool    `json:"IsMovie,omitempty"`
-	IsSports                     bool    `json:"IsSports,omitempty"`
-	IsSeries                     bool    `json:"IsSeries,omitempty"`
-	IsLive                       bool    `json:"IsLive,omitempty"`
-	IsNews                       bool    `json:"IsNews,omitempty"`
-	IsKids                       bool    `json:"IsKids,omitempty"`
-	IsPremiere                   bool    `json:"IsPremiere,omitempty"`
-	TimerId                      string  `json:"TimerId"`
-	CurrentProgram               map[string]interface{}
-	MovieCount                   int `json:"MovieCount,omitempty"`
-	SeriesCount                  int `json:"SeriesCount,omitempty"`
-	AlbumCount                   int `json:"AlbumCount,omitempty"`
-	SongCount                    int `json:"SongCount,omitempty"`
-	MusicVideoCount              int `json:"MusicVideoCount,omitempty"`
+type Items struct {
+	Name                         string           `json:"Name"`
+	OriginalTitle                string           `json:"OriginalTitle"`
+	ServerID                     string           `json:"ServerId"`
+	ID                           string           `json:"Id"`
+	GUID                         string           `json:"Guid"`
+	Etag                         string           `json:"Etag"`
+	Prefix                       string           `json:"Prefix"`
+	PlaylistItemID               string           `json:"PlaylistItemId"`
+	DateCreated                  time.Time        `json:"DateCreated"`
+	ExtraType                    string           `json:"ExtraType"`
+	SortIndexNumber              int              `json:"SortIndexNumber"`
+	SortParentIndexNumber        int              `json:"SortParentIndexNumber"`
+	AirsBeforeSeasonNumber       int              `json:"AirsBeforeSeasonNumber"`
+	AirsAfterSeasonNumber        int              `json:"AirsAfterSeasonNumber"`
+	AirsBeforeEpisodeNumber      int              `json:"AirsBeforeEpisodeNumber"`
+	CanDelete                    bool             `json:"CanDelete"`
+	CanDownload                  bool             `json:"CanDownload"`
+	SupportsResume               bool             `json:"SupportsResume"`
+	PresentationUniqueKey        string           `json:"PresentationUniqueKey"`
+	PreferredMetadataLanguage    string           `json:"PreferredMetadataLanguage"`
+	PreferredMetadataCountryCode string           `json:"PreferredMetadataCountryCode"`
+	SupportsSync                 bool             `json:"SupportsSync"`
+	Container                    string           `json:"Container"`
+	SortName                     string           `json:"SortName"`
+	ForcedSortName               string           `json:"ForcedSortName"`
+	Video3DFormat                string           `json:"Video3DFormat"`
+	PremiereDate                 time.Time        `json:"PremiereDate"`
+	ExternalUrls                 []ExternalUrls   `json:"ExternalUrls"`
+	MediaSources                 []MediaSources   `json:"MediaSources"`
+	CriticRating                 int              `json:"CriticRating"`
+	GameSystemID                 int              `json:"GameSystemId"`
+	AsSeries                     bool             `json:"AsSeries"`
+	GameSystem                   string           `json:"GameSystem"`
+	ProductionLocations          []string         `json:"ProductionLocations"`
+	Path                         string           `json:"Path"`
+	OfficialRating               string           `json:"OfficialRating"`
+	CustomRating                 string           `json:"CustomRating"`
+	ChannelID                    string           `json:"ChannelId"`
+	ChannelName                  string           `json:"ChannelName"`
+	Overview                     string           `json:"Overview"`
+	Taglines                     []string         `json:"Taglines"`
+	Genres                       []string         `json:"Genres"`
+	CommunityRating              int              `json:"CommunityRating"`
+	RunTimeTicks                 int              `json:"RunTimeTicks"`
+	Size                         int              `json:"Size"`
+	FileName                     string           `json:"FileName"`
+	Bitrate                      int              `json:"Bitrate"`
+	PlayAccess                   string           `json:"PlayAccess"`
+	ProductionYear               int              `json:"ProductionYear"`
+	Number                       string           `json:"Number"`
+	ChannelNumber                string           `json:"ChannelNumber"`
+	IndexNumber                  int              `json:"IndexNumber"`
+	IndexNumberEnd               int              `json:"IndexNumberEnd"`
+	ParentIndexNumber            int              `json:"ParentIndexNumber"`
+	RemoteTrailers               []RemoteTrailers `json:"RemoteTrailers"`
+	ProviderIds                  []string         `json:"ProviderIds"`
+	IsFolder                     bool             `json:"IsFolder"`
+	ParentID                     string           `json:"ParentId"`
+	Type                         string           `json:"Type"`
+	People                       []People         `json:"People"`
+	Studios                      []Studios        `json:"Studios"`
+	GenreItems                   []GenreItems     `json:"GenreItems"`
+	TagItems                     []TagItems       `json:"TagItems"`
+	ParentLogoItemID             string           `json:"ParentLogoItemId"`
+	ParentBackdropItemID         string           `json:"ParentBackdropItemId"`
+	ParentBackdropImageTags      []string         `json:"ParentBackdropImageTags"`
+	LocalTrailerCount            int              `json:"LocalTrailerCount"`
+	UserData                     UserData         `json:"UserData"`
+	RecursiveItemCount           int              `json:"RecursiveItemCount"`
+	ChildCount                   int              `json:"ChildCount"`
+	SeriesName                   string           `json:"SeriesName"`
+	SeriesID                     string           `json:"SeriesId"`
+	SeasonID                     string           `json:"SeasonId"`
+	SpecialFeatureCount          int              `json:"SpecialFeatureCount"`
+	DisplayPreferencesID         string           `json:"DisplayPreferencesId"`
+	Status                       string           `json:"Status"`
+	AirDays                      []string         `json:"AirDays"`
+	Tags                         []string         `json:"Tags"`
+	PrimaryImageAspectRatio      int              `json:"PrimaryImageAspectRatio"`
+	Artists                      []string         `json:"Artists"`
+	ArtistItems                  []ArtistItems    `json:"ArtistItems"`
+	Composers                    []Composers      `json:"Composers"`
+	Album                        string           `json:"Album"`
+	CollectionType               string           `json:"CollectionType"`
+	DisplayOrder                 string           `json:"DisplayOrder"`
+	AlbumID                      string           `json:"AlbumId"`
+	AlbumPrimaryImageTag         string           `json:"AlbumPrimaryImageTag"`
+	SeriesPrimaryImageTag        string           `json:"SeriesPrimaryImageTag"`
+	AlbumArtist                  string           `json:"AlbumArtist"`
+	AlbumArtists                 []AlbumArtists   `json:"AlbumArtists"`
+	SeasonName                   string           `json:"SeasonName"`
+	MediaStreams                 []MediaStreams   `json:"MediaStreams"`
+	PartCount                    int              `json:"PartCount"`
+	ImageTags                    ImageTags        `json:"ImageTags"`
+	BackdropImageTags            []string         `json:"BackdropImageTags"`
+	ParentLogoImageTag           string           `json:"ParentLogoImageTag"`
+	SeriesStudio                 string           `json:"SeriesStudio"`
+	ParentThumbItemID            string           `json:"ParentThumbItemId"`
+	ParentThumbImageTag          string           `json:"ParentThumbImageTag"`
+	Chapters                     []Chapters       `json:"Chapters"`
+	LocationType                 string           `json:"LocationType"`
+	MediaType                    string           `json:"MediaType"`
+	EndDate                      time.Time        `json:"EndDate"`
+	LockedFields                 []string         `json:"LockedFields"`
+	LockData                     bool             `json:"LockData"`
+	Width                        int              `json:"Width"`
+	Height                       int              `json:"Height"`
+	CameraMake                   string           `json:"CameraMake"`
+	CameraModel                  string           `json:"CameraModel"`
+	Software                     string           `json:"Software"`
+	ExposureTime                 int              `json:"ExposureTime"`
+	FocalLength                  int              `json:"FocalLength"`
+	ImageOrientation             string           `json:"ImageOrientation"`
+	Aperture                     int              `json:"Aperture"`
+	ShutterSpeed                 int              `json:"ShutterSpeed"`
+	Latitude                     int              `json:"Latitude"`
+	Longitude                    int              `json:"Longitude"`
+	Altitude                     int              `json:"Altitude"`
+	IsoSpeedRating               int              `json:"IsoSpeedRating"`
+	SeriesTimerID                string           `json:"SeriesTimerId"`
+	ChannelPrimaryImageTag       string           `json:"ChannelPrimaryImageTag"`
+	StartDate                    time.Time        `json:"StartDate"`
+	CompletionPercentage         int              `json:"CompletionPercentage"`
+	IsRepeat                     bool             `json:"IsRepeat"`
+	IsNew                        bool             `json:"IsNew"`
+	EpisodeTitle                 string           `json:"EpisodeTitle"`
+	IsMovie                      bool             `json:"IsMovie"`
+	IsSports                     bool             `json:"IsSports"`
+	IsSeries                     bool             `json:"IsSeries"`
+	IsLive                       bool             `json:"IsLive"`
+	IsNews                       bool             `json:"IsNews"`
+	IsKids                       bool             `json:"IsKids"`
+	IsPremiere                   bool             `json:"IsPremiere"`
+	TimerType                    string           `json:"TimerType"`
+	Disabled                     bool             `json:"Disabled"`
+	ManagementID                 string           `json:"ManagementId"`
+	TimerID                      string           `json:"TimerId"`
+	CurrentProgram               string           `json:"CurrentProgram"`
+	MovieCount                   int              `json:"MovieCount"`
+	SeriesCount                  int              `json:"SeriesCount"`
+	AlbumCount                   int              `json:"AlbumCount"`
+	SongCount                    int              `json:"SongCount"`
+	MusicVideoCount              int              `json:"MusicVideoCount"`
+	Subviews                     []string         `json:"Subviews"`
+	ListingsProviderID           string           `json:"ListingsProviderId"`
+	ListingsChannelID            string           `json:"ListingsChannelId"`
+	ListingsPath                 string           `json:"ListingsPath"`
+	ListingsID                   string           `json:"ListingsId"`
+	ListingsChannelName          string           `json:"ListingsChannelName"`
+	ListingsChannelNumber        string           `json:"ListingsChannelNumber"`
+	AffiliateCallSign            string           `json:"AffiliateCallSign"`
 }
 
 type GetItemResp struct {
-	Items            []MediaItem `json:"Items"`
-	TotalRecordCount uint64      `json:"TotalRecordCount"`
+	Items            []Items `json:"Items"`
+	TotalRecordCount uint64  `json:"TotalRecordCount"`
 }
 
 type MeResp struct {

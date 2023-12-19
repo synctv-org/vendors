@@ -43,6 +43,47 @@ func (a *EmbyService) Me(ctx context.Context, req *pb.MeReq) (*pb.MeResp, error)
 	}, nil
 }
 
+func item2pb(item *emby.Items) *pb.Item {
+	pi := &pb.Item{
+		Id:              item.ID,
+		Name:            item.Name,
+		Type:            item.Type,
+		IsFolder:        item.IsFolder,
+		ParentId:        item.ParentID,
+		SeasonName:      item.SeasonName,
+		SeasonId:        item.SeasonID,
+		SeriesName:      item.SeriesName,
+		SeriesId:        item.SeriesID,
+		MediaSourceInfo: make([]*pb.MediaSourceInfo, len(item.MediaSources)),
+	}
+	for i, msi := range item.MediaSources {
+		pi.MediaSourceInfo[i] = &pb.MediaSourceInfo{
+			Id:                         msi.ID,
+			Name:                       msi.Name,
+			Path:                       msi.Path,
+			Protocol:                   msi.Protocol,
+			Container:                  msi.Container,
+			DefaultSubtitleStreamIndex: msi.DefaultSubtitleStreamIndex,
+			DefaultAudioStreamIndex:    msi.DefaultAudioStreamIndex,
+			MediaStreamInfo:            make([]*pb.MediaStreamInfo, len(msi.MediaStreams)),
+		}
+		for j, msi := range msi.MediaStreams {
+			pi.MediaSourceInfo[i].MediaStreamInfo[j] = &pb.MediaStreamInfo{
+				Codec:           msi.Codec,
+				Language:        msi.Language,
+				Type:            msi.Type,
+				Title:           msi.Title,
+				DisplayTitle:    msi.DisplayTitle,
+				DisplayLanguage: msi.DisplayLanguage,
+				IsDefault:       msi.IsDefault,
+				Index:           msi.Index,
+				Protocol:        msi.Protocol,
+			}
+		}
+	}
+	return pi
+}
+
 func (a *EmbyService) GetItems(ctx context.Context, req *pb.GetItemsReq) (*pb.GetItemsResp, error) {
 	cli := emby.NewClient(req.Host, emby.WithContext(ctx), emby.WithKey(req.Token))
 	r, err := cli.GetItems(req.ParentId)
@@ -51,17 +92,7 @@ func (a *EmbyService) GetItems(ctx context.Context, req *pb.GetItemsReq) (*pb.Ge
 	}
 	var items []*pb.Item
 	for _, item := range r.Items {
-		items = append(items, &pb.Item{
-			Id:         item.Id,
-			Name:       item.Name,
-			Type:       item.Type,
-			IsFolder:   item.IsFolder,
-			ParentId:   item.ParentId,
-			SeasonName: item.SeasonName,
-			SeasonId:   item.SeasonId,
-			SeriesName: item.SeriesName,
-			SeriesId:   item.SeriesId,
-		})
+		items = append(items, item2pb(&item))
 	}
 	return &pb.GetItemsResp{
 		Items:            items,
@@ -75,17 +106,7 @@ func (a *EmbyService) GetItem(ctx context.Context, req *pb.GetItemReq) (*pb.Item
 	if err != nil {
 		return nil, err
 	}
-	return &pb.Item{
-		Id:         r.Id,
-		Name:       r.Name,
-		Type:       r.Type,
-		IsFolder:   r.IsFolder,
-		ParentId:   r.ParentId,
-		SeasonName: r.SeasonName,
-		SeasonId:   r.SeasonId,
-		SeriesName: r.SeriesName,
-		SeriesId:   r.SeriesId,
-	}, nil
+	return item2pb(r), nil
 }
 
 func (a *EmbyService) FsList(ctx context.Context, req *pb.FsListReq) (*pb.FsListResp, error) {
@@ -103,17 +124,7 @@ func (a *EmbyService) FsList(ctx context.Context, req *pb.FsListReq) (*pb.FsList
 	}
 	var items []*pb.Item
 	for _, item := range r.Items {
-		items = append(items, &pb.Item{
-			Id:         item.Id,
-			Name:       item.Name,
-			Type:       item.Type,
-			IsFolder:   item.IsFolder,
-			ParentId:   item.ParentId,
-			SeasonName: item.SeasonName,
-			SeasonId:   item.SeasonId,
-			SeriesName: item.SeriesName,
-			SeriesId:   item.SeriesId,
-		})
+		items = append(items, item2pb(&item))
 	}
 	paths, err := genPath(cli, req.Path)
 	if err != nil {
@@ -142,18 +153,18 @@ func genPath(cli *emby.Client, id string) ([]*pb.Path, error) {
 		paths = append([]*pb.Path{
 			{
 				Name: item.Name,
-				Path: item.Id,
+				Path: item.ID,
 			},
 		}, paths...)
 		switch item.Type {
 		case "Series", "Folder":
-			i, err := strconv.Atoi(item.ParentId)
+			i, err := strconv.Atoi(item.ParentID)
 			if err != nil {
 				return nil, err
 			}
 			id = strconv.Itoa(i + 1)
 		default:
-			id = item.ParentId
+			id = item.ParentID
 		}
 	}
 	return append([]*pb.Path{

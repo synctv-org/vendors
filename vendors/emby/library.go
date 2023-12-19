@@ -8,7 +8,7 @@ import (
 	json "github.com/json-iterator/go"
 )
 
-func (c *Client) GetItem(id string) (*MediaItem, error) {
+func (c *Client) GetItem(id string) (*Items, error) {
 	if id == "" || id == "0" {
 		id = "1"
 	}
