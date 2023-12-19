@@ -122,6 +122,7 @@ func (a *EmbyService) FsList(ctx context.Context, req *pb.FsListReq) (*pb.FsList
 	return &pb.FsListResp{
 		Items: items,
 		Paths: paths,
+		Total: r.TotalRecordCount,
 	}, nil
 }
 

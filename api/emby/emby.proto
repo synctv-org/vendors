@@ -156,4 +156,5 @@ message Path {
 message FsListResp {
   repeated Path paths = 1;
   repeated Item items = 2;
+  uint64 total = 3;
 }

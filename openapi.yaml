@@ -918,6 +918,8 @@ components:
                     type: array
                     items:
                         $ref: '#/components/schemas/api.emby.Item'
+                total:
+                    type: string
         api.emby.GetItemReq:
             type: object
             properties:
