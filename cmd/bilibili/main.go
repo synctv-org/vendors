@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"net/url"
 	"os"
 
 	"github.com/synctv-org/vendors/conf"
@@ -44,6 +45,21 @@ func newApp(logger log.Logger, gs *utils.GrpcGatewayServer, hs *http.Server, r r
 	if hs != nil {
 		s = append(s, hs)
 	}
+	es := make([]*url.URL, 0, 2)
+	if gs != nil {
+		ges, err := gs.Endpoints()
+		if err != nil {
+			panic(err)
+		}
+		es = append(es, ges...)
+	}
+	if hs != nil {
+		he, err := hs.Endpoint()
+		if err != nil {
+			panic(err)
+		}
+		es = append(es, he)
+	}
 	return kratos.New(
 		kratos.ID(id),
 		kratos.Name(Name),
@@ -54,6 +70,7 @@ func newApp(logger log.Logger, gs *utils.GrpcGatewayServer, hs *http.Server, r r
 			s...,
 		),
 		kratos.Registrar(r),
+		kratos.Endpoint(es...),
 	)
 }
 

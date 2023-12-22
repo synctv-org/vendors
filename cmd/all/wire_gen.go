@@ -27,9 +27,9 @@ func wireApp(confServer *conf.Server, confRegistry *conf.Registry, alistConfig *
 	bilibiliService := bilibili.NewBilibiliService(bilibiliConfig)
 	alistService := alist.NewAlistService(alistConfig)
 	embyService := emby.NewEmbyService(embyConfig)
-	transportServer := server.NewGRPCServer(confServer, bilibiliService, alistService, embyService, logger)
+	grpcGatewayServer := server.NewGRPCServer(confServer, bilibiliService, alistService, embyService)
 	registrar := registry.NewRegistry(confRegistry)
-	app := newApp(logger, transportServer, registrar)
+	app := newApp(logger, grpcGatewayServer, registrar)
 	return app, func() {
 	}, nil
 }

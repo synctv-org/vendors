@@ -34,7 +34,11 @@ func init() {
 	flag.StringVar(&Name, "name", "", "server name")
 }
 
-func newApp(logger log.Logger, gs *utils.GrpcGatewayServer, r registry.Registrar) *kratos.App {
+func newApp(logger log.Logger, s *utils.GrpcGatewayServer, r registry.Registrar) *kratos.App {
+	es, err := s.Endpoints()
+	if err != nil {
+		panic(err)
+	}
 	return kratos.New(
 		kratos.ID(id),
 		kratos.Name(Name),
@@ -42,9 +46,10 @@ func newApp(logger log.Logger, gs *utils.GrpcGatewayServer, r registry.Registrar
 		kratos.Metadata(map[string]string{}),
 		kratos.Logger(logger),
 		kratos.Server(
-			gs,
+			s,
 		),
 		kratos.Registrar(r),
+		kratos.Endpoint(es...),
 	)
 }
 

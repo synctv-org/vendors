@@ -23,7 +23,7 @@ import (
 
 func wireApp(confServer *conf.Server, confRegistry *conf.Registry, alistConfig *conf.AlistConfig, logger log.Logger) (*kratos.App, func(), error) {
 	alistService := alist.NewAlistService(alistConfig)
-	grpcGatewayServer := server.NewGRPCServer(confServer, alistService, logger)
+	grpcGatewayServer := server.NewGRPCServer(confServer, alistService)
 	registrar := registry.NewRegistry(confRegistry)
 	app := newApp(logger, grpcGatewayServer, registrar)
 	return app, func() {
