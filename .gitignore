@@ -30,13 +30,13 @@ Thumbs.db
 *.cert
 *.key
 *.log
-bin/
+build/
 
 # Develop tools
 .vscode/
 .idea/
 *.swp
 
-/configs
+config.yaml
 
 *_init_test.go

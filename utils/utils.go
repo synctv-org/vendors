@@ -66,16 +66,10 @@ func grpcHandlerFunc(gs *ggrpc.Server, other http.Handler) http.Handler {
 }
 
 type GrpcGatewayServer struct {
-	gs   *ggrpc.Server
-	hs   *ghttp.Server
-	once sync.Once
-}
-
-func muxGrpcGatewayServer(gs *ggrpc.Server, hs *ghttp.Server) *GrpcGatewayServer {
-	return &GrpcGatewayServer{
-		gs: gs,
-		hs: hs,
-	}
+	gs          *ggrpc.Server
+	hs          *ghttp.Server
+	serviceName string
+	once        sync.Once
 }
 
 func (s *GrpcGatewayServer) Start(ctx context.Context) error {
@@ -111,6 +105,10 @@ func (s *GrpcGatewayServer) Endpoints() ([]*url.URL, error) {
 		return nil, err
 	}
 	return []*url.URL{ge, he}, nil
+}
+
+func (s *GrpcGatewayServer) ServiceName() string {
+	return s.serviceName
 }
 
 func NewGrpcGatewayServer(config *conf.Server) *GrpcGatewayServer {
@@ -208,5 +206,9 @@ func NewGrpcGatewayServer(config *conf.Server) *GrpcGatewayServer {
 	// }
 
 	gs := ggrpc.NewServer(gopts...)
-	return muxGrpcGatewayServer(gs, hs)
+	return &GrpcGatewayServer{
+		gs:          gs,
+		hs:          hs,
+		serviceName: config.ServiceName,
+	}
 }

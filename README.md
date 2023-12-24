@@ -1,3 +1,8 @@
 # Vendors
 
-## Bilibili
+## Run
+```bash
+make init
+make build
+./build/vendors server
+```

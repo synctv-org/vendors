@@ -3,7 +3,7 @@
 
 // The build tag makes sure the stub is not built in the final build.
 
-package main
+package server
 
 import (
 	"github.com/synctv-org/vendors/conf"

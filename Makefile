@@ -1,6 +1,5 @@
 GOHOSTOS:=$(shell go env GOHOSTOS)
 GOPATH:=$(shell go env GOPATH)
-VERSION=$(shell git describe --tags --always)
 
 ifeq ($(GOHOSTOS), windows)
 	#the `find.exe` is different from `find` in bash/shell.
@@ -20,6 +19,7 @@ endif
 init:
 	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+	go install github.com/favadi/protoc-go-inject-tag@latest
 	go install github.com/go-kratos/kratos/cmd/kratos/v2@latest
 	go install github.com/go-kratos/kratos/cmd/protoc-gen-go-http/v2@latest
 	go install github.com/google/gnostic/cmd/protoc-gen-openapi@latest
@@ -32,6 +32,7 @@ config:
 	       --proto_path=./third_party \
  	       --go_out=paths=source_relative:./conf \
 	       $(CONFIG_PROTO_FILES)
+	protoc-go-inject-tag -input=./conf/*.pb.go
 
 .PHONY: api
 # generate api proto
@@ -47,7 +48,33 @@ api:
 .PHONY: build
 # build
 build:
-	mkdir -p bin/ && go build -ldflags "-X main.Version=$(VERSION)" -o ./bin/ ./...
+	bash script/build.sh
+
+.PHONY: build-all
+# build all
+build-all:
+	bash script/build.sh -p all
+
+.PHONY: build-darwin
+# build darwin
+build-darwin:
+	bash script/build.sh -p darwin
+
+.PHONY: build-linux
+# build linux
+build-linux:
+	bash script/build.sh -p linux
+
+.PHONY: build-windows
+# build windows
+build-windows:
+	bash script/build.sh -p windows
+
+.PHONY: run
+# run
+run:
+	make build
+	./build/vendors server
 
 .PHONY: generate
 # generate

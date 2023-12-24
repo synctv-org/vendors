@@ -1,0 +1,13 @@
+version: '3.3'
+services:
+  vendors:
+    image: 'synctvorg/vendors:latest'
+    container_name: synctv-vendors
+    restart: unless-stopped
+    ports:
+      - '9000:9000/tcp'
+    environment:
+      - PUID=0
+      - PGID=0
+      - UMASK=022
+      - TZ=Asia/Shanghai

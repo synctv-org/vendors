@@ -7,43 +7,49 @@ import "google/protobuf/duration.proto";
 
 message Registry {
   message Consul {
-    string scheme = 1;
-    string addr = 2;
-    string prefix = 3;
-    google.protobuf.Duration timeout = 4;
+    string scheme = 1;                    // @gotags: env:"CONSUL_SCHEME"
+    string addr = 2;                      // @gotags: env:"CONSUL_ADDR"
+    string prefix = 3;                    // @gotags: env:"CONSUL_PREFIX"
+    google.protobuf.Duration timeout = 4; // @gotags: env:"CONSUL_TIMEOUT"
   }
   message Etcd {
-    repeated string endpoints = 1;
-    string username = 2;
-    string password = 3;
-    google.protobuf.Duration timeout = 4;
+    string endpoint = 1;                  // @gotags: env:"ETCD_ENDPOINT"
+    string username = 2;                  // @gotags: env:"ETCD_USERNAME"
+    string password = 3;                  // @gotags: env:"ETCD_PASSWORD"
+    google.protobuf.Duration timeout = 4; // @gotags: env:"ETCD_TIMEOUT"
   }
   Consul consul = 1;
   Etcd etcd = 2;
 }
 
-message TLS {
-  string cert_file = 1;
-  string key_file = 2;
-  string ca_file = 3;
+message Web {
+  message TLS {
+    string cert_file = 1; // @gotags: env:"WEB_CERT_FILE"
+    string key_file = 2;  // @gotags: env:"WEB_KEY_FILE"
+    string ca_file = 3;   // @gotags: env:"WEB_CA_FILE"
+  }
+  string addr = 1; // @gotags: env:"WEB_ADDR"
+  TLS tls = 2;
+  string custom_endpoint = 3; // @gotags: env:"WEB_CUSTOM_ENDPOINT"
 }
 
-message Web {
-  string addr = 1;
-  TLS tls = 2;
-  string custom_endpoint = 3;
-}
 message GRPC {
-  string addr = 1;
+  message TLS {
+    string cert_file = 1; // @gotags: env:"GRPC_CERT_FILE"
+    string key_file = 2;  // @gotags: env:"GRPC_KEY_FILE"
+    string ca_file = 3;   // @gotags: env:"GRPC_CA_FILE"
+  }
+  string addr = 1; // @gotags: env:"GRPC_ADDR"
   TLS tls = 2;
-  string custom_endpoint = 3;
+  string custom_endpoint = 3; // @gotags: env:"GRPC_CUSTOM_ENDPOINT"
 }
 
 message Server {
   Web web = 1;
   GRPC grpc = 2;
-  google.protobuf.Duration timeout = 3;
-  string jwt_secret = 4;
+  google.protobuf.Duration timeout = 3; // @gotags: env:"SERVER_TIMEOUT"
+  string jwt_secret = 4;                // @gotags: env:"SERVER_JWT_SECRET"
+  string service_name = 5;              // @gotags: env:"SERVICE_NAME"
 }
 
 message BilibiliConfig {}

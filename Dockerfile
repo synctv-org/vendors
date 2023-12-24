@@ -1,24 +1,30 @@
-FROM golang:1.18 AS builder
+From alpine:latest as builder
 
-COPY . /src
-WORKDIR /src
+WORKDIR /vendors
+
+COPY ./ ./
+
+RUN apk add --no-cache bash curl gcc git go musl-dev 
 
 RUN make build
 
-FROM debian:stable-slim
+From alpine:latest
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates \
-    netbase &&
-    rm -rf /var/lib/apt/lists/ &&
-    apt-get autoremove -y && apt-get autoclean -y
+ENV PUID=0 PGID=0 UMASK=022
 
-COPY --from=builder /src/bin /app
+COPY --from=builder /vendors/bin/vendors /usr/local/bin/vendors
 
-WORKDIR /app
+COPY script/entrypoint.sh /entrypoint.sh
 
-EXPOSE 8000
+RUN apk add --no-cache bash ca-certificates su-exec tzdata && \
+    rm -rf /var/cache/apk/* && \
+    chmod +x /entrypoint.sh && \
+    mkdir -p /vendors
+
+WORKDIR /vendors
+
 EXPOSE 9000
-VOLUME /data/conf
 
-CMD ["./server", "-conf", "/data/conf"]
+ENTRYPOINT [ "/entrypoint.sh" ]
+
+CMD [ "server" ]
