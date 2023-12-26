@@ -22,6 +22,7 @@ const _ = http.SupportPackageIsVersion1
 const OperationAlistFsGet = "/api.alist.Alist/FsGet"
 const OperationAlistFsList = "/api.alist.Alist/FsList"
 const OperationAlistFsOther = "/api.alist.Alist/FsOther"
+const OperationAlistFsSearch = "/api.alist.Alist/FsSearch"
 const OperationAlistLogin = "/api.alist.Alist/Login"
 const OperationAlistMe = "/api.alist.Alist/Me"
 
@@ -29,6 +30,7 @@ type AlistHTTPServer interface {
 	FsGet(context.Context, *FsGetReq) (*FsGetResp, error)
 	FsList(context.Context, *FsListReq) (*FsListResp, error)
 	FsOther(context.Context, *FsOtherReq) (*FsOtherResp, error)
+	FsSearch(context.Context, *FsSearchReq) (*FsSearchResp, error)
 	Login(context.Context, *LoginReq) (*LoginResp, error)
 	Me(context.Context, *MeReq) (*MeResp, error)
 }
@@ -40,6 +42,7 @@ func RegisterAlistHTTPServer(s *http.Server, srv AlistHTTPServer) {
 	r.POST("/fs/get", _Alist_FsGet0_HTTP_Handler(srv))
 	r.POST("/fs/list", _Alist_FsList0_HTTP_Handler(srv))
 	r.POST("/fs/other", _Alist_FsOther0_HTTP_Handler(srv))
+	r.POST("/fs/search", _Alist_FsSearch0_HTTP_Handler(srv))
 }
 
 func _Alist_Login0_HTTP_Handler(srv AlistHTTPServer) func(ctx http.Context) error {
@@ -149,10 +152,33 @@ func _Alist_FsOther0_HTTP_Handler(srv AlistHTTPServer) func(ctx http.Context) er
 	}
 }
 
+func _Alist_FsSearch0_HTTP_Handler(srv AlistHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in FsSearchReq
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationAlistFsSearch)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.FsSearch(ctx, req.(*FsSearchReq))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*FsSearchResp)
+		return ctx.Result(200, reply)
+	}
+}
+
 type AlistHTTPClient interface {
 	FsGet(ctx context.Context, req *FsGetReq, opts ...http.CallOption) (rsp *FsGetResp, err error)
 	FsList(ctx context.Context, req *FsListReq, opts ...http.CallOption) (rsp *FsListResp, err error)
 	FsOther(ctx context.Context, req *FsOtherReq, opts ...http.CallOption) (rsp *FsOtherResp, err error)
+	FsSearch(ctx context.Context, req *FsSearchReq, opts ...http.CallOption) (rsp *FsSearchResp, err error)
 	Login(ctx context.Context, req *LoginReq, opts ...http.CallOption) (rsp *LoginResp, err error)
 	Me(ctx context.Context, req *MeReq, opts ...http.CallOption) (rsp *MeResp, err error)
 }
@@ -196,6 +222,19 @@ func (c *AlistHTTPClientImpl) FsOther(ctx context.Context, in *FsOtherReq, opts 
 	pattern := "/fs/other"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationAlistFsOther))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *AlistHTTPClientImpl) FsSearch(ctx context.Context, in *FsSearchReq, opts ...http.CallOption) (*FsSearchResp, error) {
+	var out FsSearchResp
+	pattern := "/fs/search"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationAlistFsSearch))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

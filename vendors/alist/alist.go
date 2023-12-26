@@ -142,3 +142,25 @@ type meResp struct {
 	SsoID      string `json:"sso_id"`
 	Otp        bool   `json:"otp"`
 }
+
+type FsSearchReq struct {
+	Parent   string `json:"parent"`
+	Keywords string `json:"keywords"`
+	Scope    uint64 `json:"scope"`
+	Page     uint64 `json:"page"`
+	PerPage  uint64 `json:"per_page"`
+	Password string `json:"password"`
+}
+
+type fsSearchResp struct {
+	Content []struct {
+		Parent string `json:"parent"`
+		Name   string `json:"name"`
+		IsDir  bool   `json:"is_dir"`
+		Size   uint64 `json:"size"`
+		Type   uint64 `json:"type"`
+	} `json:"content"`
+	Total uint64 `json:"total"`
+}
+
+type FsSearchResp = AlistResp[fsSearchResp]

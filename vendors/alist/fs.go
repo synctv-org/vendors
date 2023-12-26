@@ -7,8 +7,8 @@ import (
 	json "github.com/json-iterator/go"
 )
 
-func (c *Client) FsGet(fSGetReq FsGetReq) (*fsGetResp, error) {
-	req, err := c.NewRequest(http.MethodPost, "/api/fs/get", &fSGetReq)
+func (c *Client) FsGet(fSGetReq *FsGetReq) (*fsGetResp, error) {
+	req, err := c.NewRequest(http.MethodPost, "/api/fs/get", fSGetReq)
 	if err != nil {
 		return nil, err
 	}
@@ -27,8 +27,8 @@ func (c *Client) FsGet(fSGetReq FsGetReq) (*fsGetResp, error) {
 	return &r.Data, nil
 }
 
-func (c *Client) FsList(fSListReq FsListReq) (*fsListResp, error) {
-	req, err := c.NewRequest(http.MethodPost, "/api/fs/list", &fSListReq)
+func (c *Client) FsList(fSListReq *FsListReq) (*fsListResp, error) {
+	req, err := c.NewRequest(http.MethodPost, "/api/fs/list", fSListReq)
 	if err != nil {
 		return nil, err
 	}
@@ -47,8 +47,8 @@ func (c *Client) FsList(fSListReq FsListReq) (*fsListResp, error) {
 	return &r.Data, nil
 }
 
-func (c *Client) FsOther(fSOtherReq FsOtherReq) (*fsOtherResp, error) {
-	req, err := c.NewRequest(http.MethodPost, "/api/fs/other", &fSOtherReq)
+func (c *Client) FsOther(fSOtherReq *FsOtherReq) (*fsOtherResp, error) {
+	req, err := c.NewRequest(http.MethodPost, "/api/fs/other", fSOtherReq)
 	if err != nil {
 		return nil, err
 	}
@@ -67,8 +67,8 @@ func (c *Client) FsOther(fSOtherReq FsOtherReq) (*fsOtherResp, error) {
 	return &r.Data, nil
 }
 
-func (c *Client) FsMkdir(fSMkdirReq FsMkdirReq) error {
-	req, err := c.NewRequest(http.MethodPost, "/api/fs/mkdir", &fSMkdirReq)
+func (c *Client) FsMkdir(fSMkdirReq *FsMkdirReq) error {
+	req, err := c.NewRequest(http.MethodPost, "/api/fs/mkdir", fSMkdirReq)
 	if err != nil {
 		return err
 	}
@@ -87,8 +87,8 @@ func (c *Client) FsMkdir(fSMkdirReq FsMkdirReq) error {
 	return nil
 }
 
-func (c *Client) FsRename(fSRenameReq FsRenameReq) error {
-	req, err := c.NewRequest(http.MethodPost, "/api/fs/rename", &fSRenameReq)
+func (c *Client) FsRename(fSRenameReq *FsRenameReq) error {
+	req, err := c.NewRequest(http.MethodPost, "/api/fs/rename", fSRenameReq)
 	if err != nil {
 		return err
 	}
@@ -107,8 +107,8 @@ func (c *Client) FsRename(fSRenameReq FsRenameReq) error {
 	return nil
 }
 
-func (c *Client) FsRemove(fSRemoveReq FsRemoveReq) error {
-	req, err := c.NewRequest(http.MethodPost, "/api/fs/remove", &fSRemoveReq)
+func (c *Client) FsRemove(fSRemoveReq *FsRemoveReq) error {
+	req, err := c.NewRequest(http.MethodPost, "/api/fs/remove", fSRemoveReq)
 	if err != nil {
 		return err
 	}
@@ -125,4 +125,24 @@ func (c *Client) FsRemove(fSRemoveReq FsRemoveReq) error {
 		return fmt.Errorf("alist: %s", r.Message)
 	}
 	return nil
+}
+
+func (c *Client) FsSearch(fSSearchReq *FsSearchReq) (*fsSearchResp, error) {
+	req, err := c.NewRequest(http.MethodPost, "/api/fs/search", fSSearchReq)
+	if err != nil {
+		return nil, err
+	}
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	var r FsSearchResp
+	if err := json.NewDecoder(resp.Body).Decode(&r); err != nil {
+		return nil, err
+	}
+	if r.Code != 200 {
+		return nil, fmt.Errorf("alist: %s", r.Message)
+	}
+	return &r.Data, nil
 }

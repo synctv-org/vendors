@@ -19,11 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Alist_Login_FullMethodName   = "/api.alist.Alist/Login"
-	Alist_Me_FullMethodName      = "/api.alist.Alist/Me"
-	Alist_FsGet_FullMethodName   = "/api.alist.Alist/FsGet"
-	Alist_FsList_FullMethodName  = "/api.alist.Alist/FsList"
-	Alist_FsOther_FullMethodName = "/api.alist.Alist/FsOther"
+	Alist_Login_FullMethodName    = "/api.alist.Alist/Login"
+	Alist_Me_FullMethodName       = "/api.alist.Alist/Me"
+	Alist_FsGet_FullMethodName    = "/api.alist.Alist/FsGet"
+	Alist_FsList_FullMethodName   = "/api.alist.Alist/FsList"
+	Alist_FsOther_FullMethodName  = "/api.alist.Alist/FsOther"
+	Alist_FsSearch_FullMethodName = "/api.alist.Alist/FsSearch"
 )
 
 // AlistClient is the client API for Alist service.
@@ -35,6 +36,7 @@ type AlistClient interface {
 	FsGet(ctx context.Context, in *FsGetReq, opts ...grpc.CallOption) (*FsGetResp, error)
 	FsList(ctx context.Context, in *FsListReq, opts ...grpc.CallOption) (*FsListResp, error)
 	FsOther(ctx context.Context, in *FsOtherReq, opts ...grpc.CallOption) (*FsOtherResp, error)
+	FsSearch(ctx context.Context, in *FsSearchReq, opts ...grpc.CallOption) (*FsSearchResp, error)
 }
 
 type alistClient struct {
@@ -90,6 +92,15 @@ func (c *alistClient) FsOther(ctx context.Context, in *FsOtherReq, opts ...grpc.
 	return out, nil
 }
 
+func (c *alistClient) FsSearch(ctx context.Context, in *FsSearchReq, opts ...grpc.CallOption) (*FsSearchResp, error) {
+	out := new(FsSearchResp)
+	err := c.cc.Invoke(ctx, Alist_FsSearch_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AlistServer is the server API for Alist service.
 // All implementations must embed UnimplementedAlistServer
 // for forward compatibility
@@ -99,6 +110,7 @@ type AlistServer interface {
 	FsGet(context.Context, *FsGetReq) (*FsGetResp, error)
 	FsList(context.Context, *FsListReq) (*FsListResp, error)
 	FsOther(context.Context, *FsOtherReq) (*FsOtherResp, error)
+	FsSearch(context.Context, *FsSearchReq) (*FsSearchResp, error)
 	mustEmbedUnimplementedAlistServer()
 }
 
@@ -120,6 +132,9 @@ func (UnimplementedAlistServer) FsList(context.Context, *FsListReq) (*FsListResp
 }
 func (UnimplementedAlistServer) FsOther(context.Context, *FsOtherReq) (*FsOtherResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FsOther not implemented")
+}
+func (UnimplementedAlistServer) FsSearch(context.Context, *FsSearchReq) (*FsSearchResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FsSearch not implemented")
 }
 func (UnimplementedAlistServer) mustEmbedUnimplementedAlistServer() {}
 
@@ -224,6 +239,24 @@ func _Alist_FsOther_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Alist_FsSearch_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FsSearchReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AlistServer).FsSearch(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Alist_FsSearch_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AlistServer).FsSearch(ctx, req.(*FsSearchReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Alist_ServiceDesc is the grpc.ServiceDesc for Alist service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -250,6 +283,10 @@ var Alist_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "FsOther",
 			Handler:    _Alist_FsOther_Handler,
+		},
+		{
+			MethodName: "FsSearch",
+			Handler:    _Alist_FsSearch_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

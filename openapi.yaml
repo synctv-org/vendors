@@ -432,6 +432,24 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.alist.FsOtherResp'
+    /fs/search:
+        post:
+            tags:
+                - Alist
+            operationId: Alist_FsSearch
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.alist.FsSearchReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.alist.FsSearchResp'
     /me:
         get:
             tags:
@@ -579,6 +597,47 @@ components:
                         $ref: '#/components/schemas/api.alist.VideoPreviewPlayInfo_LiveTranscodingTaskList'
                 meta:
                     $ref: '#/components/schemas/api.alist.VideoPreviewPlayInfo_Meta'
+        api.alist.FsSearchReq:
+            type: object
+            properties:
+                host:
+                    type: string
+                token:
+                    type: string
+                parent:
+                    type: string
+                keywords:
+                    type: string
+                scope:
+                    type: string
+                page:
+                    type: string
+                perPage:
+                    type: string
+                password:
+                    type: string
+        api.alist.FsSearchResp:
+            type: object
+            properties:
+                content:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.alist.FsSearchResp_FsSearchContent'
+                total:
+                    type: string
+        api.alist.FsSearchResp_FsSearchContent:
+            type: object
+            properties:
+                parent:
+                    type: string
+                name:
+                    type: string
+                isDir:
+                    type: boolean
+                size:
+                    type: string
+                type:
+                    type: string
         api.alist.LoginReq:
             type: object
             properties:

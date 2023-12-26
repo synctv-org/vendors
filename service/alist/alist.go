@@ -60,7 +60,7 @@ func (a *AlistService) FsGet(ctx context.Context, req *pb.FsGetReq) (*pb.FsGetRe
 	if err != nil {
 		return nil, err
 	}
-	r, err := cli.FsGet(alist.FsGetReq{
+	r, err := cli.FsGet(&alist.FsGetReq{
 		Path:     req.Path,
 		Password: req.Password,
 	})
@@ -88,7 +88,7 @@ func (a *AlistService) FsList(ctx context.Context, req *pb.FsListReq) (*pb.FsLis
 	if err != nil {
 		return nil, err
 	}
-	r, err := cli.FsList(alist.FsListReq{
+	r, err := cli.FsList(&alist.FsListReq{
 		Path:     req.Path,
 		Password: req.Password,
 		Page:     req.Page,
@@ -124,7 +124,7 @@ func (a *AlistService) FsOther(ctx context.Context, req *pb.FsOtherReq) (*pb.FsO
 	if err != nil {
 		return nil, err
 	}
-	r, err := cli.FsOther(alist.FsOtherReq{
+	r, err := cli.FsOther(&alist.FsOtherReq{
 		Path:     req.Path,
 		Method:   req.Method,
 		Password: req.Password,
@@ -168,5 +168,37 @@ func (a *AlistService) FsOther(ctx context.Context, req *pb.FsOtherReq) (*pb.FsO
 		DriveId:              r.DriveID,
 		FileId:               r.FileID,
 		VideoPreviewPlayInfo: &videoPreviewPlayInfo,
+	}, nil
+}
+
+func (a *AlistService) FsSearch(ctx context.Context, req *pb.FsSearchReq) (*pb.FsSearchResp, error) {
+	cli, err := alist.NewClient(req.Host, req.Token, alist.WithContext(ctx))
+	if err != nil {
+		return nil, err
+	}
+	r, err := cli.FsSearch(&alist.FsSearchReq{
+		Parent:   req.Parent,
+		Password: req.Password,
+		Keywords: req.Keywords,
+		Scope:    req.Scope,
+		Page:     req.Page,
+		PerPage:  req.PerPage,
+	})
+	if err != nil {
+		return nil, err
+	}
+	var content []*pb.FsSearchResp_FsSearchContent
+	for _, v := range r.Content {
+		content = append(content, &pb.FsSearchResp_FsSearchContent{
+			Parent: v.Parent,
+			Name:   v.Name,
+			Size:   v.Size,
+			IsDir:  v.IsDir,
+			Type:   v.Type,
+		})
+	}
+	return &pb.FsSearchResp{
+		Content: content,
+		Total:   r.Total,
 	}, nil
 }

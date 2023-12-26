@@ -29,7 +29,7 @@ func TestFsGet(t *testing.T) {
 		t.Fatalf("NewClient error: %v", err)
 	}
 	for _, v := range tests {
-		get, err := client.FsGet(alist.FsGetReq{
+		get, err := client.FsGet(&alist.FsGetReq{
 			Path: v.path,
 		})
 		if (err != nil) != v.wantErr {
@@ -55,7 +55,7 @@ func TestFsList(t *testing.T) {
 		t.Fatalf("NewClient error: %v", err)
 	}
 	for _, v := range tests {
-		list, err := client.FsList(alist.FsListReq{
+		list, err := client.FsList(&alist.FsListReq{
 			Path:    v.path,
 			Page:    1,
 			PerPage: 1,
