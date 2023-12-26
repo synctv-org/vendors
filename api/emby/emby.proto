@@ -79,6 +79,7 @@ message GetItemsReq {
   string host = 1;
   string token = 2;
   string parentId = 3;
+  string searchTerm = 4;
 }
 
 message MediaStreamInfo {
@@ -170,6 +171,7 @@ message FsListReq {
   string path = 3;
   uint64 startIndex = 4;
   uint64 limit = 5;
+  string searchTerm = 6;
 }
 
 message Path {

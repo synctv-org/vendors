@@ -57,16 +57,57 @@ func WithLimit(limit uint64) GetItemsOptionFunc {
 	}
 }
 
-func (c *Client) GetItems(id string, opt ...GetItemsOptionFunc) (*GetItemResp, error) {
-	if id == "" || id == "0" {
-		id = "1"
+func WithParentId(parentId string) GetItemsOptionFunc {
+	return func(o map[string]string) {
+		if parentId == "" || parentId == "0" {
+			parentId = "1"
+		}
+		o["ParentId"] = parentId
 	}
+}
+
+func WithSortBy(sortBy string) GetItemsOptionFunc {
+	return func(o map[string]string) {
+		o["SortBy"] = sortBy
+	}
+}
+
+func WithSortOrderAsc() GetItemsOptionFunc {
+	return func(o map[string]string) {
+		o["SortOrder"] = "Ascending"
+	}
+}
+
+func WithSortOrderDesc() GetItemsOptionFunc {
+	return func(o map[string]string) {
+		o["SortOrder"] = "Descending"
+	}
+}
+
+func WithSearch(search string) GetItemsOptionFunc {
+	return func(o map[string]string) {
+		o["SearchTerm"] = search
+	}
+}
+
+// 递归获取
+func WithRecursive() GetItemsOptionFunc {
+	return func(o map[string]string) {
+		o["Recursive"] = "true"
+	}
+}
+
+func (c *Client) GetItems(opt ...GetItemsOptionFunc) (*GetItemResp, error) {
 	o := map[string]string{
-		"ParentId": id,
-		"Fields":   "MediaSources,ParentId",
+		"Fields": "MediaSources,ParentId",
 	}
 	for _, f := range opt {
 		f(o)
+	}
+	if _, ok := o["SearchTerm"]; ok {
+		if i, ok := o["ParentId"]; ok && i == "1" {
+			delete(o, "ParentId")
+		}
 	}
 	req, err := c.NewRequest(http.MethodGet, "/emby/Items", nil, o)
 	if err != nil {

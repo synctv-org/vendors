@@ -86,7 +86,13 @@ func item2pb(item *emby.Items) *pb.Item {
 
 func (a *EmbyService) GetItems(ctx context.Context, req *pb.GetItemsReq) (*pb.GetItemsResp, error) {
 	cli := emby.NewClient(req.Host, emby.WithContext(ctx), emby.WithKey(req.Token))
-	r, err := cli.GetItems(req.ParentId)
+	opts := []emby.GetItemsOptionFunc{
+		emby.WithParentId(req.ParentId),
+	}
+	if req.SearchTerm != "" {
+		opts = append(opts, emby.WithRecursive(), emby.WithSortBy("SortName"), emby.WithSortOrderAsc(), emby.WithSearch(req.SearchTerm))
+	}
+	r, err := cli.GetItems(opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -111,14 +117,19 @@ func (a *EmbyService) GetItem(ctx context.Context, req *pb.GetItemReq) (*pb.Item
 
 func (a *EmbyService) FsList(ctx context.Context, req *pb.FsListReq) (*pb.FsListResp, error) {
 	cli := emby.NewClient(req.Host, emby.WithContext(ctx), emby.WithKey(req.Token))
-	opts := make([]emby.GetItemsOptionFunc, 0)
+	opts := []emby.GetItemsOptionFunc{
+		emby.WithParentId(req.Path),
+	}
+	if req.SearchTerm != "" {
+		opts = append(opts, emby.WithRecursive(), emby.WithSortBy("SortName"), emby.WithSortOrderAsc(), emby.WithSearch(req.SearchTerm))
+	}
 	if req.StartIndex != 0 {
 		opts = append(opts, emby.WithStartIndex(req.StartIndex))
 	}
 	if req.Limit != 0 {
 		opts = append(opts, emby.WithLimit(req.Limit))
 	}
-	r, err := cli.GetItems(req.Path, opts...)
+	r, err := cli.GetItems(opts...)
 	if err != nil {
 		return nil, err
 	}

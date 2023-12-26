@@ -907,6 +907,8 @@ components:
                     type: string
                 limit:
                     type: string
+                searchTerm:
+                    type: string
         api.emby.FsListResp:
             type: object
             properties:
@@ -937,6 +939,8 @@ components:
                 token:
                     type: string
                 parentId:
+                    type: string
+                searchTerm:
                     type: string
         api.emby.GetItemsResp:
             type: object
