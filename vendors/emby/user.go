@@ -56,6 +56,29 @@ func (c *Client) Login(username, password string) error {
 	return nil
 }
 
+func (c *Client) Logout() error {
+	req, err := c.NewRequest(http.MethodPost, "/emby/Sessions/Logout", nil)
+	if err != nil {
+		return err
+	}
+	req.Header.Set("Authorization", fmt.Sprintf("Emby Client=\"Emby Web\", Device=\"SyncTV\", DeviceId=\"%s\", Version=\"4.7.14.0\"", uuid.NewString()))
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusNoContent {
+		b, err := io.ReadAll(resp.Body)
+		if err != nil {
+			return err
+		}
+		return errors.New(string(b))
+	}
+	c.SetKey("")
+	c.SetUserID("")
+	return nil
+}
+
 func (c *Client) Me() (*MeResp, error) {
 	if c.userID == "" {
 		return nil, errors.New("user id not set")

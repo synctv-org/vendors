@@ -223,3 +223,11 @@ func (a *EmbyService) GetSystemInfo(ctx context.Context, req *pb.SystemInfoReq) 
 		Id:                                   r.Id,
 	}, nil
 }
+
+func (a *EmbyService) Logout(ctx context.Context, req *pb.LogoutReq) (*pb.Empty, error) {
+	err := emby.NewClient(req.Host, emby.WithContext(ctx), emby.WithKey(req.Token)).Logout()
+	if err != nil {
+		return nil, err
+	}
+	return &pb.Empty{}, nil
+}

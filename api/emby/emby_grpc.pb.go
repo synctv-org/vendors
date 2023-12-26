@@ -25,6 +25,7 @@ const (
 	Emby_GetItem_FullMethodName       = "/api.emby.Emby/GetItem"
 	Emby_GetSystemInfo_FullMethodName = "/api.emby.Emby/GetSystemInfo"
 	Emby_FsList_FullMethodName        = "/api.emby.Emby/FsList"
+	Emby_Logout_FullMethodName        = "/api.emby.Emby/Logout"
 )
 
 // EmbyClient is the client API for Emby service.
@@ -37,6 +38,7 @@ type EmbyClient interface {
 	GetItem(ctx context.Context, in *GetItemReq, opts ...grpc.CallOption) (*Item, error)
 	GetSystemInfo(ctx context.Context, in *SystemInfoReq, opts ...grpc.CallOption) (*SystemInfoResp, error)
 	FsList(ctx context.Context, in *FsListReq, opts ...grpc.CallOption) (*FsListResp, error)
+	Logout(ctx context.Context, in *LogoutReq, opts ...grpc.CallOption) (*Empty, error)
 }
 
 type embyClient struct {
@@ -101,6 +103,15 @@ func (c *embyClient) FsList(ctx context.Context, in *FsListReq, opts ...grpc.Cal
 	return out, nil
 }
 
+func (c *embyClient) Logout(ctx context.Context, in *LogoutReq, opts ...grpc.CallOption) (*Empty, error) {
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, Emby_Logout_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // EmbyServer is the server API for Emby service.
 // All implementations must embed UnimplementedEmbyServer
 // for forward compatibility
@@ -111,6 +122,7 @@ type EmbyServer interface {
 	GetItem(context.Context, *GetItemReq) (*Item, error)
 	GetSystemInfo(context.Context, *SystemInfoReq) (*SystemInfoResp, error)
 	FsList(context.Context, *FsListReq) (*FsListResp, error)
+	Logout(context.Context, *LogoutReq) (*Empty, error)
 	mustEmbedUnimplementedEmbyServer()
 }
 
@@ -135,6 +147,9 @@ func (UnimplementedEmbyServer) GetSystemInfo(context.Context, *SystemInfoReq) (*
 }
 func (UnimplementedEmbyServer) FsList(context.Context, *FsListReq) (*FsListResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FsList not implemented")
+}
+func (UnimplementedEmbyServer) Logout(context.Context, *LogoutReq) (*Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Logout not implemented")
 }
 func (UnimplementedEmbyServer) mustEmbedUnimplementedEmbyServer() {}
 
@@ -257,6 +272,24 @@ func _Emby_FsList_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Emby_Logout_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LogoutReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EmbyServer).Logout(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Emby_Logout_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EmbyServer).Logout(ctx, req.(*LogoutReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Emby_ServiceDesc is the grpc.ServiceDesc for Emby service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -287,6 +320,10 @@ var Emby_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "FsList",
 			Handler:    _Emby_FsList_Handler,
+		},
+		{
+			MethodName: "Logout",
+			Handler:    _Emby_Logout_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

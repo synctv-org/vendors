@@ -342,6 +342,24 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.emby.LoginResp'
+    /emby/Sessions/Logout:
+        post:
+            tags:
+                - Emby
+            operationId: Emby_Logout
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.emby.LogoutReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.emby.Empty'
     /emby/System/Info:
         post:
             tags:
@@ -953,6 +971,9 @@ components:
                     type: string
                 url:
                     type: string
+        api.emby.Empty:
+            type: object
+            properties: {}
         api.emby.FsListReq:
             type: object
             properties:
@@ -1050,6 +1071,13 @@ components:
                 token:
                     type: string
                 userId:
+                    type: string
+        api.emby.LogoutReq:
+            type: object
+            properties:
+                host:
+                    type: string
+                token:
                     type: string
         api.emby.MeReq:
             type: object

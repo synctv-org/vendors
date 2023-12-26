@@ -50,6 +50,13 @@ service Emby {
       body : "*"
     };
   }
+
+  rpc Logout(LogoutReq) returns (Empty) {
+    option (google.api.http) = {
+      post : "/emby/Sessions/Logout"
+      body : "*"
+    };
+  }
 }
 
 message LoginReq {
@@ -184,3 +191,10 @@ message FsListResp {
   repeated Item items = 2;
   uint64 total = 3;
 }
+
+message LogoutReq {
+  string host = 1;
+  string token = 2;
+}
+
+message Empty {}

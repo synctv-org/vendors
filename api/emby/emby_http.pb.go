@@ -24,6 +24,7 @@ const OperationEmbyGetItem = "/api.emby.Emby/GetItem"
 const OperationEmbyGetItems = "/api.emby.Emby/GetItems"
 const OperationEmbyGetSystemInfo = "/api.emby.Emby/GetSystemInfo"
 const OperationEmbyLogin = "/api.emby.Emby/Login"
+const OperationEmbyLogout = "/api.emby.Emby/Logout"
 const OperationEmbyMe = "/api.emby.Emby/Me"
 
 type EmbyHTTPServer interface {
@@ -32,6 +33,7 @@ type EmbyHTTPServer interface {
 	GetItems(context.Context, *GetItemsReq) (*GetItemsResp, error)
 	GetSystemInfo(context.Context, *SystemInfoReq) (*SystemInfoResp, error)
 	Login(context.Context, *LoginReq) (*LoginResp, error)
+	Logout(context.Context, *LogoutReq) (*Empty, error)
 	Me(context.Context, *MeReq) (*MeResp, error)
 }
 
@@ -43,6 +45,7 @@ func RegisterEmbyHTTPServer(s *http.Server, srv EmbyHTTPServer) {
 	r.POST("/emby/Items/{itemId}", _Emby_GetItem0_HTTP_Handler(srv))
 	r.POST("/emby/System/Info", _Emby_GetSystemInfo0_HTTP_Handler(srv))
 	r.POST("/emby/FileSystem/Paths", _Emby_FsList1_HTTP_Handler(srv))
+	r.POST("/emby/Sessions/Logout", _Emby_Logout0_HTTP_Handler(srv))
 }
 
 func _Emby_Login1_HTTP_Handler(srv EmbyHTTPServer) func(ctx http.Context) error {
@@ -180,12 +183,35 @@ func _Emby_FsList1_HTTP_Handler(srv EmbyHTTPServer) func(ctx http.Context) error
 	}
 }
 
+func _Emby_Logout0_HTTP_Handler(srv EmbyHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in LogoutReq
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationEmbyLogout)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.Logout(ctx, req.(*LogoutReq))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*Empty)
+		return ctx.Result(200, reply)
+	}
+}
+
 type EmbyHTTPClient interface {
 	FsList(ctx context.Context, req *FsListReq, opts ...http.CallOption) (rsp *FsListResp, err error)
 	GetItem(ctx context.Context, req *GetItemReq, opts ...http.CallOption) (rsp *Item, err error)
 	GetItems(ctx context.Context, req *GetItemsReq, opts ...http.CallOption) (rsp *GetItemsResp, err error)
 	GetSystemInfo(ctx context.Context, req *SystemInfoReq, opts ...http.CallOption) (rsp *SystemInfoResp, err error)
 	Login(ctx context.Context, req *LoginReq, opts ...http.CallOption) (rsp *LoginResp, err error)
+	Logout(ctx context.Context, req *LogoutReq, opts ...http.CallOption) (rsp *Empty, err error)
 	Me(ctx context.Context, req *MeReq, opts ...http.CallOption) (rsp *MeResp, err error)
 }
 
@@ -254,6 +280,19 @@ func (c *EmbyHTTPClientImpl) Login(ctx context.Context, in *LoginReq, opts ...ht
 	pattern := "/emby/Login"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationEmbyLogin))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *EmbyHTTPClientImpl) Logout(ctx context.Context, in *LogoutReq, opts ...http.CallOption) (*Empty, error) {
+	var out Empty
+	pattern := "/emby/Sessions/Logout"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationEmbyLogout))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
