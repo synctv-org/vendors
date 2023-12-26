@@ -1,6 +1,6 @@
 #!/bin/bash
 
-chown -R ${PUID}:${PGID} /synctv
+chown -R ${PUID}:${PGID} /vendors
 
 umask ${UMASK}
 
