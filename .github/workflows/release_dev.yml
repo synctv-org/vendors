@@ -22,7 +22,7 @@ jobs:
 
       - name: Build
         run: |
-          bash script/build.sh -v dev -p "windows,linux,darwin"
+          make build-all
 
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:

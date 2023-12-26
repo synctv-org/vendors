@@ -1,18 +1,20 @@
 From alpine:latest as builder
 
+ARG VERSION=dev
+
 WORKDIR /vendors
 
 COPY ./ ./
 
 RUN apk add --no-cache bash curl gcc git go musl-dev 
 
-RUN make build
+RUN bash script/build.sh -v ${VERSION}
 
 From alpine:latest
 
 ENV PUID=0 PGID=0 UMASK=022
 
-COPY --from=builder /vendors/bin/vendors /usr/local/bin/vendors
+COPY --from=builder /vendors/build/vendors /usr/local/build/vendors
 
 COPY script/entrypoint.sh /entrypoint.sh
 
