@@ -25,8 +25,9 @@ func (a *EmbyService) Login(ctx context.Context, req *pb.LoginReq) (*pb.LoginRes
 		return nil, err
 	}
 	return &pb.LoginResp{
-		Token:  r.AccessToken,
-		UserId: r.UserID,
+		Token:    r.AccessToken,
+		UserId:   r.UserID,
+		ServerId: r.ServerID,
 	}, nil
 }
 

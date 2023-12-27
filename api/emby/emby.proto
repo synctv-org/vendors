@@ -68,6 +68,7 @@ message LoginReq {
 message LoginResp {
   string token = 1;
   string userId = 2;
+  string serverId = 3;
 }
 
 message MeReq {

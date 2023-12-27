@@ -13,6 +13,7 @@ import (
 type GetApiKeyResp struct {
 	AccessToken string `json:"AccessToken"`
 	UserID      string `json:"User"`
+	ServerID    string `json:"ServerId"`
 }
 
 func (c *Client) GetApiKey(username, password string) (*GetApiKeyResp, error) {
@@ -43,6 +44,7 @@ func (c *Client) GetApiKey(username, password string) (*GetApiKeyResp, error) {
 	return &GetApiKeyResp{
 		AccessToken: loginResp.AccessToken,
 		UserID:      loginResp.User.ID,
+		ServerID:    loginResp.ServerID,
 	}, nil
 }
 
