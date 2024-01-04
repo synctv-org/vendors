@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"path/filepath"
 	"strings"
 	"sync"
 
@@ -17,7 +18,9 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	ggrpc "github.com/go-kratos/kratos/v2/transport/grpc"
 	ghttp "github.com/go-kratos/kratos/v2/transport/http"
+	"github.com/synctv-org/vendors/cmd/flags"
 	"github.com/synctv-org/vendors/conf"
+	"github.com/zijiren233/go-colorable"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 	"google.golang.org/grpc"
@@ -209,4 +212,42 @@ func NewGrpcGatewayServer(config *conf.GrpcServer) *GrpcGatewayServer {
 		gs: gs,
 		hs: hs,
 	}
+}
+
+func GetEnvFiles(root string) ([]string, error) {
+	var files []string
+
+	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		if !info.IsDir() && strings.HasPrefix(info.Name(), ".env") {
+			files = append(files, path)
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return files, nil
+}
+
+var (
+	needColor     bool
+	needColorOnce sync.Once
+)
+
+func ForceColor() bool {
+	needColorOnce.Do(func() {
+		if flags.DisableLogColor {
+			needColor = false
+			return
+		}
+		needColor = colorable.IsTerminal(os.Stdout.Fd())
+	})
+	return needColor
 }

@@ -50,44 +50,14 @@ message GrpcServer {
 
 message BilibiliConfig {}
 
-message BilibiliServer {
-  message Bilibili {
-    GrpcServer server = 1;
-    Registry registry = 2;
-    BilibiliConfig config = 3;
-  }
-  Bilibili bilibili = 1;
-}
-
 message AlistConfig {}
-
-message AlistServer {
-  message Alist {
-    GrpcServer server = 1;
-    Registry registry = 2;
-    AlistConfig config = 3;
-  }
-  Alist alist = 1;
-}
 
 message EmbyConfig {}
 
-message EmbyServer {
-  message Emby {
-    GrpcServer server = 1;
-    Registry registry = 2;
-    EmbyConfig config = 3;
-  }
-  Emby emby = 1;
-}
-
 message AllServer {
-  message All {
-    GrpcServer server = 1;
-    Registry registry = 2;
-    BilibiliConfig bilibili = 3;
-    AlistConfig alist = 4;
-    EmbyConfig emby = 5;
-  }
-  All all = 1;
+  GrpcServer server = 1;
+  Registry registry = 2;
+  BilibiliConfig bilibili = 3;
+  AlistConfig alist = 4;
+  EmbyConfig emby = 5;
 }

@@ -53,10 +53,8 @@ var ServerCmd = &cobra.Command{
 
 func Server(cmd *cobra.Command, args []string) {
 	var bc conf.AllServer = conf.AllServer{
-		All: &conf.AllServer_All{
-			Server:   conf.DefaultGrpcServer(),
-			Registry: conf.DefaultRegistry(),
-		},
+		Server:   conf.DefaultGrpcServer(),
+		Registry: conf.DefaultRegistry(),
 	}
 
 	if flagconf != "" {
@@ -75,23 +73,23 @@ func Server(cmd *cobra.Command, args []string) {
 		}
 	}
 
-	if err := env.Parse(bc.All); err != nil {
+	if err := env.Parse(&bc); err != nil {
 		panic(err)
 	}
 
-	id = fmt.Sprintf("%s-%s", id, bc.All.Server.Addr)
+	id = fmt.Sprintf("%s-%s", id, bc.Server.Addr)
 
 	logger := log.With(log.NewStdLogger(os.Stdout),
 		"ts", log.DefaultTimestamp,
 		"caller", log.DefaultCaller,
 		"service.id", id,
-		"service.name", bc.All.Server.ServiceName,
+		"service.name", bc.Server.ServiceName,
 		"service.version", flags.Version,
 		"trace.id", tracing.TraceID(),
 		"span.id", tracing.SpanID(),
 	)
 
-	app, cleanup, err := wireApp(bc.All.Server, bc.All.Registry, bc.All.Alist, bc.All.Bilibili, bc.All.Emby, logger)
+	app, cleanup, err := wireApp(bc.Server, bc.Registry, bc.Alist, bc.Bilibili, bc.Emby, logger)
 	if err != nil {
 		panic(err)
 	}
