@@ -111,7 +111,7 @@ func (s *GrpcGatewayServer) ServiceName() string {
 	return s.serviceName
 }
 
-func NewGrpcGatewayServer(config *conf.Server) *GrpcGatewayServer {
+func NewGrpcGatewayServer(config *conf.GrpcServer) *GrpcGatewayServer {
 	middlewares := []middleware.Middleware{recovery.Recovery()}
 	if config.JwtSecret != "" {
 		jwtSecret := []byte(config.JwtSecret)
@@ -120,7 +120,7 @@ func NewGrpcGatewayServer(config *conf.Server) *GrpcGatewayServer {
 		}, jwt.WithSigningMethod(jwtv4.SigningMethodHS256)))
 	}
 
-	l, err := net.Listen("tcp", config.Grpc.Addr)
+	l, err := net.Listen("tcp", config.Addr)
 	if err != nil {
 		panic(err)
 	}
@@ -128,13 +128,13 @@ func NewGrpcGatewayServer(config *conf.Server) *GrpcGatewayServer {
 	var hopts = []ghttp.ServerOption{
 		ghttp.Middleware(middlewares...),
 		ghttp.Listener(l),
-		ghttp.Address(config.Grpc.Addr),
+		ghttp.Address(config.Addr),
 	}
 
 	var gopts = []ggrpc.ServerOption{
 		ggrpc.Middleware(middlewares...),
 		ggrpc.Listener(l),
-		ggrpc.Address(config.Grpc.Addr),
+		ggrpc.Address(config.Addr),
 	}
 
 	if config.Timeout != nil {
@@ -142,31 +142,24 @@ func NewGrpcGatewayServer(config *conf.Server) *GrpcGatewayServer {
 		gopts = append(gopts, ggrpc.Timeout(config.Timeout.AsDuration()))
 	}
 
-	if config.Grpc.CustomEndpoint != "" {
-		u, err := url.Parse(config.Grpc.CustomEndpoint)
-		if err != nil {
-			panic(err)
-		}
-		hopts = append(hopts, ghttp.Endpoint(u))
-		gopts = append(gopts, ggrpc.Endpoint(u))
-	}
-
-	if config.Grpc.Tls != nil && config.Grpc.Tls.CertFile != "" && config.Grpc.Tls.KeyFile != "" {
+	var enableTls bool
+	if config.Tls != nil && config.Tls.CertFile != "" && config.Tls.KeyFile != "" {
+		enableTls = true
 		var rootCAs *x509.CertPool
 		rootCAs, err := x509.SystemCertPool()
 		if err != nil {
 			fmt.Println("Failed to load system root CA:", err)
 			panic(err)
 		}
-		if config.Grpc.Tls.CaFile != "" {
-			b, err := os.ReadFile(config.Grpc.Tls.CaFile)
+		if config.Tls.CaFile != "" {
+			b, err := os.ReadFile(config.Tls.CaFile)
 			if err != nil {
 				panic(err)
 			}
 			rootCAs.AppendCertsFromPEM(b)
 		}
 
-		cert, err := tls.LoadX509KeyPair(config.Grpc.Tls.CertFile, config.Grpc.Tls.KeyFile)
+		cert, err := tls.LoadX509KeyPair(config.Tls.CertFile, config.Tls.KeyFile)
 		if err != nil {
 			panic(err)
 		}
@@ -180,35 +173,40 @@ func NewGrpcGatewayServer(config *conf.Server) *GrpcGatewayServer {
 		}))
 	}
 
+	if config.CustomEndpoint != "" {
+		u, err := url.Parse(config.CustomEndpoint)
+		if err != nil {
+			panic(err)
+		}
+		var (
+			hu = *u
+			gu = *u
+		)
+		if u.Scheme == "grpcs" || u.Scheme == "https" {
+			hu.Scheme = "https"
+			gu.Scheme = "grpcs"
+		} else if u.Scheme == "grpc" || u.Scheme == "http" {
+			hu.Scheme = "http"
+			gu.Scheme = "grpc"
+		} else if u.Scheme == "" {
+			if enableTls {
+				hu.Scheme = "https"
+				gu.Scheme = "grpcs"
+			} else {
+				hu.Scheme = "http"
+				gu.Scheme = "grpc"
+			}
+		} else {
+			panic("invalid custom endpoint scheme")
+		}
+		hopts = append(hopts, ghttp.Endpoint(&hu))
+		gopts = append(gopts, ggrpc.Endpoint(&gu))
+	}
+
 	hs := ghttp.NewServer(hopts...)
-
-	// if config.Grpc.CustomEndpoint != "" {
-	// 	u, err := url.Parse(config.Grpc.CustomEndpoint)
-	// 	if err != nil {
-	// 		panic(err)
-	// 	}
-	// 	gopts = append(gopts, ggrpc.Endpoint(u))
-	// } else {
-	// 	// fix streamServerInterceptor panic(endpoint is nil)
-	// 	var (
-	// 		u   *url.URL
-	// 		err error
-	// 	)
-	// 	if config.Grpc.Tls != nil {
-	// 		u, err = url.Parse("grpcs://" + config.Grpc.Addr)
-	// 	} else {
-	// 		u, err = url.Parse("grpc://" + config.Grpc.Addr)
-	// 	}
-	// 	if err != nil {
-	// 		panic(err)
-	// 	}
-	// 	gopts = append(gopts, ggrpc.Endpoint(u))
-	// }
-
 	gs := ggrpc.NewServer(gopts...)
 	return &GrpcGatewayServer{
-		gs:          gs,
-		hs:          hs,
-		serviceName: config.ServiceName,
+		gs: gs,
+		hs: hs,
 	}
 }

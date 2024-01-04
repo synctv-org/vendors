@@ -22,7 +22,7 @@ message Registry {
   Etcd etcd = 2;
 }
 
-message Web {
+message WebServer {
   message TLS {
     string cert_file = 1; // @gotags: env:"WEB_CERT_FILE"
     string key_file = 2;  // @gotags: env:"WEB_KEY_FILE"
@@ -31,9 +31,10 @@ message Web {
   string addr = 1; // @gotags: env:"WEB_ADDR"
   TLS tls = 2;
   string custom_endpoint = 3; // @gotags: env:"WEB_CUSTOM_ENDPOINT"
+  string service_name = 6;    // @gotags: env:"SERVICE_NAME"
 }
 
-message GRPC {
+message GrpcServer {
   message TLS {
     string cert_file = 1; // @gotags: env:"GRPC_CERT_FILE"
     string key_file = 2;  // @gotags: env:"GRPC_KEY_FILE"
@@ -41,22 +42,17 @@ message GRPC {
   }
   string addr = 1; // @gotags: env:"GRPC_ADDR"
   TLS tls = 2;
-  string custom_endpoint = 3; // @gotags: env:"GRPC_CUSTOM_ENDPOINT"
-}
-
-message Server {
-  Web web = 1;
-  GRPC grpc = 2;
-  google.protobuf.Duration timeout = 3; // @gotags: env:"SERVER_TIMEOUT"
-  string jwt_secret = 4;                // @gotags: env:"SERVER_JWT_SECRET"
-  string service_name = 5;              // @gotags: env:"SERVICE_NAME"
+  string custom_endpoint = 3;           // @gotags: env:"GRPC_CUSTOM_ENDPOINT"
+  google.protobuf.Duration timeout = 4; // @gotags: env:"SERVER_TIMEOUT"
+  string jwt_secret = 5;                // @gotags: env:"SERVER_JWT_SECRET"
+  string service_name = 6;              // @gotags: env:"SERVICE_NAME"
 }
 
 message BilibiliConfig {}
 
 message BilibiliServer {
   message Bilibili {
-    Server server = 1;
+    GrpcServer server = 1;
     Registry registry = 2;
     BilibiliConfig config = 3;
   }
@@ -67,7 +63,7 @@ message AlistConfig {}
 
 message AlistServer {
   message Alist {
-    Server server = 1;
+    GrpcServer server = 1;
     Registry registry = 2;
     AlistConfig config = 3;
   }
@@ -78,7 +74,7 @@ message EmbyConfig {}
 
 message EmbyServer {
   message Emby {
-    Server server = 1;
+    GrpcServer server = 1;
     Registry registry = 2;
     EmbyConfig config = 3;
   }
@@ -87,7 +83,7 @@ message EmbyServer {
 
 message AllServer {
   message All {
-    Server server = 1;
+    GrpcServer server = 1;
     Registry registry = 2;
     BilibiliConfig bilibili = 3;
     AlistConfig alist = 4;

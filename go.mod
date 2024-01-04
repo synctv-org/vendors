@@ -12,6 +12,7 @@ require (
 	github.com/google/wire v0.5.0
 	github.com/hashicorp/consul/api v1.26.1
 	github.com/json-iterator/go v1.1.12
+	github.com/sirupsen/logrus v1.4.2
 	github.com/spf13/cobra v1.8.0
 	github.com/zencoder/go-dash/v3 v3.0.3
 	github.com/zijiren233/gencontainer v0.0.0-20231213075414-f7f4c8261dca
@@ -47,6 +48,7 @@ require (
 	github.com/hashicorp/serf v0.10.1 // indirect
 	github.com/imdario/mergo v0.3.16 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
+	github.com/konsorten/go-windows-terminal-sequences v1.0.1 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect

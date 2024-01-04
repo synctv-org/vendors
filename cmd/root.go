@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
+	"github.com/synctv-org/vendors/cmd/flags"
 	"github.com/synctv-org/vendors/cmd/server"
 )
 
@@ -23,4 +24,8 @@ func Execute() {
 
 func init() {
 	RootCmd.AddCommand(server.ServerCmd)
+}
+
+func init() {
+	RootCmd.PersistentFlags().BoolVarP(&flags.Dev, "dev", "d", false, "dev mode")
 }

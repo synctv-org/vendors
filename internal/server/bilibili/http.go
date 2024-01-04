@@ -9,7 +9,7 @@ import (
 )
 
 func NewHTTPServer(
-	c *conf.Server,
+	c *conf.WebServer,
 	bilibili *bilibili.BilibiliService,
 	logger log.Logger,
 ) *http.Server {

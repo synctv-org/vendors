@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -53,7 +54,8 @@ var ServerCmd = &cobra.Command{
 func Server(cmd *cobra.Command, args []string) {
 	var bc conf.AllServer = conf.AllServer{
 		All: &conf.AllServer_All{
-			Server: conf.DefaultServer(),
+			Server:   conf.DefaultGrpcServer(),
+			Registry: conf.DefaultRegistry(),
 		},
 	}
 
@@ -76,6 +78,8 @@ func Server(cmd *cobra.Command, args []string) {
 	if err := env.Parse(bc.All); err != nil {
 		panic(err)
 	}
+
+	id = fmt.Sprintf("%s-%s", id, bc.All.Server.Addr)
 
 	logger := log.With(log.NewStdLogger(os.Stdout),
 		"ts", log.DefaultTimestamp,

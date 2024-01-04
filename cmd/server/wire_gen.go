@@ -23,7 +23,7 @@ import (
 
 // Injectors from wire.go:
 
-func wireApp(confServer *conf.Server, confRegistry *conf.Registry, alistConfig *conf.AlistConfig, bilibiliConfig *conf.BilibiliConfig, embyConfig *conf.EmbyConfig, logger log.Logger) (*kratos.App, func(), error) {
+func wireApp(confServer *conf.GrpcServer, confRegistry *conf.Registry, alistConfig *conf.AlistConfig, bilibiliConfig *conf.BilibiliConfig, embyConfig *conf.EmbyConfig, logger log.Logger) (*kratos.App, func(), error) {
 	bilibiliService := bilibili.NewBilibiliService(bilibiliConfig)
 	alistService := alist.NewAlistService(alistConfig)
 	embyService := emby.NewEmbyService(embyConfig)

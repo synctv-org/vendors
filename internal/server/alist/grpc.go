@@ -8,7 +8,7 @@ import (
 )
 
 func NewGRPCServer(
-	config *conf.Server,
+	config *conf.GrpcServer,
 	alist *alist.AlistService,
 ) *utils.GrpcGatewayServer {
 	ggs := utils.NewGrpcGatewayServer(config)
