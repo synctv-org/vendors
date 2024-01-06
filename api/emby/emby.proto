@@ -124,6 +124,7 @@ message Item {
   string seasonId = 8;
   bool isFolder = 9;
   repeated MediaSourceInfo mediaSourceInfo = 10;
+  string collectionType = 11;
 }
 
 message GetItemsResp {

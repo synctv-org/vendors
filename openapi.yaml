@@ -1056,6 +1056,8 @@ components:
                     type: array
                     items:
                         $ref: '#/components/schemas/api.emby.MediaSourceInfo'
+                collectionType:
+                    type: string
         api.emby.LoginReq:
             type: object
             properties:

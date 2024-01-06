@@ -200,7 +200,7 @@ func NewGrpcGatewayServer(config *conf.GrpcServer) *GrpcGatewayServer {
 				gu.Scheme = "grpc"
 			}
 		} else {
-			panic("invalid custom endpoint scheme")
+			panic("invalid custom endpoint scheme: " + u.Scheme)
 		}
 		hopts = append(hopts, ghttp.Endpoint(&hu))
 		gopts = append(gopts, ggrpc.Endpoint(&gu))

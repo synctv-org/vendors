@@ -56,6 +56,7 @@ func item2pb(item *emby.Items) *pb.Item {
 		SeriesName:      item.SeriesName,
 		SeriesId:        item.SeriesID,
 		MediaSourceInfo: make([]*pb.MediaSourceInfo, len(item.MediaSources)),
+		CollectionType:  item.CollectionType,
 	}
 	for i, msi := range item.MediaSources {
 		pi.MediaSourceInfo[i] = &pb.MediaSourceInfo{
@@ -89,9 +90,14 @@ func (a *EmbyService) GetItems(ctx context.Context, req *pb.GetItemsReq) (*pb.Ge
 	cli := emby.NewClient(req.Host, emby.WithContext(ctx), emby.WithKey(req.Token))
 	opts := []emby.GetItemsOptionFunc{
 		emby.WithParentId(req.ParentId),
+		emby.WithSortBy("SortName"),
+		emby.WithSortOrderAsc(),
 	}
 	if req.SearchTerm != "" {
-		opts = append(opts, emby.WithRecursive(), emby.WithSortBy("SortName"), emby.WithSortOrderAsc(), emby.WithSearch(req.SearchTerm))
+		opts = append(opts,
+			emby.WithSearch(req.SearchTerm),
+			emby.WithRecursive(),
+		)
 	}
 	r, err := cli.GetItems(opts...)
 	if err != nil {
@@ -120,15 +126,33 @@ func (a *EmbyService) FsList(ctx context.Context, req *pb.FsListReq) (*pb.FsList
 	cli := emby.NewClient(req.Host, emby.WithContext(ctx), emby.WithKey(req.Token))
 	opts := []emby.GetItemsOptionFunc{
 		emby.WithParentId(req.Path),
+		emby.WithSortBy("SortName"),
+		emby.WithSortOrderAsc(),
+	}
+	parentItem, err := cli.GetItem(req.Path)
+	if err != nil {
+		return nil, err
+	}
+	if parentItem.Type == "CollectionFolder" {
+		opts = append(opts,
+			emby.WithRecursive(),
+		)
+		switch parentItem.CollectionType {
+		case "movies":
+			opts = append(opts,
+				emby.WithIncludeItemTypes("Movie"),
+			)
+		case "tvshows":
+			opts = append(opts,
+				emby.WithIncludeItemTypes("Series"),
+			)
+		}
 	}
 	if req.SearchTerm != "" {
-		opts = append(opts, emby.WithRecursive(), emby.WithSortBy("SortName"), emby.WithSortOrderAsc(), emby.WithSearch(req.SearchTerm))
+		opts = append(opts, emby.WithSearch(req.SearchTerm))
 	}
-	if req.StartIndex != 0 {
-		opts = append(opts, emby.WithStartIndex(req.StartIndex))
-	}
-	if req.Limit != 0 {
-		opts = append(opts, emby.WithLimit(req.Limit))
+	if req.StartIndex != 0 || req.Limit != 0 {
+		opts = append(opts, emby.WithStartIndex(req.StartIndex), emby.WithLimit(req.Limit))
 	}
 	r, err := cli.GetItems(opts...)
 	if err != nil {
@@ -138,7 +162,9 @@ func (a *EmbyService) FsList(ctx context.Context, req *pb.FsListReq) (*pb.FsList
 	for _, item := range r.Items {
 		items = append(items, item2pb(&item))
 	}
-	paths, err := genPath(cli, req.Path)
+	paths, err := genPath(cli, req.Path, map[string]*emby.Items{
+		req.Path: parentItem,
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -149,15 +175,29 @@ func (a *EmbyService) FsList(ctx context.Context, req *pb.FsListReq) (*pb.FsList
 	}, nil
 }
 
-func genPath(cli *emby.Client, id string) ([]*pb.Path, error) {
+func genPath(cli *emby.Client, id string, caches ...map[string]*emby.Items) ([]*pb.Path, error) {
 	var paths []*pb.Path
+	var (
+		item *emby.Items
+		err  error
+	)
 	for {
 		if id == "1" || id == "" {
 			break
 		}
-		item, err := cli.GetItem(id)
-		if err != nil {
-			return nil, err
+		if len(caches) > 0 {
+			var ok bool
+			if item, ok = caches[0][id]; !ok {
+				item, err = cli.GetItem(id)
+				if err != nil {
+					return nil, err
+				}
+			}
+		} else {
+			item, err = cli.GetItem(id)
+			if err != nil {
+				return nil, err
+			}
 		}
 		if !item.IsFolder {
 			return nil, errors.New("not a folder")

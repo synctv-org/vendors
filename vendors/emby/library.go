@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strings"
 
 	json "github.com/json-iterator/go"
 )
@@ -14,7 +15,7 @@ func (c *Client) GetItem(id string) (*Items, error) {
 	}
 	req, err := c.NewRequest(http.MethodGet, "/emby/Items", nil, map[string]string{
 		"Ids":    id,
-		"Fields": "MediaSources,ParentId",
+		"Fields": "MediaSources,ParentId,Container",
 	})
 	if err != nil {
 		return nil, err
@@ -97,9 +98,19 @@ func WithRecursive() GetItemsOptionFunc {
 	}
 }
 
+func WithIncludeItemTypes(types ...string) GetItemsOptionFunc {
+	return func(o map[string]string) {
+		if v, ok := o["IncludeItemTypes"]; ok {
+			o["IncludeItemTypes"] = fmt.Sprintf("%s,%s", v, strings.Join(types, ","))
+		} else {
+			o["IncludeItemTypes"] = strings.Join(types, ",")
+		}
+	}
+}
+
 func (c *Client) GetItems(opt ...GetItemsOptionFunc) (*GetItemResp, error) {
 	o := map[string]string{
-		"Fields": "MediaSources,ParentId",
+		"Fields": "MediaSources,ParentId,Container",
 	}
 	for _, f := range opt {
 		f(o)
