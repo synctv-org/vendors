@@ -133,7 +133,12 @@ func (a *EmbyService) FsList(ctx context.Context, req *pb.FsListReq) (*pb.FsList
 	if err != nil {
 		return nil, err
 	}
-	if parentItem.Type == "CollectionFolder" {
+	if req.SearchTerm != "" {
+		opts = append(opts,
+			emby.WithSearch(req.SearchTerm),
+			emby.WithRecursive(),
+		)
+	} else if parentItem.Type == "CollectionFolder" {
 		opts = append(opts,
 			emby.WithRecursive(),
 		)
@@ -148,11 +153,11 @@ func (a *EmbyService) FsList(ctx context.Context, req *pb.FsListReq) (*pb.FsList
 			)
 		}
 	}
-	if req.SearchTerm != "" {
-		opts = append(opts, emby.WithSearch(req.SearchTerm))
-	}
 	if req.StartIndex != 0 || req.Limit != 0 {
-		opts = append(opts, emby.WithStartIndex(req.StartIndex), emby.WithLimit(req.Limit))
+		opts = append(opts,
+			emby.WithStartIndex(req.StartIndex),
+			emby.WithLimit(req.Limit),
+		)
 	}
 	r, err := cli.GetItems(opts...)
 	if err != nil {
