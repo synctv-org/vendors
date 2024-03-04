@@ -20,7 +20,7 @@ require (
 	github.com/zijiren233/go-colorable v0.0.0-20230930131441-997304c961cb
 	go.etcd.io/etcd/client/v3 v3.5.11
 	go.uber.org/automaxprocs v1.5.3
-	golang.org/x/net v0.19.0
+	golang.org/x/net v0.22.0
 	golang.org/x/oauth2 v0.15.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20231212172506-995d672761c0
 	google.golang.org/grpc v1.60.1
@@ -67,7 +67,7 @@ require (
 	go.uber.org/zap v1.26.0 // indirect
 	golang.org/x/exp v0.0.0-20231219180239-dc181d75b848 // indirect
 	golang.org/x/sync v0.5.0 // indirect
-	golang.org/x/sys v0.15.0 // indirect
+	golang.org/x/sys v0.18.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	google.golang.org/appengine v1.6.8 // indirect
 	google.golang.org/genproto v0.0.0-20231212172506-995d672761c0 // indirect
