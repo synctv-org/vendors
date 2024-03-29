@@ -25,7 +25,7 @@ import (
 	"golang.org/x/net/http2/h2c"
 	"google.golang.org/grpc"
 
-	jwtv4 "github.com/golang-jwt/jwt/v4"
+	jwtv5 "github.com/golang-jwt/jwt/v5"
 )
 
 const (
@@ -118,9 +118,9 @@ func NewGrpcGatewayServer(config *conf.GrpcServer) *GrpcGatewayServer {
 	middlewares := []middleware.Middleware{recovery.Recovery()}
 	if config.JwtSecret != "" {
 		jwtSecret := []byte(config.JwtSecret)
-		middlewares = append(middlewares, jwt.Server(func(token *jwtv4.Token) (interface{}, error) {
+		middlewares = append(middlewares, jwt.Server(func(token *jwtv5.Token) (interface{}, error) {
 			return jwtSecret, nil
-		}, jwt.WithSigningMethod(jwtv4.SigningMethodHS256)))
+		}, jwt.WithSigningMethod(jwtv5.SigningMethodHS256)))
 	}
 
 	l, err := net.Listen("tcp", config.Addr)
