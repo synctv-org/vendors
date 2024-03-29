@@ -21,7 +21,7 @@ require (
 	go.etcd.io/etcd/client/v3 v3.5.12
 	go.uber.org/automaxprocs v1.5.3
 	golang.org/x/net v0.22.0
-	golang.org/x/oauth2 v0.16.0
+	golang.org/x/oauth2 v0.18.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20240325203815-454cdb8f5daa
 	google.golang.org/grpc v1.62.1
 	google.golang.org/protobuf v1.33.0
