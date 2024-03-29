@@ -18,7 +18,7 @@ require (
 	github.com/zencoder/go-dash/v3 v3.0.3
 	github.com/zijiren233/gencontainer v0.0.0-20240214185550-64325761736f
 	github.com/zijiren233/go-colorable v0.0.0-20230930131441-997304c961cb
-	go.etcd.io/etcd/client/v3 v3.5.12
+	go.etcd.io/etcd/client/v3 v3.5.13
 	go.uber.org/automaxprocs v1.5.3
 	golang.org/x/net v0.22.0
 	golang.org/x/oauth2 v0.16.0
@@ -58,8 +58,8 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	go.etcd.io/etcd/api/v3 v3.5.12 // indirect
-	go.etcd.io/etcd/client/pkg/v3 v3.5.12 // indirect
+	go.etcd.io/etcd/api/v3 v3.5.13 // indirect
+	go.etcd.io/etcd/client/pkg/v3 v3.5.13 // indirect
 	go.opentelemetry.io/otel v1.24.0 // indirect
 	go.opentelemetry.io/otel/metric v1.24.0 // indirect
 	go.opentelemetry.io/otel/trace v1.24.0 // indirect
