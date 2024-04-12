@@ -23,6 +23,7 @@ type VideoInfo struct {
 	Epid       uint64 `json:"epid,omitempty"`
 	Name       string `json:"name"`
 	CoverImage string `json:"coverImage"`
+	Live       bool   `json:"live"`
 }
 
 type ParseVideoPageConf struct {

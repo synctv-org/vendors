@@ -141,3 +141,25 @@ func TestGetSubtitles(t *testing.T) {
 		t.Log(sub)
 	}
 }
+
+func TestGetLiveStreams(t *testing.T) {
+	c, err := bilibili.NewClient(nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	streams, err := c.GetLiveStreams(7777, true)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, stream := range streams {
+		t.Log(stream)
+	}
+
+	streams, err = c.GetLiveStreams(7777, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, stream := range streams {
+		t.Log(stream)
+	}
+}

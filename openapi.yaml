@@ -42,6 +42,24 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.bilibili.GetDashVideoURLResp'
+    /api/bilibili/get_live_streams:
+        post:
+            tags:
+                - Bilibili
+            operationId: Bilibili_GetLiveStreams
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.bilibili.GetLiveStreamsReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.bilibili.GetLiveStreamsResp'
     /api/bilibili/get_pgc_url:
         post:
             tags:
@@ -192,6 +210,24 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.bilibili.NewSMSResp'
+    /api/bilibili/parse_live_page:
+        post:
+            tags:
+                - Bilibili
+            operationId: Bilibili_ParseLivePage
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.bilibili.ParseLivePageReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.bilibili.VideoPageInfo'
     /api/bilibili/parse_pgc_page:
         post:
             tags:
@@ -767,6 +803,24 @@ components:
                     type: string
                 hevcMpd:
                     type: string
+        api.bilibili.GetLiveStreamsReq:
+            type: object
+            properties:
+                cookies:
+                    type: object
+                    additionalProperties:
+                        type: string
+                cid:
+                    type: string
+                hls:
+                    type: boolean
+        api.bilibili.GetLiveStreamsResp:
+            type: object
+            properties:
+                liveStreams:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.bilibili.LiveStream'
         api.bilibili.GetPGCURLReq:
             type: object
             properties:
@@ -814,6 +868,17 @@ components:
                 cid:
                     type: string
                 quality:
+                    type: string
+        api.bilibili.LiveStream:
+            type: object
+            properties:
+                quality:
+                    type: string
+                urls:
+                    type: array
+                    items:
+                        type: string
+                desc:
                     type: string
         api.bilibili.LoginWithQRCodeReq:
             type: object
@@ -890,6 +955,15 @@ components:
             properties:
                 captchaKey:
                     type: string
+        api.bilibili.ParseLivePageReq:
+            type: object
+            properties:
+                cookies:
+                    type: object
+                    additionalProperties:
+                        type: string
+                roomID:
+                    type: string
         api.bilibili.ParsePGCPageReq:
             type: object
             properties:
@@ -945,6 +1019,8 @@ components:
                     type: string
                 coverImage:
                     type: string
+                live:
+                    type: boolean
         api.bilibili.VideoPageInfo:
             type: object
             properties:

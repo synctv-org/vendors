@@ -1099,3 +1099,47 @@ type dashPGCResp struct {
 		Status            int      `json:"status"`
 	} `json:"result"`
 }
+
+type parseLivePageResp struct {
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+	Data    struct {
+		Uid        uint64 `json:"uid"`
+		RoomID     uint64 `json:"room_id"`
+		SortID     uint64 `json:"sort_id"`
+		Title      string `json:"title"`
+		UserCover  string `json:"user_cover"`
+		LiveStatus uint64 `json:"live_status"`
+	} `json:"data"`
+}
+
+type getLiveMasterInfoResp struct {
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+	Data    struct {
+		Info struct {
+			Uid      uint64 `json:"uid"`
+			Username string `json:"uname"`
+			Face     string `json:"face"`
+		} `json:"info"`
+	} `json:"data"`
+}
+
+type getLiveStreamResp struct {
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+	TTL     int    `json:"ttl"`
+	Data    struct {
+		AcceptQuality      []string `json:"accept_quality"`
+		CurrentQuality     uint64   `json:"current_quality"`
+		CurrentQn          uint64   `json:"current_qn"`
+		QualityDescription []struct {
+			Quality uint64 `json:"qn"`
+			Desc    string `json:"desc"`
+		} `json:"quality_description"`
+		DUrl []struct {
+			Url   string `json:"url"`
+			Order int    `json:"order"`
+		} `json:"durl"`
+	} `json:"data"`
+}

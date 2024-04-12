@@ -84,20 +84,9 @@ func (s *BilibiliService) ParseVideoPage(ctx context.Context, req *pb.ParseVideo
 		return nil, err
 	}
 	resp := &pb.VideoPageInfo{
-		Title:  r.Title,
-		Actors: r.Actors,
-	}
-	if len(r.VideoInfos) != 0 {
-		resp.VideoInfos = make([]*pb.VideoInfo, len(r.VideoInfos))
-		for i, v := range r.VideoInfos {
-			resp.VideoInfos[i] = &pb.VideoInfo{
-				Bvid:       v.Bvid,
-				Cid:        v.Cid,
-				Epid:       v.Epid,
-				Name:       v.Name,
-				CoverImage: v.CoverImage,
-			}
-		}
+		Title:      r.Title,
+		Actors:     r.Actors,
+		VideoInfos: videoInfos2pb(r.VideoInfos),
 	}
 	return resp, nil
 }
@@ -176,20 +165,9 @@ func (s *BilibiliService) ParsePGCPage(ctx context.Context, req *pb.ParsePGCPage
 		return nil, err
 	}
 	resp := &pb.VideoPageInfo{
-		Title:  r.Title,
-		Actors: r.Actors,
-	}
-	if len(r.VideoInfos) != 0 {
-		resp.VideoInfos = make([]*pb.VideoInfo, len(r.VideoInfos))
-		for i, v := range r.VideoInfos {
-			resp.VideoInfos[i] = &pb.VideoInfo{
-				Bvid:       v.Bvid,
-				Cid:        v.Cid,
-				Epid:       v.Epid,
-				Name:       v.Name,
-				CoverImage: v.CoverImage,
-			}
-		}
+		Title:      r.Title,
+		Actors:     r.Actors,
+		VideoInfos: videoInfos2pb(r.VideoInfos),
 	}
 	return resp, nil
 }
@@ -265,4 +243,61 @@ func (s *BilibiliService) Match(ctx context.Context, req *pb.MatchReq) (*pb.Matc
 		Type: t,
 		Id:   id,
 	}, nil
+}
+
+func (s *BilibiliService) GetLiveStreams(ctx context.Context, req *pb.GetLiveStreamsReq) (*pb.GetLiveStreamsResp, error) {
+	c, err := bilibili.NewClient(utils.MapToHttpCookies(req.Cookies), bilibili.WithContext(ctx))
+	if err != nil {
+		return nil, err
+	}
+	r, err := c.GetLiveStreams(req.Cid, req.Hls)
+	if err != nil {
+		return nil, err
+	}
+	resp := &pb.GetLiveStreamsResp{
+		LiveStreams: make([]*pb.LiveStream, len(r)),
+	}
+	for i, v := range r {
+		resp.LiveStreams[i] = &pb.LiveStream{
+			Quality: v.Quality,
+			Urls:    v.Urls,
+			Desc:    v.Desc,
+		}
+	}
+	return resp, nil
+}
+
+func (s *BilibiliService) ParseLivePage(ctx context.Context, req *pb.ParseLivePageReq) (*pb.VideoPageInfo, error) {
+	c, err := bilibili.NewClient(utils.MapToHttpCookies(req.Cookies), bilibili.WithContext(ctx))
+	if err != nil {
+		return nil, err
+	}
+	r, err := c.ParseLivePage(req.RoomID)
+	if err != nil {
+		return nil, err
+	}
+	resp := &pb.VideoPageInfo{
+		Title:      r.Title,
+		Actors:     r.Actors,
+		VideoInfos: videoInfos2pb(r.VideoInfos),
+	}
+	return resp, nil
+}
+
+func videoInfos2pb(in []*bilibili.VideoInfo) []*pb.VideoInfo {
+	if len(in) == 0 {
+		return nil
+	}
+	out := make([]*pb.VideoInfo, len(in))
+	for i, v := range in {
+		out[i] = &pb.VideoInfo{
+			Bvid:       v.Bvid,
+			Cid:        v.Cid,
+			Epid:       v.Epid,
+			Name:       v.Name,
+			CoverImage: v.CoverImage,
+			Live:       v.Live,
+		}
+	}
+	return out
 }

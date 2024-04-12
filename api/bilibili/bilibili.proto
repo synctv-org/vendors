@@ -91,6 +91,18 @@ service Bilibili {
       body : "*"
     };
   };
+  rpc GetLiveStreams(GetLiveStreamsReq) returns (GetLiveStreamsResp) {
+    option (google.api.http) = {
+      post : "/api/bilibili/get_live_streams"
+      body : "*"
+    };
+  };
+  rpc ParseLivePage(ParseLivePageReq) returns (VideoPageInfo) {
+    option (google.api.http) = {
+      post : "/api/bilibili/parse_live_page"
+      body : "*"
+    };
+  };
 }
 
 message Empty {}
@@ -150,6 +162,7 @@ message VideoInfo {
   uint64 epid = 4;
   string name = 5;
   string coverImage = 6;
+  bool live = 7;
 }
 
 message ParseVideoPageReq {
@@ -233,4 +246,25 @@ message MatchReq { string url = 1; }
 message MatchResp {
   string type = 1;
   string id = 2;
+}
+
+message GetLiveStreamsReq {
+  map<string, string> cookies = 1;
+  uint64 cid = 2;
+  bool hls = 3;
+}
+
+message LiveStream {
+  uint64 quality = 1;
+  repeated string urls = 2;
+  string desc = 3;
+}
+
+message GetLiveStreamsResp {
+  repeated LiveStream liveStreams = 1;
+}
+
+message ParseLivePageReq {
+  map<string, string> cookies = 1;
+  uint64 roomID = 2;
 }
