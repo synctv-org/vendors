@@ -8,11 +8,12 @@ import (
 )
 
 var (
-	BVRegex  = regexp.MustCompile(`^(?:https://www\.bilibili\.com/video/)?((?:bv|bV|Bv|BV)\w+)(?:[/\?].*)?$`)
-	ARegex   = regexp.MustCompile(`^(?:https://www\.bilibili\.com/video/)?(?:av|aV|Av|AV)(\d+)(?:[/\?].*)?$`)
-	SSRegex  = regexp.MustCompile(`^(?:https://www\.bilibili\.com/bangumi/play/)?(?:ss|sS|Ss|SS)(\d+)(?:[/\?].*)?$`)
-	EPRegex  = regexp.MustCompile(`^(?:https://www\.bilibili\.com/bangumi/play/)?(?:ep|eP|Ep|EP)(\d+)(?:[/\?].*)?$`)
-	B23Regex = regexp.MustCompile(`^(https://)?b23\.tv/(\w+)$`)
+	BVRegex   = regexp.MustCompile(`^(?:https://www\.bilibili\.com/video/)?((?:bv|bV|Bv|BV)\w+)(?:[/\?].*)?$`)
+	ARegex    = regexp.MustCompile(`^(?:https://www\.bilibili\.com/video/)?(?:av|aV|Av|AV)(\d+)(?:[/\?].*)?$`)
+	SSRegex   = regexp.MustCompile(`^(?:https://www\.bilibili\.com/bangumi/play/)?(?:ss|sS|Ss|SS)(\d+)(?:[/\?].*)?$`)
+	EPRegex   = regexp.MustCompile(`^(?:https://www\.bilibili\.com/bangumi/play/)?(?:ep|eP|Ep|EP)(\d+)(?:[/\?].*)?$`)
+	B23Regex  = regexp.MustCompile(`^(https://)?b23\.tv/(\w+)$`)
+	LIVERegex = regexp.MustCompile(`^(?:https://live\.bilibili\.com/)?(\d+)(?:\?.*)?$`)
 )
 
 func Match(url string) (t string, id string, err error) {
@@ -35,6 +36,9 @@ func Match(url string) (t string, id string, err error) {
 	}
 	if m := EPRegex.FindStringSubmatch(url); m != nil {
 		return "ep", m[1], nil
+	}
+	if m := LIVERegex.FindStringSubmatch(url); m != nil {
+		return "live", m[1], nil
 	}
 	return "", "", errors.New("match failed")
 }
