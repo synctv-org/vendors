@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/synctv-org/vendors/utils"
+	utc "github.com/zijiren233/go-uhc"
 )
 
 type Client struct {
@@ -87,5 +88,5 @@ func (c *Client) NewRequest(method, url string, body io.Reader, conf ...RequestO
 }
 
 func (c *Client) Do(req *http.Request) (*http.Response, error) {
-	return utils.UtlsDo(req)
+	return utc.UtlsDo(req)
 }

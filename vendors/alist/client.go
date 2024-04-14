@@ -7,7 +7,7 @@ import (
 	"net/url"
 
 	json "github.com/json-iterator/go"
-	"github.com/synctv-org/vendors/utils"
+	utc "github.com/zijiren233/go-uhc"
 )
 
 type Client struct {
@@ -75,5 +75,5 @@ func (c *Client) NewRequest(method, relative string, data any) (req *http.Reques
 }
 
 func (c *Client) Do(req *http.Request) (*http.Response, error) {
-	return utils.UtlsDo(req)
+	return utc.UtlsDo(req)
 }

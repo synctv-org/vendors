@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/synctv-org/vendors/utils"
+	utc "github.com/zijiren233/go-uhc"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/microsoft"
 )
@@ -71,7 +71,7 @@ func (c *Client) httpClient() *http.Client {
 	return &http.Client{
 		Transport: &oauth2.Transport{
 			Source: c.tks,
-			Base:   utils.DefaultUtlsHttpRoundTripper,
+			Base:   utc.DefaultUtlsHttpRoundTripper,
 		},
 	}
 }
