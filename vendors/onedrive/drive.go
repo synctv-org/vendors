@@ -2,10 +2,11 @@ package onedrive
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
-func (c *Client) DriveList() (*DriveListResp, error) {
+func (c *Client) DriveList() (*DriveList, error) {
 	req, err := c.NewRequest(http.MethodGet, "/me/drives", nil)
 	if err != nil {
 		return nil, err
@@ -15,15 +16,18 @@ func (c *Client) DriveList() (*DriveListResp, error) {
 		return nil, err
 	}
 	defer resp.Body.Close()
-	dl := DriveListResp{}
+	dl := driveListResp{}
 	err = json.NewDecoder(resp.Body).Decode(&dl)
 	if err != nil {
 		return nil, err
 	}
-	return &dl, nil
+	if dl.MicrosoftError.Code != "" {
+		return nil, fmt.Errorf("get drive list failed: %s", dl.MicrosoftError.Message)
+	}
+	return &dl.DriveList, nil
 }
 
-type DriveListResp struct {
+type DriveList struct {
 	Value []struct {
 		ID        string `json:"id"`
 		DriveType string `json:"driveType"`
@@ -35,4 +39,9 @@ type DriveListResp struct {
 			} `json:"user"`
 		} `json:"owner"`
 	} `json:"value"`
+}
+
+type driveListResp struct {
+	DriveList
+	MicrosoftError `json:"error"`
 }

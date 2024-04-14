@@ -7,22 +7,16 @@ import (
 	"net/url"
 
 	json "github.com/json-iterator/go"
+	"github.com/synctv-org/vendors/utils"
 )
 
 type Client struct {
-	host       string
-	token      string
-	httpClient *http.Client
-	ctx        context.Context
+	host  string
+	token string
+	ctx   context.Context
 }
 
 type ClientConfig func(*Client)
-
-func WithHttpClient(httpClient *http.Client) ClientConfig {
-	return func(c *Client) {
-		c.httpClient = httpClient
-	}
-}
 
 func WithContext(ctx context.Context) ClientConfig {
 	return func(c *Client) {
@@ -36,10 +30,9 @@ func NewClient(host, token string, conf ...ClientConfig) (*Client, error) {
 		return nil, err
 	}
 	cli := &Client{
-		host:       u.String(),
-		token:      token,
-		httpClient: http.DefaultClient,
-		ctx:        context.Background(),
+		host:  u.String(),
+		token: token,
+		ctx:   context.Background(),
 	}
 	for _, v := range conf {
 		v(cli)
@@ -79,4 +72,8 @@ func (c *Client) NewRequest(method, relative string, data any) (req *http.Reques
 	req.Header.Set("Origin", c.host)
 	req.Header.Set("Referer", c.host)
 	return req, nil
+}
+
+func (c *Client) Do(req *http.Request) (*http.Response, error) {
+	return utils.UtlsDo(req)
 }

@@ -11,7 +11,7 @@ func (c *Client) SystemInfo() (*SystemInfoResp, error) {
 	if err != nil {
 		return nil, err
 	}
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := c.Do(req)
 	if err != nil {
 		return nil, err
 	}

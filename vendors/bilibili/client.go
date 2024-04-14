@@ -9,19 +9,12 @@ import (
 )
 
 type Client struct {
-	httpClient *http.Client
-	cookies    []*http.Cookie
-	buvid      []*http.Cookie
-	ctx        context.Context
+	cookies []*http.Cookie
+	buvid   []*http.Cookie
+	ctx     context.Context
 }
 
 type ClientConfig func(*Client)
-
-func WithHttpClient(httpClient *http.Client) ClientConfig {
-	return func(c *Client) {
-		c.httpClient = httpClient
-	}
-}
 
 func WithContext(ctx context.Context) ClientConfig {
 	return func(c *Client) {
@@ -31,9 +24,8 @@ func WithContext(ctx context.Context) ClientConfig {
 
 func NewClient(cookies []*http.Cookie, conf ...ClientConfig) (*Client, error) {
 	cli := &Client{
-		httpClient: http.DefaultClient,
-		cookies:    cookies,
-		ctx:        context.Background(),
+		cookies: cookies,
+		ctx:     context.Background(),
 	}
 	for _, v := range conf {
 		v(cli)
@@ -92,4 +84,8 @@ func (c *Client) NewRequest(method, url string, body io.Reader, conf ...RequestO
 	req.Header.Set("User-Agent", utils.UA)
 	req.Header.Set("Referer", "https://www.bilibili.com")
 	return req, nil
+}
+
+func (c *Client) Do(req *http.Request) (*http.Response, error) {
+	return utils.UtlsDo(req)
 }

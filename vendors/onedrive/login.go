@@ -12,12 +12,9 @@ func (c *Client) GetToken(code string) (*oauth2.Token, error) {
 	return c.config.Exchange(c.ctx, code)
 }
 
-func (c *Client) RefreshToken(refresh string) (*oauth2.Token, error) {
-	return c.tk.Token()
-}
-
 func (c *Client) SetToken(tk oauth2.Token) {
-	c.tk = oauth2.StaticTokenSource(&tk)
+	c.tk = tk
+	c.tks = c.config.TokenSource(c.ctx, &c.tk)
 }
 
 func (c *Client) Login(code string) error {

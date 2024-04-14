@@ -7,6 +7,7 @@ import (
 	"net/url"
 
 	json "github.com/json-iterator/go"
+	"github.com/synctv-org/vendors/utils"
 )
 
 type Client struct {
@@ -87,4 +88,8 @@ func (c *Client) NewRequest(method, relative string, data any, querys ...map[str
 	}
 	req.URL.RawQuery = q.Encode()
 	return req, nil
+}
+
+func (c *Client) Do(req *http.Request) (*http.Response, error) {
+	return utils.UtlsDo(req)
 }

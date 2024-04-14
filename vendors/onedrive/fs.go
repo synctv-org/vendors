@@ -9,7 +9,7 @@ import (
 	"github.com/synctv-org/vendors/utils"
 )
 
-func (c *Client) FsGet(path string, opt ...FsOptionFunc) (*FsGetResp, error) {
+func (c *Client) FsGet(path string, opt ...FsOptionFunc) (*FsGet, error) {
 	opts := FsOption{}
 	for _, flo := range opt {
 		flo(&opts)
@@ -34,12 +34,15 @@ func (c *Client) FsGet(path string, opt ...FsOptionFunc) (*FsGetResp, error) {
 		return nil, err
 	}
 	defer resp.Body.Close()
-	var fsg FsGetResp
+	var fsg fsGetResp
 	err = json.NewDecoder(resp.Body).Decode(&fsg)
 	if err != nil {
 		return nil, err
 	}
-	return &fsg, nil
+	if fsg.MicrosoftError.Code != "" {
+		return nil, fmt.Errorf("get file info failed: %s", fsg.MicrosoftError.Message)
+	}
+	return &fsg.FsGet, nil
 }
 
 type FsOption struct {
@@ -54,7 +57,7 @@ func WithDriveID(driveID string) FsOptionFunc {
 	}
 }
 
-func (c *Client) FsList(path string, opt ...FsOptionFunc) (*FsListResp, error) {
+func (c *Client) FsList(path string, opt ...FsOptionFunc) (*FsList, error) {
 	opts := FsOption{}
 	for _, flo := range opt {
 		flo(&opts)
@@ -79,12 +82,15 @@ func (c *Client) FsList(path string, opt ...FsOptionFunc) (*FsListResp, error) {
 		return nil, err
 	}
 	defer resp.Body.Close()
-	var fsl FsListResp
+	var fsl fsListResp
 	err = json.NewDecoder(resp.Body).Decode(&fsl)
 	if err != nil {
 		return nil, err
 	}
-	return &fsl, nil
+	if fsl.MicrosoftError.Code != "" {
+		return nil, fmt.Errorf("get file list failed: %s", fsl.MicrosoftError.Message)
+	}
+	return &fsl.FsList, nil
 }
 
 func (c *Client) FsDownload(path string, opt ...FsOptionFunc) (string, error) {
@@ -107,15 +113,15 @@ func (c *Client) FsDownload(path string, opt ...FsOptionFunc) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	cli, err := c.HttpClient()
-	if err != nil {
-		return "", err
-	}
-	cli = utils.NoRedirectClient(cli)
+	cli := utils.NoRedirectClient(c.httpClient())
 	resp, err := cli.Do(req)
 	if err != nil {
 		return "", err
 	}
-	defer resp.Body.Close()
-	return resp.Header.Get("Location"), nil
+	resp.Body.Close()
+	location := resp.Header.Get("Location")
+	if location == "" {
+		return "", fmt.Errorf("download file failed: location not found")
+	}
+	return location, nil
 }

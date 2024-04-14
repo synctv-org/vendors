@@ -2,7 +2,7 @@ package onedrive
 
 import "time"
 
-type microsoftUserInfo struct {
+type MicrosoftUserInfo struct {
 	OdataContext      string `json:"@odata.context"`
 	UserPrincipalName string `json:"userPrincipalName"`
 	ID                string `json:"id"`
@@ -13,10 +13,25 @@ type microsoftUserInfo struct {
 	Mail              string `json:"mail"`
 }
 
-type FsListResp struct {
+type MicrosoftError struct {
+	Code    string `json:"code"`
+	Message string `json:"message"`
+}
+
+type microsoftUserInfoResp struct {
+	MicrosoftUserInfo
+	MicrosoftError `json:"error"`
+}
+
+type FsList struct {
 	OdataContext string  `json:"@odata.context"`
 	OdataCount   int     `json:"@odata.count"`
 	Value        []Value `json:"value"`
+}
+
+type fsListResp struct {
+	FsList
+	MicrosoftError `json:"error"`
 }
 
 type Reactions struct {
@@ -112,7 +127,7 @@ type Value struct {
 	File                      File            `json:"file,omitempty"`
 }
 
-type FsGetResp struct {
+type FsGet struct {
 	CreatedBy struct {
 		User struct {
 			ID          string `json:"id"`
@@ -138,4 +153,9 @@ type FsGetResp struct {
 	} `json:"root"`
 	Size   int    `json:"size"`
 	WebURL string `json:"webUrl"`
+}
+
+type fsGetResp struct {
+	FsGet
+	MicrosoftError `json:"error"`
 }

@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/url"
 
+	"github.com/synctv-org/vendors/utils"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/microsoft"
 )
@@ -25,7 +26,8 @@ func newOauth2Config(clientID, clientSecret, redirectURL string) oauth2.Config {
 type Client struct {
 	config  oauth2.Config
 	ctx     context.Context
-	tk      oauth2.TokenSource
+	tk      oauth2.Token
+	tks     oauth2.TokenSource
 	baseURL string
 }
 
@@ -39,7 +41,7 @@ func WithContext(ctx context.Context) ClientOption {
 
 func WithToken(tk oauth2.Token) ClientOption {
 	return func(c *Client) {
-		c.tk = oauth2.StaticTokenSource(&tk)
+		c.SetToken(tk)
 	}
 }
 
@@ -62,23 +64,20 @@ func NewClient(clientID, clientSecret, redirectURL string, opt ...ClientOption) 
 }
 
 func (c *Client) Token() (*oauth2.Token, error) {
-	return c.tk.Token()
+	return c.tks.Token()
 }
 
-func (c *Client) HttpClient() (*http.Client, error) {
-	t, err := c.Token()
-	if err != nil {
-		return nil, err
+func (c *Client) httpClient() *http.Client {
+	return &http.Client{
+		Transport: &oauth2.Transport{
+			Source: c.tks,
+			Base:   utils.DefaultUtlsHttpRoundTripper,
+		},
 	}
-	return c.config.Client(c.ctx, t), nil
 }
 
 func (c *Client) Do(req *http.Request) (*http.Response, error) {
-	cli, err := c.HttpClient()
-	if err != nil {
-		return nil, err
-	}
-	return cli.Do(req)
+	return c.httpClient().Do(req)
 }
 
 func (c *Client) NewRequest(method, relative string, data any) (req *http.Request, err error) {

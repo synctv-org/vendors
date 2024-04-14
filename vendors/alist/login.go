@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	json "github.com/json-iterator/go"
+	"github.com/synctv-org/vendors/utils"
 )
 
 type LoginOptions struct {
@@ -39,7 +40,7 @@ func Login(ctx context.Context, host string, data LoginReq, opts ...LoginOpt) (s
 		return "", err
 	}
 	req.Header.Set("Content-Type", "application/json")
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := utils.UtlsDo(req)
 	if err != nil {
 		return "", err
 	}

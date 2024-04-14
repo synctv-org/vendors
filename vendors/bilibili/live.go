@@ -31,7 +31,7 @@ func (c *Client) ParseLivePage(roomID uint64) (*VideoPageInfo, error) {
 		return nil, err
 	}
 
-	resp, err := c.httpClient.Do(req)
+	resp, err := c.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -91,7 +91,7 @@ func (c *Client) GetLiveMasterInfo(uid uint64) (*LiveMasterInfo, error) {
 		return nil, err
 	}
 
-	resp, err := c.httpClient.Do(req)
+	resp, err := c.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -166,7 +166,7 @@ func (c *Client) GetLiveStreamWithQuality(cid uint64, hls bool, qn uint64) (*Get
 		return nil, err
 	}
 
-	resp, err := c.httpClient.Do(req)
+	resp, err := c.Do(req)
 	if err != nil {
 		return nil, err
 	}

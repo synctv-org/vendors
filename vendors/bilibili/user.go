@@ -19,7 +19,7 @@ func (c *Client) UserInfo() (*UserInfo, error) {
 	if err != nil {
 		return nil, err
 	}
-	resp, err := c.httpClient.Do(req)
+	resp, err := c.Do(req)
 	if err != nil {
 		return nil, err
 	}

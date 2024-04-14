@@ -55,7 +55,7 @@ func (c *Client) ParseVideoPage(aid uint64, bvid string, conf ...ParseVideoPageC
 	if err != nil {
 		return nil, err
 	}
-	resp, err := c.httpClient.Do(req)
+	resp, err := c.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -163,7 +163,7 @@ func (c *Client) GetVideoURL(aid uint64, bvid string, cid uint64, conf ...GetVid
 	if err != nil {
 		return nil, err
 	}
-	resp, err := c.httpClient.Do(req)
+	resp, err := c.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -224,7 +224,7 @@ func (c *Client) GetDashVideoURL(aid uint64, bvid string, cid uint64, conf ...Ge
 	if err != nil {
 		return nil, nil, err
 	}
-	resp, err := c.httpClient.Do(req)
+	resp, err := c.Do(req)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -322,7 +322,7 @@ func (c *Client) GetSubtitles(aid uint64, bvid string, cid uint64) ([]*Subtitle,
 	if err != nil {
 		return nil, err
 	}
-	resp, err := c.httpClient.Do(req)
+	resp, err := c.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -359,7 +359,7 @@ func (c *Client) ParsePGCPage(epid, season_id uint64) (*VideoPageInfo, error) {
 	if err != nil {
 		return nil, err
 	}
-	resp, err := c.httpClient.Do(req)
+	resp, err := c.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -414,7 +414,7 @@ func (c *Client) GetPGCURL(epid, cid uint64, conf ...GetVideoURLConfig) (*VideoU
 	if err != nil {
 		return nil, err
 	}
-	resp, err := c.httpClient.Do(req)
+	resp, err := c.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -463,7 +463,7 @@ func (c *Client) GetDashPGCURL(epid, cid uint64, conf ...GetDashVideoURLConfig) 
 	if err != nil {
 		return nil, nil, err
 	}
-	resp, err := c.httpClient.Do(req)
+	resp, err := c.Do(req)
 	if err != nil {
 		return nil, nil, err
 	}

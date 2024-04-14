@@ -48,6 +48,9 @@ func NoRedirectClient(client *http.Client) *http.Client {
 }
 
 func MapToHttpCookies(m map[string]string) []*http.Cookie {
+	if len(m) == 0 {
+		return nil
+	}
 	var cookies = make([]*http.Cookie, 0, len(m))
 	for k, v := range m {
 		cookies = append(cookies, &http.Cookie{

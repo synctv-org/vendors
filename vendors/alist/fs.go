@@ -12,7 +12,7 @@ func (c *Client) FsGet(fSGetReq *FsGetReq) (*fsGetResp, error) {
 	if err != nil {
 		return nil, err
 	}
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := c.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -32,7 +32,7 @@ func (c *Client) FsList(fSListReq *FsListReq) (*fsListResp, error) {
 	if err != nil {
 		return nil, err
 	}
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := c.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -52,7 +52,7 @@ func (c *Client) FsOther(fSOtherReq *FsOtherReq) (*fsOtherResp, error) {
 	if err != nil {
 		return nil, err
 	}
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := c.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -72,7 +72,7 @@ func (c *Client) FsMkdir(fSMkdirReq *FsMkdirReq) error {
 	if err != nil {
 		return err
 	}
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := c.Do(req)
 	if err != nil {
 		return err
 	}
@@ -92,7 +92,7 @@ func (c *Client) FsRename(fSRenameReq *FsRenameReq) error {
 	if err != nil {
 		return err
 	}
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := c.Do(req)
 	if err != nil {
 		return err
 	}
@@ -112,7 +112,7 @@ func (c *Client) FsRemove(fSRemoveReq *FsRemoveReq) error {
 	if err != nil {
 		return err
 	}
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := c.Do(req)
 	if err != nil {
 		return err
 	}
@@ -132,7 +132,7 @@ func (c *Client) FsSearch(fSSearchReq *FsSearchReq) (*fsSearchResp, error) {
 	if err != nil {
 		return nil, err
 	}
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := c.Do(req)
 	if err != nil {
 		return nil, err
 	}
