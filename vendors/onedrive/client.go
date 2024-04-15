@@ -71,7 +71,7 @@ func (c *Client) httpClient() *http.Client {
 	return &http.Client{
 		Transport: &oauth2.Transport{
 			Source: c.tks,
-			Base:   uhc.DefaultUtlsHttpRoundTripper,
+			Base:   uhc.DefaultTransport,
 		},
 	}
 }

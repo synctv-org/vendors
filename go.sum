@@ -264,6 +264,8 @@ github.com/zijiren233/go-colorable v0.0.0-20230930131441-997304c961cb h1:0DyOxf/
 github.com/zijiren233/go-colorable v0.0.0-20230930131441-997304c961cb/go.mod h1:6TCzjDiQ8+5gWZiwsC3pnA5M0vUy2jV2Y7ciHJh729g=
 github.com/zijiren233/go-uhc v0.1.1 h1:u20sQbkPE7HfMxMK88zGzZOkvSgIW+1Yf+CygmZL/ts=
 github.com/zijiren233/go-uhc v0.1.1/go.mod h1:bOwLWM4v3PL9DsqKOq5pc5XyLDAqxJFxHECZFeI00fM=
+github.com/zijiren233/go-uhc v0.2.0 h1:bB+7Bqiuglds0BjZ3P14kiiAk0NVC5WvH2R1Luk3yqc=
+github.com/zijiren233/go-uhc v0.2.0/go.mod h1:bOwLWM4v3PL9DsqKOq5pc5XyLDAqxJFxHECZFeI00fM=
 go.etcd.io/etcd/api/v3 v3.5.13 h1:8WXU2/NBge6AUF1K1gOexB6e07NgsN1hXK0rSTtgSp4=
 go.etcd.io/etcd/api/v3 v3.5.13/go.mod h1:gBqlqkcMMZMVTMm4NDZloEVJzxQOQIls8splbqBDa0c=
 go.etcd.io/etcd/client/pkg/v3 v3.5.13 h1:RVZSAnWWWiI5IrYAXjQorajncORbS0zI48LQlE2kQWg=
