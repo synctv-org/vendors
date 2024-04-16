@@ -18,7 +18,7 @@ require (
 	github.com/zencoder/go-dash/v3 v3.0.3
 	github.com/zijiren233/gencontainer v0.0.0-20240331174346-b5e420773df7
 	github.com/zijiren233/go-colorable v0.0.0-20230930131441-997304c961cb
-	github.com/zijiren233/go-uhc v0.2.1
+	github.com/zijiren233/go-uhc v0.2.2
 	go.etcd.io/etcd/client/v3 v3.5.13
 	go.uber.org/automaxprocs v1.5.3
 	golang.org/x/net v0.24.0
