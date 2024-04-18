@@ -56,7 +56,7 @@ func (a *AlistService) Me(ctx context.Context, req *pb.MeReq) (*pb.MeResp, error
 }
 
 func (a *AlistService) FsGet(ctx context.Context, req *pb.FsGetReq) (*pb.FsGetResp, error) {
-	cli, err := alist.NewClient(req.Host, req.Token, alist.WithContext(ctx))
+	cli, err := alist.NewClient(req.Host, req.Token, alist.WithContext(ctx), alist.WithUserAgent(req.UserAgent))
 	if err != nil {
 		return nil, err
 	}

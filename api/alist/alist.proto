@@ -60,6 +60,8 @@ message FsGetReq {
   string token = 2;
   string path = 3;
   string password = 4;
+
+  string user_agent = 5;
 }
 
 message FsGetResp {
@@ -120,7 +122,8 @@ message FsOtherResp {
       string status = 2;
       string url = 3;
     }
-    repeated LiveTranscodingSubtitleTaskList liveTranscodingSubtitleTaskList = 2;
+    repeated LiveTranscodingSubtitleTaskList liveTranscodingSubtitleTaskList =
+        2;
     message LiveTranscodingTaskList {
       string stage = 1;
       string status = 2;

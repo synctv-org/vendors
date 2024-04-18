@@ -7,13 +7,15 @@ import (
 	"net/url"
 
 	json "github.com/json-iterator/go"
+	"github.com/synctv-org/vendors/utils"
 	"github.com/zijiren233/go-uhc"
 )
 
 type Client struct {
-	host  string
-	token string
-	ctx   context.Context
+	host      string
+	token     string
+	ctx       context.Context
+	userAgent string
 }
 
 type ClientConfig func(*Client)
@@ -21,6 +23,12 @@ type ClientConfig func(*Client)
 func WithContext(ctx context.Context) ClientConfig {
 	return func(c *Client) {
 		c.ctx = ctx
+	}
+}
+
+func WithUserAgent(userAgent string) ClientConfig {
+	return func(c *Client) {
+		c.userAgent = userAgent
 	}
 }
 
@@ -71,6 +79,13 @@ func (c *Client) NewRequest(method, relative string, data any) (req *http.Reques
 	}
 	req.Header.Set("Origin", c.host)
 	req.Header.Set("Referer", c.host)
+	if req.Header.Get("User-Agent") == "" {
+		if c.userAgent != "" {
+			req.Header.Set("User-Agent", c.userAgent)
+		} else {
+			req.Header.Set("User-Agent", utils.UA)
+		}
+	}
 	return req, nil
 }
 
