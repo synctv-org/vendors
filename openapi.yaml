@@ -1092,8 +1092,6 @@ components:
                     type: string
                 token:
                     type: string
-                deviceId:
-                    type: string
                 palySessionId:
                     type: string
         api.emby.Empty:
