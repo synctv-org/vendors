@@ -26,6 +26,7 @@ const OperationEmbyGetSystemInfo = "/api.emby.Emby/GetSystemInfo"
 const OperationEmbyLogin = "/api.emby.Emby/Login"
 const OperationEmbyLogout = "/api.emby.Emby/Logout"
 const OperationEmbyMe = "/api.emby.Emby/Me"
+const OperationEmbyPlaybackInfo = "/api.emby.Emby/PlaybackInfo"
 
 type EmbyHTTPServer interface {
 	FsList(context.Context, *FsListReq) (*FsListResp, error)
@@ -35,6 +36,7 @@ type EmbyHTTPServer interface {
 	Login(context.Context, *LoginReq) (*LoginResp, error)
 	Logout(context.Context, *LogoutReq) (*Empty, error)
 	Me(context.Context, *MeReq) (*MeResp, error)
+	PlaybackInfo(context.Context, *PlaybackInfoReq) (*PlaybackInfoResp, error)
 }
 
 func RegisterEmbyHTTPServer(s *http.Server, srv EmbyHTTPServer) {
@@ -46,6 +48,7 @@ func RegisterEmbyHTTPServer(s *http.Server, srv EmbyHTTPServer) {
 	r.POST("/emby/System/Info", _Emby_GetSystemInfo0_HTTP_Handler(srv))
 	r.POST("/emby/FileSystem/Paths", _Emby_FsList1_HTTP_Handler(srv))
 	r.POST("/emby/Sessions/Logout", _Emby_Logout0_HTTP_Handler(srv))
+	r.POST("/emby/Playback/Info", _Emby_PlaybackInfo0_HTTP_Handler(srv))
 }
 
 func _Emby_Login1_HTTP_Handler(srv EmbyHTTPServer) func(ctx http.Context) error {
@@ -205,6 +208,28 @@ func _Emby_Logout0_HTTP_Handler(srv EmbyHTTPServer) func(ctx http.Context) error
 	}
 }
 
+func _Emby_PlaybackInfo0_HTTP_Handler(srv EmbyHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in PlaybackInfoReq
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationEmbyPlaybackInfo)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.PlaybackInfo(ctx, req.(*PlaybackInfoReq))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*PlaybackInfoResp)
+		return ctx.Result(200, reply)
+	}
+}
+
 type EmbyHTTPClient interface {
 	FsList(ctx context.Context, req *FsListReq, opts ...http.CallOption) (rsp *FsListResp, err error)
 	GetItem(ctx context.Context, req *GetItemReq, opts ...http.CallOption) (rsp *Item, err error)
@@ -213,6 +238,7 @@ type EmbyHTTPClient interface {
 	Login(ctx context.Context, req *LoginReq, opts ...http.CallOption) (rsp *LoginResp, err error)
 	Logout(ctx context.Context, req *LogoutReq, opts ...http.CallOption) (rsp *Empty, err error)
 	Me(ctx context.Context, req *MeReq, opts ...http.CallOption) (rsp *MeResp, err error)
+	PlaybackInfo(ctx context.Context, req *PlaybackInfoReq, opts ...http.CallOption) (rsp *PlaybackInfoResp, err error)
 }
 
 type EmbyHTTPClientImpl struct {
@@ -306,6 +332,19 @@ func (c *EmbyHTTPClientImpl) Me(ctx context.Context, in *MeReq, opts ...http.Cal
 	pattern := "/emby/Users/Me"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationEmbyMe))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *EmbyHTTPClientImpl) PlaybackInfo(ctx context.Context, in *PlaybackInfoReq, opts ...http.CallOption) (*PlaybackInfoResp, error) {
+	var out PlaybackInfoResp
+	pattern := "/emby/Playback/Info"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationEmbyPlaybackInfo))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

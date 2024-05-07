@@ -57,6 +57,13 @@ service Emby {
       body : "*"
     };
   }
+
+  rpc PlaybackInfo(PlaybackInfoReq) returns (PlaybackInfoResp) {
+    option (google.api.http) = {
+      post : "/emby/Playback/Info"
+      body : "*"
+    };
+  }
 }
 
 message LoginReq {
@@ -111,6 +118,8 @@ message MediaSourceInfo {
   uint64 defaultSubtitleStreamIndex = 6;
   uint64 defaultAudioStreamIndex = 7;
   repeated MediaStreamInfo mediaStreamInfo = 8;
+  string directPlayUrl = 9;
+  string transcodingUrl = 10;
 }
 
 message Item {
@@ -201,3 +210,18 @@ message LogoutReq {
 }
 
 message Empty {}
+
+message PlaybackInfoReq {
+  string host = 1;
+  string token = 2;
+  string userId = 3;
+  string itemId = 4;
+  string mediaSourceId = 5;
+  string audioStreamIndex = 6;
+  string subtitleStreamIndex = 7;
+}
+
+message PlaybackInfoResp {
+  string playSessionID = 1;
+  repeated MediaSourceInfo mediaSourceInfo = 2;
+}

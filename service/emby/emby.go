@@ -45,6 +45,43 @@ func (a *EmbyService) Me(ctx context.Context, req *pb.MeReq) (*pb.MeResp, error)
 	}, nil
 }
 
+func mediaStreamInfo2pb(msi []emby.MediaStreams) []*pb.MediaStreamInfo {
+	var pbmsi []*pb.MediaStreamInfo = make([]*pb.MediaStreamInfo, len(msi))
+	for i, msi := range msi {
+		pbmsi[i] = &pb.MediaStreamInfo{
+			Codec:           msi.Codec,
+			Language:        msi.Language,
+			Type:            msi.Type,
+			Title:           msi.Title,
+			DisplayTitle:    msi.DisplayTitle,
+			DisplayLanguage: msi.DisplayLanguage,
+			IsDefault:       msi.IsDefault,
+			Index:           msi.Index,
+			Protocol:        msi.Protocol,
+		}
+	}
+	return pbmsi
+}
+
+func mediaSources2pb(ms []emby.MediaSources) []*pb.MediaSourceInfo {
+	var pbms []*pb.MediaSourceInfo = make([]*pb.MediaSourceInfo, len(ms))
+	for i, msi := range ms {
+		pbms[i] = &pb.MediaSourceInfo{
+			Id:                         msi.ID,
+			Name:                       msi.Name,
+			Path:                       msi.Path,
+			Protocol:                   msi.Protocol,
+			Container:                  msi.Container,
+			DefaultSubtitleStreamIndex: msi.DefaultSubtitleStreamIndex,
+			DefaultAudioStreamIndex:    msi.DefaultAudioStreamIndex,
+			MediaStreamInfo:            mediaStreamInfo2pb(msi.MediaStreams),
+			DirectPlayUrl:              msi.DirectStreamURL,
+			TranscodingUrl:             msi.TranscodingURL,
+		}
+	}
+	return pbms
+}
+
 func item2pb(item *emby.Items) *pb.Item {
 	pi := &pb.Item{
 		Id:              item.ID,
@@ -56,33 +93,8 @@ func item2pb(item *emby.Items) *pb.Item {
 		SeasonId:        item.SeasonID,
 		SeriesName:      item.SeriesName,
 		SeriesId:        item.SeriesID,
-		MediaSourceInfo: make([]*pb.MediaSourceInfo, len(item.MediaSources)),
+		MediaSourceInfo: mediaSources2pb(item.MediaSources),
 		CollectionType:  item.CollectionType,
-	}
-	for i, msi := range item.MediaSources {
-		pi.MediaSourceInfo[i] = &pb.MediaSourceInfo{
-			Id:                         msi.ID,
-			Name:                       msi.Name,
-			Path:                       msi.Path,
-			Protocol:                   msi.Protocol,
-			Container:                  msi.Container,
-			DefaultSubtitleStreamIndex: msi.DefaultSubtitleStreamIndex,
-			DefaultAudioStreamIndex:    msi.DefaultAudioStreamIndex,
-			MediaStreamInfo:            make([]*pb.MediaStreamInfo, len(msi.MediaStreams)),
-		}
-		for j, msi := range msi.MediaStreams {
-			pi.MediaSourceInfo[i].MediaStreamInfo[j] = &pb.MediaStreamInfo{
-				Codec:           msi.Codec,
-				Language:        msi.Language,
-				Type:            msi.Type,
-				Title:           msi.Title,
-				DisplayTitle:    msi.DisplayTitle,
-				DisplayLanguage: msi.DisplayLanguage,
-				IsDefault:       msi.IsDefault,
-				Index:           msi.Index,
-				Protocol:        msi.Protocol,
-			}
-		}
 	}
 	return pi
 }
@@ -324,4 +336,16 @@ func (a *EmbyService) Logout(ctx context.Context, req *pb.LogoutReq) (*pb.Empty,
 		return nil, err
 	}
 	return &pb.Empty{}, nil
+}
+
+func (a *EmbyService) PlaybackInfo(ctx context.Context, req *pb.PlaybackInfoReq) (*pb.PlaybackInfoResp, error) {
+	cli := emby.NewClient(req.Host, emby.WithContext(ctx), emby.WithKey(req.Token), emby.WithUserID(req.UserId))
+	r, err := cli.UserPlaybackInfo(req.ItemId)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.PlaybackInfoResp{
+		PlaySessionID:   r.PlaySessionID,
+		MediaSourceInfo: mediaSources2pb(r.MediaSources),
+	}, nil
 }

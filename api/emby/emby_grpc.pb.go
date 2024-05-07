@@ -26,6 +26,7 @@ const (
 	Emby_GetSystemInfo_FullMethodName = "/api.emby.Emby/GetSystemInfo"
 	Emby_FsList_FullMethodName        = "/api.emby.Emby/FsList"
 	Emby_Logout_FullMethodName        = "/api.emby.Emby/Logout"
+	Emby_PlaybackInfo_FullMethodName  = "/api.emby.Emby/PlaybackInfo"
 )
 
 // EmbyClient is the client API for Emby service.
@@ -39,6 +40,7 @@ type EmbyClient interface {
 	GetSystemInfo(ctx context.Context, in *SystemInfoReq, opts ...grpc.CallOption) (*SystemInfoResp, error)
 	FsList(ctx context.Context, in *FsListReq, opts ...grpc.CallOption) (*FsListResp, error)
 	Logout(ctx context.Context, in *LogoutReq, opts ...grpc.CallOption) (*Empty, error)
+	PlaybackInfo(ctx context.Context, in *PlaybackInfoReq, opts ...grpc.CallOption) (*PlaybackInfoResp, error)
 }
 
 type embyClient struct {
@@ -112,6 +114,15 @@ func (c *embyClient) Logout(ctx context.Context, in *LogoutReq, opts ...grpc.Cal
 	return out, nil
 }
 
+func (c *embyClient) PlaybackInfo(ctx context.Context, in *PlaybackInfoReq, opts ...grpc.CallOption) (*PlaybackInfoResp, error) {
+	out := new(PlaybackInfoResp)
+	err := c.cc.Invoke(ctx, Emby_PlaybackInfo_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // EmbyServer is the server API for Emby service.
 // All implementations must embed UnimplementedEmbyServer
 // for forward compatibility
@@ -123,6 +134,7 @@ type EmbyServer interface {
 	GetSystemInfo(context.Context, *SystemInfoReq) (*SystemInfoResp, error)
 	FsList(context.Context, *FsListReq) (*FsListResp, error)
 	Logout(context.Context, *LogoutReq) (*Empty, error)
+	PlaybackInfo(context.Context, *PlaybackInfoReq) (*PlaybackInfoResp, error)
 	mustEmbedUnimplementedEmbyServer()
 }
 
@@ -150,6 +162,9 @@ func (UnimplementedEmbyServer) FsList(context.Context, *FsListReq) (*FsListResp,
 }
 func (UnimplementedEmbyServer) Logout(context.Context, *LogoutReq) (*Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Logout not implemented")
+}
+func (UnimplementedEmbyServer) PlaybackInfo(context.Context, *PlaybackInfoReq) (*PlaybackInfoResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PlaybackInfo not implemented")
 }
 func (UnimplementedEmbyServer) mustEmbedUnimplementedEmbyServer() {}
 
@@ -290,6 +305,24 @@ func _Emby_Logout_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Emby_PlaybackInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PlaybackInfoReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EmbyServer).PlaybackInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Emby_PlaybackInfo_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EmbyServer).PlaybackInfo(ctx, req.(*PlaybackInfoReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Emby_ServiceDesc is the grpc.ServiceDesc for Emby service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -324,6 +357,10 @@ var Emby_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Logout",
 			Handler:    _Emby_Logout_Handler,
+		},
+		{
+			MethodName: "PlaybackInfo",
+			Handler:    _Emby_PlaybackInfo_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

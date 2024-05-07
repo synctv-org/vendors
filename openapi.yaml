@@ -378,6 +378,24 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.emby.LoginResp'
+    /emby/Playback/Info:
+        post:
+            tags:
+                - Emby
+            operationId: Emby_PlaybackInfo
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.emby.PlaybackInfoReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.emby.PlaybackInfoResp'
     /emby/Sessions/Logout:
         post:
             tags:
@@ -1202,6 +1220,10 @@ components:
                     type: array
                     items:
                         $ref: '#/components/schemas/api.emby.MediaStreamInfo'
+                directPlayUrl:
+                    type: string
+                transcodingUrl:
+                    type: string
         api.emby.MediaStreamInfo:
             type: object
             properties:
@@ -1230,6 +1252,32 @@ components:
                     type: string
                 path:
                     type: string
+        api.emby.PlaybackInfoReq:
+            type: object
+            properties:
+                host:
+                    type: string
+                token:
+                    type: string
+                userId:
+                    type: string
+                itemId:
+                    type: string
+                mediaSourceId:
+                    type: string
+                audioStreamIndex:
+                    type: string
+                subtitleStreamIndex:
+                    type: string
+        api.emby.PlaybackInfoResp:
+            type: object
+            properties:
+                playSessionID:
+                    type: string
+                mediaSourceInfo:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.emby.MediaSourceInfo'
         api.emby.SystemInfoReq:
             type: object
             properties:

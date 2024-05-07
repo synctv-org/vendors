@@ -500,52 +500,82 @@ type PlayBackResp struct {
 	PlaySessionID string         `json:"PlaySessionId"`
 }
 
+type DirectPlayProfile struct {
+	Container  string `json:"Container"`
+	Type       string `json:"Type"`
+	VideoCodec string `json:"VideoCodec,omitempty"`
+	AudioCodec string `json:"AudioCodec,omitempty"`
+}
+
+type TranscodingProfile struct {
+	Container           string `json:"Container"`
+	Type                string `json:"Type"`
+	AudioCodec          string `json:"AudioCodec"`
+	Context             string `json:"Context"`
+	Protocol            string `json:"Protocol,omitempty"`
+	MaxAudioChannels    string `json:"MaxAudioChannels,omitempty"`
+	MinSegments         string `json:"MinSegments,omitempty"`
+	BreakOnNonKeyFrames bool   `json:"BreakOnNonKeyFrames,omitempty"`
+	VideoCodec          string `json:"VideoCodec,omitempty"`
+	CopyTimestamps      bool   `json:"CopyTimestamps,omitempty"`
+	ManifestSubtitles   string `json:"ManifestSubtitles,omitempty"`
+}
+
+type Condition struct {
+	Condition  string `json:"Condition"`
+	Property   string `json:"Property"`
+	Value      string `json:"Value"`
+	IsRequired any    `json:"IsRequired"`
+}
+
+type CodecProfile struct {
+	Type       string      `json:"Type"`
+	Codec      string      `json:"Codec,omitempty"`
+	Conditions []Condition `json:"Conditions"`
+}
+
+type SubtitleProfile struct {
+	Format   string `json:"Format"`
+	Method   string `json:"Method"`
+	Protocol string `json:"Protocol,omitempty"`
+}
+
+type ResponseProfile struct {
+	Type      string `json:"Type"`
+	Container string `json:"Container"`
+	MimeType  string `json:"MimeType"`
+}
+
 type DeviceProfile struct {
-	MaxStaticBitrate                 int `json:"MaxStaticBitrate"`
-	MaxStreamingBitrate              int `json:"MaxStreamingBitrate"`
-	MusicStreamingTranscodingBitrate int `json:"MusicStreamingTranscodingBitrate"`
-	DirectPlayProfiles               []struct {
-		Container  string `json:"Container"`
-		Type       string `json:"Type"`
-		VideoCodec string `json:"VideoCodec,omitempty"`
-		AudioCodec string `json:"AudioCodec,omitempty"`
-	} `json:"DirectPlayProfiles"`
-	TranscodingProfiles []struct {
-		Container           string `json:"Container"`
-		Type                string `json:"Type"`
-		AudioCodec          string `json:"AudioCodec"`
-		Context             string `json:"Context"`
-		Protocol            string `json:"Protocol,omitempty"`
-		MaxAudioChannels    string `json:"MaxAudioChannels,omitempty"`
-		MinSegments         string `json:"MinSegments,omitempty"`
-		BreakOnNonKeyFrames bool   `json:"BreakOnNonKeyFrames,omitempty"`
-		VideoCodec          string `json:"VideoCodec,omitempty"`
-		CopyTimestamps      bool   `json:"CopyTimestamps,omitempty"`
-		ManifestSubtitles   string `json:"ManifestSubtitles,omitempty"`
-	} `json:"TranscodingProfiles"`
-	ContainerProfiles []interface{} `json:"ContainerProfiles"`
-	CodecProfiles     []struct {
-		Type       string `json:"Type"`
-		Codec      string `json:"Codec,omitempty"`
-		Conditions []struct {
-			Condition  string `json:"Condition"`
-			Property   string `json:"Property"`
-			Value      string `json:"Value"`
-			IsRequired any    `json:"IsRequired"`
-		} `json:"Conditions"`
-	} `json:"CodecProfiles"`
-	SubtitleProfiles []struct {
-		Format   string `json:"Format"`
-		Method   string `json:"Method"`
-		Protocol string `json:"Protocol,omitempty"`
-	} `json:"SubtitleProfiles"`
-	ResponseProfiles []struct {
-		Type      string `json:"Type"`
-		Container string `json:"Container"`
-		MimeType  string `json:"MimeType"`
-	} `json:"ResponseProfiles"`
+	MaxStaticBitrate                 int                  `json:"MaxStaticBitrate"`
+	MaxStreamingBitrate              int                  `json:"MaxStreamingBitrate"`
+	MusicStreamingTranscodingBitrate int                  `json:"MusicStreamingTranscodingBitrate"`
+	DirectPlayProfiles               []DirectPlayProfile  `json:"DirectPlayProfiles"`
+	TranscodingProfiles              []TranscodingProfile `json:"TranscodingProfiles"`
+	CodecProfiles                    []CodecProfile       `json:"CodecProfiles"`
+	SubtitleProfiles                 []SubtitleProfile    `json:"SubtitleProfiles"`
+	ResponseProfiles                 []ResponseProfile    `json:"ResponseProfiles"`
 }
 
 type PlayBackReq struct {
-	DeviceProfile DeviceProfile `json:"DeviceProfile"`
+	DeviceProfile                  DeviceProfile `json:"DeviceProfile"`
+	ID                             string        `json:"Id,omitempty"`
+	UserID                         string        `json:"UserId,omitempty"`
+	MaxStreamingBitrate            int           `json:"MaxStreamingBitrate,omitempty"`
+	StartTimeTicks                 int           `json:"StartTimeTicks,omitempty"`
+	AudioStreamIndex               int           `json:"AudioStreamIndex,omitempty"`
+	SubtitleStreamIndex            int           `json:"SubtitleStreamIndex,omitempty"`
+	MaxAudioChannels               int           `json:"MaxAudioChannels,omitempty"`
+	MediaSourceID                  string        `json:"MediaSourceId,omitempty"`
+	LiveStreamID                   string        `json:"LiveStreamId,omitempty"`
+	EnableDirectPlay               bool          `json:"EnableDirectPlay,omitempty"`
+	EnableDirectStream             bool          `json:"EnableDirectStream,omitempty"`
+	EnableTranscoding              bool          `json:"EnableTranscoding,omitempty"`
+	AllowInterlacedVideoStreamCopy bool          `json:"AllowInterlacedVideoStreamCopy,omitempty"`
+	AllowVideoStreamCopy           bool          `json:"AllowVideoStreamCopy,omitempty"`
+	AllowAudioStreamCopy           bool          `json:"AllowAudioStreamCopy,omitempty"`
+	IsPlayback                     bool          `json:"IsPlayback,omitempty"`
+	AutoOpenLiveStream             bool          `json:"AutoOpenLiveStream,omitempty"`
+	DirectPlayProtocols            []string      `json:"DirectPlayProtocols,omitempty"`
+	CurrentPlaySessionID           string        `json:"CurrentPlaySessionId,omitempty"`
 }
