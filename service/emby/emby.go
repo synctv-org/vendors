@@ -3,6 +3,7 @@ package emby
 import (
 	"context"
 	"errors"
+	"fmt"
 	"strconv"
 
 	pb "github.com/synctv-org/vendors/api/emby"
@@ -89,7 +90,6 @@ func item2pb(item *emby.Items) *pb.Item {
 func (a *EmbyService) GetItems(ctx context.Context, req *pb.GetItemsReq) (*pb.GetItemsResp, error) {
 	cli := emby.NewClient(req.Host, emby.WithContext(ctx), emby.WithKey(req.Token))
 	opts := []emby.GetItemsOptionFunc{
-		emby.WithParentId(req.ParentId),
 		emby.WithSortBy("SortName"),
 		emby.WithSortOrderAsc(),
 	}
@@ -97,6 +97,10 @@ func (a *EmbyService) GetItems(ctx context.Context, req *pb.GetItemsReq) (*pb.Ge
 		opts = append(opts,
 			emby.WithSearch(req.SearchTerm),
 			emby.WithRecursive(),
+		)
+	} else {
+		opts = append(opts,
+			emby.WithParentId(req.ParentId),
 		)
 	}
 	r, err := cli.GetItems(opts...)
@@ -123,96 +127,133 @@ func (a *EmbyService) GetItem(ctx context.Context, req *pb.GetItemReq) (*pb.Item
 }
 
 func (a *EmbyService) FsList(ctx context.Context, req *pb.FsListReq) (*pb.FsListResp, error) {
-	cli := emby.NewClient(req.Host, emby.WithContext(ctx), emby.WithKey(req.Token))
-	opts := []emby.GetItemsOptionFunc{
-		emby.WithParentId(req.Path),
-		emby.WithSortBy("SortName"),
-		emby.WithSortOrderAsc(),
-	}
-	parentItem, err := cli.GetItem(req.Path)
-	if err != nil {
-		return nil, err
-	}
+	cli := emby.NewClient(req.Host, emby.WithContext(ctx), emby.WithKey(req.Token), emby.WithUserID(req.UserId))
+	var resp *emby.ItemsResp
+	var paths []*pb.Path
+	var err error
 	if req.SearchTerm != "" {
-		opts = append(opts,
+		opts := []emby.GetItemsOptionFunc{
+			emby.WithSortBy("SortName"),
+			emby.WithSortOrderAsc(),
+			emby.WithRecursive(),
 			emby.WithSearch(req.SearchTerm),
-			emby.WithRecursive(),
-		)
-	} else if parentItem.Type == "CollectionFolder" {
-		opts = append(opts,
-			emby.WithRecursive(),
-		)
-		switch parentItem.CollectionType {
-		case "movies":
+		}
+		if req.StartIndex != 0 || req.Limit != 0 {
 			opts = append(opts,
-				emby.WithIncludeItemTypes("Movie"),
-			)
-		case "tvshows":
-			opts = append(opts,
-				emby.WithIncludeItemTypes("Series"),
+				emby.WithStartIndex(req.StartIndex),
+				emby.WithLimit(req.Limit),
 			)
 		}
+		if req.Path != "" {
+			opts = append(opts, emby.WithParentId(req.Path))
+			paths, err = genPath(cli, req.Path, nil)
+			if err != nil {
+				return nil, err
+			}
+		} else {
+			paths = []*pb.Path{
+				{
+					Name: "Home",
+					Path: "",
+				},
+			}
+		}
+		resp, err = cli.UserItems(opts...)
+	} else if req.Path == "" {
+		resp, err = cli.UserViews()
+		paths = []*pb.Path{
+			{
+				Name: "Home",
+				Path: "",
+			},
+		}
+	} else {
+		var item *emby.Items
+		item, err = cli.UserItemsByID(req.Path)
+		if err != nil {
+			return nil, err
+		}
+		switch item.Type {
+		case "CollectionFolder":
+			opts := []emby.GetItemsOptionFunc{
+				emby.WithSortBy("SortName"),
+				emby.WithSortOrderAsc(),
+				emby.WithParentId(item.ID),
+				emby.WithRecursive(),
+			}
+			if req.StartIndex != 0 || req.Limit != 0 {
+				opts = append(opts,
+					emby.WithStartIndex(req.StartIndex),
+					emby.WithLimit(req.Limit),
+				)
+			}
+			switch item.CollectionType {
+			case "movies":
+				opts = append(opts,
+					emby.WithIncludeItemTypes("Movie"),
+				)
+			case "tvshows":
+				opts = append(opts,
+					emby.WithIncludeItemTypes("Series"),
+				)
+			}
+			resp, err = cli.UserItems(opts...)
+		case "Series":
+			resp, err = cli.Seasons(item.ID)
+		case "Season":
+			resp, err = cli.Episodes(item.SeriesID, item.ID)
+		default:
+			return nil, fmt.Errorf("unknown type: %s", item.Type)
+		}
+		if err != nil {
+			return nil, err
+		}
+		paths, err = genPath(cli, item.ID, map[string]*emby.Items{
+			item.ID: item,
+		})
 	}
-	if req.StartIndex != 0 || req.Limit != 0 {
-		opts = append(opts,
-			emby.WithStartIndex(req.StartIndex),
-			emby.WithLimit(req.Limit),
-		)
-	}
-	r, err := cli.GetItems(opts...)
 	if err != nil {
 		return nil, err
 	}
 	var items []*pb.Item
-	for _, item := range r.Items {
+	for _, item := range resp.Items {
 		items = append(items, item2pb(&item))
-	}
-	paths, err := genPath(cli, req.Path, map[string]*emby.Items{
-		req.Path: parentItem,
-	})
-	if err != nil {
-		return nil, err
 	}
 	return &pb.FsListResp{
 		Items: items,
 		Paths: paths,
-		Total: r.TotalRecordCount,
+		Total: resp.TotalRecordCount,
 	}, nil
 }
 
-func genPath(cli *emby.Client, id string, caches ...map[string]*emby.Items) ([]*pb.Path, error) {
+const genPathMaxDepth = 5
+
+func genPath(cli *emby.Client, id string, caches map[string]*emby.Items) ([]*pb.Path, error) {
 	var paths []*pb.Path
 	var (
-		item *emby.Items
-		err  error
+		item  *emby.Items
+		err   error
+		depth int
 	)
 	for {
-		if id == "1" || id == "" {
-			break
+		if depth > genPathMaxDepth {
+			return nil, errors.New("genPath: max depth reached")
 		}
 		if len(caches) > 0 {
 			var ok bool
-			if item, ok = caches[0][id]; !ok {
-				item, err = cli.GetItem(id)
+			if item, ok = caches[id]; !ok {
+				item, err = cli.UserItemsByID(id)
 				if err != nil {
 					return nil, err
 				}
 			}
 		} else {
-			item, err = cli.GetItem(id)
+			item, err = cli.UserItemsByID(id)
 			if err != nil {
 				return nil, err
 			}
 		}
-		if !item.IsFolder {
-			return nil, errors.New("not a folder")
-		}
-		paths = append([]*pb.Path{
-			{
-				Name: item.Name,
-				Path: item.ID,
-			},
-		}, paths...)
+		depth++
 		switch item.Type {
 		case "Series", "Folder":
 			i, err := strconv.Atoi(item.ParentID)
@@ -220,16 +261,23 @@ func genPath(cli *emby.Client, id string, caches ...map[string]*emby.Items) ([]*
 				return nil, err
 			}
 			id = strconv.Itoa(i + 1)
+		case "UserRootFolder":
+			return append([]*pb.Path{
+				{
+					Name: "Home",
+					Path: "",
+				},
+			}, paths...), nil
 		default:
 			id = item.ParentID
 		}
+		paths = append([]*pb.Path{
+			{
+				Name: item.Name,
+				Path: item.ID,
+			},
+		}, paths...)
 	}
-	return append([]*pb.Path{
-		{
-			Name: "Home",
-			Path: "1",
-		},
-	}, paths...), nil
 }
 
 func (a *EmbyService) GetSystemInfo(ctx context.Context, req *pb.SystemInfoReq) (*pb.SystemInfoResp, error) {

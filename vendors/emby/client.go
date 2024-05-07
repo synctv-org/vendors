@@ -3,6 +3,7 @@ package emby
 import (
 	"bytes"
 	"context"
+	"io"
 	"net/http"
 	"net/url"
 
@@ -62,9 +63,13 @@ func (c *Client) NewRequest(method, relative string, data any, querys ...map[str
 		return nil, err
 	}
 	if data != nil {
-		body := new(bytes.Buffer)
-		if err := json.NewEncoder(body).Encode(data); err != nil {
-			return nil, err
+		body, ok := data.(io.Reader)
+		if !ok {
+			buffer := new(bytes.Buffer)
+			if err := json.NewEncoder(buffer).Encode(data); err != nil {
+				return nil, err
+			}
+			body = buffer
 		}
 		req, err = http.NewRequestWithContext(c.ctx, method, result, body)
 		if err != nil {

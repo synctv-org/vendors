@@ -32,7 +32,7 @@ func (c *Client) GetItem(id string) (*Items, error) {
 		}
 		return nil, fmt.Errorf("status code %d: %s", resp.StatusCode, string(b))
 	}
-	var fsGetResp GetItemResp
+	var fsGetResp ItemsResp
 	if err := json.NewDecoder(resp.Body).Decode(&fsGetResp); err != nil {
 		return nil, err
 	}
@@ -108,17 +108,12 @@ func WithIncludeItemTypes(types ...string) GetItemsOptionFunc {
 	}
 }
 
-func (c *Client) GetItems(opt ...GetItemsOptionFunc) (*GetItemResp, error) {
+func (c *Client) GetItems(opt ...GetItemsOptionFunc) (*ItemsResp, error) {
 	o := map[string]string{
 		"Fields": "MediaSources,ParentId,Container",
 	}
 	for _, f := range opt {
 		f(o)
-	}
-	if _, ok := o["SearchTerm"]; ok {
-		if i, ok := o["ParentId"]; ok && i == "1" {
-			delete(o, "ParentId")
-		}
 	}
 	req, err := c.NewRequest(http.MethodGet, "/emby/Items", nil, o)
 	if err != nil {
@@ -136,7 +131,7 @@ func (c *Client) GetItems(opt ...GetItemsOptionFunc) (*GetItemResp, error) {
 		}
 		return nil, fmt.Errorf("status code %d: %s", resp.StatusCode, string(b))
 	}
-	var fsGetResp GetItemResp
+	var fsGetResp ItemsResp
 	if err := json.NewDecoder(resp.Body).Decode(&fsGetResp); err != nil {
 		return nil, err
 	}

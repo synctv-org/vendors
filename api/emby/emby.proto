@@ -181,6 +181,7 @@ message FsListReq {
   uint64 startIndex = 4;
   uint64 limit = 5;
   string searchTerm = 6;
+  string userId = 7;
 }
 
 message Path {
