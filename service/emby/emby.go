@@ -352,5 +352,5 @@ func (a *EmbyService) PlaybackInfo(ctx context.Context, req *pb.PlaybackInfoReq)
 
 func (a *EmbyService) DeleteActiveEncodeings(ctx context.Context, req *pb.DeleteActiveEncodeingsReq) (*pb.Empty, error) {
 	cli := emby.NewClient(req.Host, emby.WithContext(ctx), emby.WithKey(req.Token))
-	return nil, cli.DeleteActiveEncodeings(req.DeviceId, req.PalySessionId)
+	return nil, cli.DeleteActiveEncodeings(req.PalySessionId)
 }

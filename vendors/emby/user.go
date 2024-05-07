@@ -420,15 +420,11 @@ func (c *Client) UserPlaybackInfo(id string) (*PlayBackResp, error) {
 	return &playBackResp, nil
 }
 
-func (c *Client) DeleteActiveEncodeings(deviceID, playSessionID string) error {
-	if deviceID == "" {
-		return errors.New("device id is empty")
-	}
+func (c *Client) DeleteActiveEncodeings(playSessionID string) error {
 	if playSessionID == "" {
 		return errors.New("play session id is empty")
 	}
-	req, err := c.NewRequest(http.MethodGet, "/emby/Videos/ActiveEncodings/Delete", nil, map[string]string{
-		"DeviceId":      deviceID,
+	req, err := c.NewRequest(http.MethodPost, "/emby/Videos/ActiveEncodings/Delete", nil, map[string]string{
 		"PlaySessionId": playSessionID,
 	})
 	if err != nil {
@@ -439,7 +435,7 @@ func (c *Client) DeleteActiveEncodeings(deviceID, playSessionID string) error {
 		return err
 	}
 	defer resp.Body.Close()
-	if resp.StatusCode != http.StatusOK {
+	if resp.StatusCode != http.StatusNoContent {
 		b, err := io.ReadAll(resp.Body)
 		if err != nil {
 			return err

@@ -236,6 +236,5 @@ message PlaybackInfoResp {
 message DeleteActiveEncodeingsReq {
   string host = 1;
   string token = 2;
-  string deviceId = 3;
-  string palySessionId = 4;
+  string palySessionId = 3;
 }
