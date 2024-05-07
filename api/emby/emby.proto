@@ -64,6 +64,13 @@ service Emby {
       body : "*"
     };
   }
+
+  rpc DeleteActiveEncodeings(DeleteActiveEncodeingsReq) returns (Empty) {
+    option (google.api.http) = {
+      post : "/emby/DeleteActiveEncodeing"
+      body : "*"
+    };
+  }
 }
 
 message LoginReq {
@@ -224,4 +231,11 @@ message PlaybackInfoReq {
 message PlaybackInfoResp {
   string playSessionID = 1;
   repeated MediaSourceInfo mediaSourceInfo = 2;
+}
+
+message DeleteActiveEncodeingsReq {
+  string host = 1;
+  string token = 2;
+  string deviceId = 3;
+  string palySessionId = 4;
 }

@@ -300,6 +300,24 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.alist.LoginResp'
+    /emby/DeleteActiveEncodeing:
+        post:
+            tags:
+                - Emby
+            operationId: Emby_DeleteActiveEncodeings
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.emby.DeleteActiveEncodeingsReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.emby.Empty'
     /emby/FileSystem/Paths:
         post:
             tags:
@@ -1066,6 +1084,17 @@ components:
                 currentQuality:
                     type: string
                 url:
+                    type: string
+        api.emby.DeleteActiveEncodeingsReq:
+            type: object
+            properties:
+                host:
+                    type: string
+                token:
+                    type: string
+                deviceId:
+                    type: string
+                palySessionId:
                     type: string
         api.emby.Empty:
             type: object

@@ -19,14 +19,15 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Emby_Login_FullMethodName         = "/api.emby.Emby/Login"
-	Emby_Me_FullMethodName            = "/api.emby.Emby/Me"
-	Emby_GetItems_FullMethodName      = "/api.emby.Emby/GetItems"
-	Emby_GetItem_FullMethodName       = "/api.emby.Emby/GetItem"
-	Emby_GetSystemInfo_FullMethodName = "/api.emby.Emby/GetSystemInfo"
-	Emby_FsList_FullMethodName        = "/api.emby.Emby/FsList"
-	Emby_Logout_FullMethodName        = "/api.emby.Emby/Logout"
-	Emby_PlaybackInfo_FullMethodName  = "/api.emby.Emby/PlaybackInfo"
+	Emby_Login_FullMethodName                  = "/api.emby.Emby/Login"
+	Emby_Me_FullMethodName                     = "/api.emby.Emby/Me"
+	Emby_GetItems_FullMethodName               = "/api.emby.Emby/GetItems"
+	Emby_GetItem_FullMethodName                = "/api.emby.Emby/GetItem"
+	Emby_GetSystemInfo_FullMethodName          = "/api.emby.Emby/GetSystemInfo"
+	Emby_FsList_FullMethodName                 = "/api.emby.Emby/FsList"
+	Emby_Logout_FullMethodName                 = "/api.emby.Emby/Logout"
+	Emby_PlaybackInfo_FullMethodName           = "/api.emby.Emby/PlaybackInfo"
+	Emby_DeleteActiveEncodeings_FullMethodName = "/api.emby.Emby/DeleteActiveEncodeings"
 )
 
 // EmbyClient is the client API for Emby service.
@@ -41,6 +42,7 @@ type EmbyClient interface {
 	FsList(ctx context.Context, in *FsListReq, opts ...grpc.CallOption) (*FsListResp, error)
 	Logout(ctx context.Context, in *LogoutReq, opts ...grpc.CallOption) (*Empty, error)
 	PlaybackInfo(ctx context.Context, in *PlaybackInfoReq, opts ...grpc.CallOption) (*PlaybackInfoResp, error)
+	DeleteActiveEncodeings(ctx context.Context, in *DeleteActiveEncodeingsReq, opts ...grpc.CallOption) (*Empty, error)
 }
 
 type embyClient struct {
@@ -123,6 +125,15 @@ func (c *embyClient) PlaybackInfo(ctx context.Context, in *PlaybackInfoReq, opts
 	return out, nil
 }
 
+func (c *embyClient) DeleteActiveEncodeings(ctx context.Context, in *DeleteActiveEncodeingsReq, opts ...grpc.CallOption) (*Empty, error) {
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, Emby_DeleteActiveEncodeings_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // EmbyServer is the server API for Emby service.
 // All implementations must embed UnimplementedEmbyServer
 // for forward compatibility
@@ -135,6 +146,7 @@ type EmbyServer interface {
 	FsList(context.Context, *FsListReq) (*FsListResp, error)
 	Logout(context.Context, *LogoutReq) (*Empty, error)
 	PlaybackInfo(context.Context, *PlaybackInfoReq) (*PlaybackInfoResp, error)
+	DeleteActiveEncodeings(context.Context, *DeleteActiveEncodeingsReq) (*Empty, error)
 	mustEmbedUnimplementedEmbyServer()
 }
 
@@ -165,6 +177,9 @@ func (UnimplementedEmbyServer) Logout(context.Context, *LogoutReq) (*Empty, erro
 }
 func (UnimplementedEmbyServer) PlaybackInfo(context.Context, *PlaybackInfoReq) (*PlaybackInfoResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PlaybackInfo not implemented")
+}
+func (UnimplementedEmbyServer) DeleteActiveEncodeings(context.Context, *DeleteActiveEncodeingsReq) (*Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteActiveEncodeings not implemented")
 }
 func (UnimplementedEmbyServer) mustEmbedUnimplementedEmbyServer() {}
 
@@ -323,6 +338,24 @@ func _Emby_PlaybackInfo_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Emby_DeleteActiveEncodeings_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteActiveEncodeingsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EmbyServer).DeleteActiveEncodeings(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Emby_DeleteActiveEncodeings_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EmbyServer).DeleteActiveEncodeings(ctx, req.(*DeleteActiveEncodeingsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Emby_ServiceDesc is the grpc.ServiceDesc for Emby service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -361,6 +394,10 @@ var Emby_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "PlaybackInfo",
 			Handler:    _Emby_PlaybackInfo_Handler,
+		},
+		{
+			MethodName: "DeleteActiveEncodeings",
+			Handler:    _Emby_DeleteActiveEncodeings_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

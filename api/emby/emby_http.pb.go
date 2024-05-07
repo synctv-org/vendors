@@ -19,6 +19,7 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
+const OperationEmbyDeleteActiveEncodeings = "/api.emby.Emby/DeleteActiveEncodeings"
 const OperationEmbyFsList = "/api.emby.Emby/FsList"
 const OperationEmbyGetItem = "/api.emby.Emby/GetItem"
 const OperationEmbyGetItems = "/api.emby.Emby/GetItems"
@@ -29,6 +30,7 @@ const OperationEmbyMe = "/api.emby.Emby/Me"
 const OperationEmbyPlaybackInfo = "/api.emby.Emby/PlaybackInfo"
 
 type EmbyHTTPServer interface {
+	DeleteActiveEncodeings(context.Context, *DeleteActiveEncodeingsReq) (*Empty, error)
 	FsList(context.Context, *FsListReq) (*FsListResp, error)
 	GetItem(context.Context, *GetItemReq) (*Item, error)
 	GetItems(context.Context, *GetItemsReq) (*GetItemsResp, error)
@@ -49,6 +51,7 @@ func RegisterEmbyHTTPServer(s *http.Server, srv EmbyHTTPServer) {
 	r.POST("/emby/FileSystem/Paths", _Emby_FsList1_HTTP_Handler(srv))
 	r.POST("/emby/Sessions/Logout", _Emby_Logout0_HTTP_Handler(srv))
 	r.POST("/emby/Playback/Info", _Emby_PlaybackInfo0_HTTP_Handler(srv))
+	r.POST("/emby/DeleteActiveEncodeing", _Emby_DeleteActiveEncodeings0_HTTP_Handler(srv))
 }
 
 func _Emby_Login1_HTTP_Handler(srv EmbyHTTPServer) func(ctx http.Context) error {
@@ -230,7 +233,30 @@ func _Emby_PlaybackInfo0_HTTP_Handler(srv EmbyHTTPServer) func(ctx http.Context)
 	}
 }
 
+func _Emby_DeleteActiveEncodeings0_HTTP_Handler(srv EmbyHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in DeleteActiveEncodeingsReq
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationEmbyDeleteActiveEncodeings)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.DeleteActiveEncodeings(ctx, req.(*DeleteActiveEncodeingsReq))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*Empty)
+		return ctx.Result(200, reply)
+	}
+}
+
 type EmbyHTTPClient interface {
+	DeleteActiveEncodeings(ctx context.Context, req *DeleteActiveEncodeingsReq, opts ...http.CallOption) (rsp *Empty, err error)
 	FsList(ctx context.Context, req *FsListReq, opts ...http.CallOption) (rsp *FsListResp, err error)
 	GetItem(ctx context.Context, req *GetItemReq, opts ...http.CallOption) (rsp *Item, err error)
 	GetItems(ctx context.Context, req *GetItemsReq, opts ...http.CallOption) (rsp *GetItemsResp, err error)
@@ -247,6 +273,19 @@ type EmbyHTTPClientImpl struct {
 
 func NewEmbyHTTPClient(client *http.Client) EmbyHTTPClient {
 	return &EmbyHTTPClientImpl{client}
+}
+
+func (c *EmbyHTTPClientImpl) DeleteActiveEncodeings(ctx context.Context, in *DeleteActiveEncodeingsReq, opts ...http.CallOption) (*Empty, error) {
+	var out Empty
+	pattern := "/emby/DeleteActiveEncodeing"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationEmbyDeleteActiveEncodeings))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
 }
 
 func (c *EmbyHTTPClientImpl) FsList(ctx context.Context, in *FsListReq, opts ...http.CallOption) (*FsListResp, error) {

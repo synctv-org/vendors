@@ -419,3 +419,32 @@ func (c *Client) UserPlaybackInfo(id string) (*PlayBackResp, error) {
 	}
 	return &playBackResp, nil
 }
+
+func (c *Client) DeleteActiveEncodeings(deviceID, playSessionID string) error {
+	if deviceID == "" {
+		return errors.New("device id is empty")
+	}
+	if playSessionID == "" {
+		return errors.New("play session id is empty")
+	}
+	req, err := c.NewRequest(http.MethodGet, "/emby/Videos/ActiveEncodings/Delete", nil, map[string]string{
+		"DeviceId":      deviceID,
+		"PlaySessionId": playSessionID,
+	})
+	if err != nil {
+		return err
+	}
+	resp, err := c.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		b, err := io.ReadAll(resp.Body)
+		if err != nil {
+			return err
+		}
+		return fmt.Errorf("status code %d: %s", resp.StatusCode, string(b))
+	}
+	return nil
+}
