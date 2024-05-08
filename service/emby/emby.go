@@ -101,7 +101,7 @@ func item2pb(item *emby.Items) *pb.Item {
 
 func (a *EmbyService) GetItems(ctx context.Context, req *pb.GetItemsReq) (*pb.GetItemsResp, error) {
 	cli := emby.NewClient(req.Host, emby.WithContext(ctx), emby.WithKey(req.Token))
-	opts := []emby.GetItemsOptionFunc{
+	opts := []emby.QueryFunc{
 		emby.WithSortBy("SortName"),
 		emby.WithSortOrderAsc(),
 	}
@@ -143,19 +143,20 @@ func (a *EmbyService) FsList(ctx context.Context, req *pb.FsListReq) (*pb.FsList
 	var resp *emby.ItemsResp
 	var paths []*pb.Path
 	var err error
+	opts := []emby.QueryFunc{}
+	if req.StartIndex != 0 || req.Limit != 0 {
+		opts = append(opts,
+			emby.WithStartIndex(req.StartIndex),
+			emby.WithLimit(req.Limit),
+		)
+	}
 	if req.SearchTerm != "" {
-		opts := []emby.GetItemsOptionFunc{
+		opts = append(opts,
 			emby.WithSortBy("SortName"),
 			emby.WithSortOrderAsc(),
 			emby.WithRecursive(),
 			emby.WithSearch(req.SearchTerm),
-		}
-		if req.StartIndex != 0 || req.Limit != 0 {
-			opts = append(opts,
-				emby.WithStartIndex(req.StartIndex),
-				emby.WithLimit(req.Limit),
-			)
-		}
+		)
 		if req.Path != "" {
 			opts = append(opts, emby.WithParentId(req.Path))
 			paths, err = genPath(cli, req.Path, nil)
@@ -172,7 +173,7 @@ func (a *EmbyService) FsList(ctx context.Context, req *pb.FsListReq) (*pb.FsList
 		}
 		resp, err = cli.UserItems(opts...)
 	} else if req.Path == "" {
-		resp, err = cli.UserViews()
+		resp, err = cli.UserViews(opts...)
 		paths = []*pb.Path{
 			{
 				Name: "Home",
@@ -187,18 +188,12 @@ func (a *EmbyService) FsList(ctx context.Context, req *pb.FsListReq) (*pb.FsList
 		}
 		switch item.Type {
 		case "CollectionFolder":
-			opts := []emby.GetItemsOptionFunc{
+			opts = append(opts,
 				emby.WithSortBy("SortName"),
 				emby.WithSortOrderAsc(),
 				emby.WithParentId(item.ID),
 				emby.WithRecursive(),
-			}
-			if req.StartIndex != 0 || req.Limit != 0 {
-				opts = append(opts,
-					emby.WithStartIndex(req.StartIndex),
-					emby.WithLimit(req.Limit),
-				)
-			}
+			)
 			switch item.CollectionType {
 			case "movies":
 				opts = append(opts,
@@ -211,9 +206,9 @@ func (a *EmbyService) FsList(ctx context.Context, req *pb.FsListReq) (*pb.FsList
 			}
 			resp, err = cli.UserItems(opts...)
 		case "Series":
-			resp, err = cli.Seasons(item.ID)
+			resp, err = cli.Seasons(item.ID, opts...)
 		case "Season":
-			resp, err = cli.Episodes(item.SeriesID, item.ID)
+			resp, err = cli.Episodes(item.SeriesID, item.ID, opts...)
 		default:
 			return nil, fmt.Errorf("unknown type: %s", item.Type)
 		}

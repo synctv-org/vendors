@@ -108,11 +108,15 @@ func (c *Client) Me() (*MeResp, error) {
 	return &meResp, nil
 }
 
-func (c *Client) UserViews() (*ItemsResp, error) {
+func (c *Client) UserViews(opt ...QueryFunc) (*ItemsResp, error) {
 	if c.userID == "" {
 		return nil, errors.New("user id not set")
 	}
-	req, err := c.NewRequest(http.MethodGet, fmt.Sprintf("/emby/Users/%s/Views", c.userID), nil)
+	o := map[string]string{}
+	for _, f := range opt {
+		f(o)
+	}
+	req, err := c.NewRequest(http.MethodGet, fmt.Sprintf("/emby/Users/%s/Views", c.userID), o)
 	if err != nil {
 		return nil, err
 	}
@@ -165,7 +169,7 @@ func (c *Client) UserItemsByID(id string) (*Items, error) {
 	return &itemsResp, nil
 }
 
-func (c *Client) UserItems(opt ...GetItemsOptionFunc) (*ItemsResp, error) {
+func (c *Client) UserItems(opt ...QueryFunc) (*ItemsResp, error) {
 	if c.userID == "" {
 		return nil, errors.New("user id not set")
 	}
@@ -198,11 +202,15 @@ func (c *Client) UserItems(opt ...GetItemsOptionFunc) (*ItemsResp, error) {
 	return &itemsResp, nil
 }
 
-func (c *Client) Seasons(id string) (*ItemsResp, error) {
+func (c *Client) Seasons(id string, opt ...QueryFunc) (*ItemsResp, error) {
 	if c.userID == "" {
 		return nil, errors.New("user id not set")
 	}
-	req, err := c.NewRequest(http.MethodGet, fmt.Sprintf("/emby/Shows/%s/Seasons", id), nil)
+	o := map[string]string{}
+	for _, f := range opt {
+		f(o)
+	}
+	req, err := c.NewRequest(http.MethodGet, fmt.Sprintf("/emby/Shows/%s/Seasons", id), o)
 	if err != nil {
 		return nil, err
 	}
@@ -225,13 +233,17 @@ func (c *Client) Seasons(id string) (*ItemsResp, error) {
 	return &itemsResp, nil
 }
 
-func (c *Client) Episodes(seriesID, seasonId string) (*ItemsResp, error) {
+func (c *Client) Episodes(seriesID, seasonId string, opt ...QueryFunc) (*ItemsResp, error) {
 	if c.userID == "" {
 		return nil, errors.New("user id not set")
 	}
-	req, err := c.NewRequest(http.MethodGet, fmt.Sprintf("/emby/Shows/%s/Episodes", seriesID), nil, map[string]string{
+	o := map[string]string{
 		"SeasonId": seasonId,
-	})
+	}
+	for _, f := range opt {
+		f(o)
+	}
+	req, err := c.NewRequest(http.MethodGet, fmt.Sprintf("/emby/Shows/%s/Episodes", seriesID), nil, o)
 	if err != nil {
 		return nil, err
 	}

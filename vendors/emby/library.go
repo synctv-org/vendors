@@ -44,21 +44,21 @@ func (c *Client) GetItem(id string) (*Items, error) {
 	return &fsGetResp.Items[0], nil
 }
 
-type GetItemsOptionFunc func(map[string]string)
+type QueryFunc func(map[string]string)
 
-func WithStartIndex(startIndex uint64) GetItemsOptionFunc {
+func WithStartIndex(startIndex uint64) QueryFunc {
 	return func(o map[string]string) {
 		o["StartIndex"] = fmt.Sprintf("%d", startIndex)
 	}
 }
 
-func WithLimit(limit uint64) GetItemsOptionFunc {
+func WithLimit(limit uint64) QueryFunc {
 	return func(o map[string]string) {
 		o["Limit"] = fmt.Sprintf("%d", limit)
 	}
 }
 
-func WithParentId(parentId string) GetItemsOptionFunc {
+func WithParentId(parentId string) QueryFunc {
 	return func(o map[string]string) {
 		if parentId == "" || parentId == "0" {
 			parentId = "1"
@@ -67,38 +67,38 @@ func WithParentId(parentId string) GetItemsOptionFunc {
 	}
 }
 
-func WithSortBy(sortBy string) GetItemsOptionFunc {
+func WithSortBy(sortBy string) QueryFunc {
 	return func(o map[string]string) {
 		o["SortBy"] = sortBy
 	}
 }
 
-func WithSortOrderAsc() GetItemsOptionFunc {
+func WithSortOrderAsc() QueryFunc {
 	return func(o map[string]string) {
 		o["SortOrder"] = "Ascending"
 	}
 }
 
-func WithSortOrderDesc() GetItemsOptionFunc {
+func WithSortOrderDesc() QueryFunc {
 	return func(o map[string]string) {
 		o["SortOrder"] = "Descending"
 	}
 }
 
-func WithSearch(search string) GetItemsOptionFunc {
+func WithSearch(search string) QueryFunc {
 	return func(o map[string]string) {
 		o["SearchTerm"] = search
 	}
 }
 
 // 递归获取
-func WithRecursive() GetItemsOptionFunc {
+func WithRecursive() QueryFunc {
 	return func(o map[string]string) {
 		o["Recursive"] = "true"
 	}
 }
 
-func WithIncludeItemTypes(types ...string) GetItemsOptionFunc {
+func WithIncludeItemTypes(types ...string) QueryFunc {
 	return func(o map[string]string) {
 		if v, ok := o["IncludeItemTypes"]; ok {
 			o["IncludeItemTypes"] = fmt.Sprintf("%s,%s", v, strings.Join(types, ","))
@@ -108,7 +108,7 @@ func WithIncludeItemTypes(types ...string) GetItemsOptionFunc {
 	}
 }
 
-func (c *Client) GetItems(opt ...GetItemsOptionFunc) (*ItemsResp, error) {
+func (c *Client) GetItems(opt ...QueryFunc) (*ItemsResp, error) {
 	o := map[string]string{
 		"Fields": "MediaSources,ParentId,Container",
 	}
