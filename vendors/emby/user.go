@@ -406,7 +406,7 @@ func (c *Client) UserPlaybackInfo(id string) (*PlayBackResp, error) {
 		StartTimeTicks:      0,
 		IsPlayback:          true,
 		AutoOpenLiveStream:  true,
-		MaxStreamingBitrate: 160000000,
+		MaxStreamingBitrate: 6000001,
 	}, map[string]string{
 		"reqformat": "json",
 	})
