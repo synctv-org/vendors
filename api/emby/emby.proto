@@ -102,6 +102,7 @@ message GetItemsReq {
   string token = 2;
   string parentId = 3;
   string searchTerm = 4;
+  string userId = 5;
 }
 
 message MediaStreamInfo {

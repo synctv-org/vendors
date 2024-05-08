@@ -2,9 +2,7 @@ package emby
 
 import (
 	"context"
-	"errors"
 	"fmt"
-	"strconv"
 
 	pb "github.com/synctv-org/vendors/api/emby"
 	"github.com/synctv-org/vendors/conf"
@@ -100,10 +98,11 @@ func item2pb(item *emby.Items) *pb.Item {
 }
 
 func (a *EmbyService) GetItems(ctx context.Context, req *pb.GetItemsReq) (*pb.GetItemsResp, error) {
-	cli := emby.NewClient(req.Host, emby.WithContext(ctx), emby.WithKey(req.Token))
+	cli := emby.NewClient(req.Host, emby.WithContext(ctx), emby.WithKey(req.Token), emby.WithUserID(req.UserId))
 	opts := []emby.QueryFunc{
 		emby.WithSortBy("SortName"),
 		emby.WithSortOrderAsc(),
+		emby.WithNotFolder(),
 	}
 	if req.SearchTerm != "" {
 		opts = append(opts,
@@ -115,7 +114,7 @@ func (a *EmbyService) GetItems(ctx context.Context, req *pb.GetItemsReq) (*pb.Ge
 			emby.WithParentId(req.ParentId),
 		)
 	}
-	r, err := cli.GetItems(opts...)
+	r, err := cli.UserItems(opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -159,9 +158,20 @@ func (a *EmbyService) FsList(ctx context.Context, req *pb.FsListReq) (*pb.FsList
 		)
 		if req.Path != "" {
 			opts = append(opts, emby.WithParentId(req.Path))
-			paths, err = genPath(cli, req.Path, nil)
+			var item *emby.Items
+			item, err = cli.UserItemsByID(req.Path)
 			if err != nil {
 				return nil, err
+			}
+			paths = []*pb.Path{
+				{
+					Name: "Home",
+					Path: "",
+				},
+				{
+					Name: item.Name,
+					Path: item.ID,
+				},
 			}
 		} else {
 			paths = []*pb.Path{
@@ -212,12 +222,16 @@ func (a *EmbyService) FsList(ctx context.Context, req *pb.FsListReq) (*pb.FsList
 		default:
 			return nil, fmt.Errorf("unknown type: %s", item.Type)
 		}
-		if err != nil {
-			return nil, err
+		paths = []*pb.Path{
+			{
+				Name: "Home",
+				Path: "",
+			},
+			{
+				Name: item.Name,
+				Path: item.ID,
+			},
 		}
-		paths, err = genPath(cli, item.ID, map[string]*emby.Items{
-			item.ID: item,
-		})
 	}
 	if err != nil {
 		return nil, err
@@ -231,60 +245,6 @@ func (a *EmbyService) FsList(ctx context.Context, req *pb.FsListReq) (*pb.FsList
 		Paths: paths,
 		Total: resp.TotalRecordCount,
 	}, nil
-}
-
-const genPathMaxDepth = 5
-
-func genPath(cli *emby.Client, id string, caches map[string]*emby.Items) ([]*pb.Path, error) {
-	var paths []*pb.Path
-	var (
-		item  *emby.Items
-		err   error
-		depth int
-	)
-	for {
-		if depth > genPathMaxDepth {
-			return nil, errors.New("genPath: max depth reached")
-		}
-		if len(caches) > 0 {
-			var ok bool
-			if item, ok = caches[id]; !ok {
-				item, err = cli.UserItemsByID(id)
-				if err != nil {
-					return nil, err
-				}
-			}
-		} else {
-			item, err = cli.UserItemsByID(id)
-			if err != nil {
-				return nil, err
-			}
-		}
-		depth++
-		switch item.Type {
-		case "Series", "Folder":
-			i, err := strconv.Atoi(item.ParentID)
-			if err != nil {
-				return nil, err
-			}
-			id = strconv.Itoa(i + 1)
-		case "UserRootFolder":
-			return append([]*pb.Path{
-				{
-					Name: "Home",
-					Path: "",
-				},
-			}, paths...), nil
-		default:
-			id = item.ParentID
-		}
-		paths = append([]*pb.Path{
-			{
-				Name: item.Name,
-				Path: item.ID,
-			},
-		}, paths...)
-	}
 }
 
 func (a *EmbyService) GetSystemInfo(ctx context.Context, req *pb.SystemInfoReq) (*pb.SystemInfoResp, error) {

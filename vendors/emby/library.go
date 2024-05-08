@@ -79,6 +79,12 @@ func WithSortOrderAsc() QueryFunc {
 	}
 }
 
+func WithNotFolder() QueryFunc {
+	return func(o map[string]string) {
+		o["IsFolder"] = "false"
+	}
+}
+
 func WithSortOrderDesc() QueryFunc {
 	return func(o map[string]string) {
 		o["SortOrder"] = "Descending"
