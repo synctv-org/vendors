@@ -89,7 +89,7 @@ func Server(cmd *cobra.Command, args []string) {
 		"span.id", tracing.SpanID(),
 	)
 
-	app, cleanup, err := wireApp(bc.Server, bc.Registry, bc.Alist, bc.Bilibili, bc.Emby, logger)
+	app, cleanup, err := wireApp(bc.Server, bc.Registry, bc.Alist, bc.Bilibili, bc.Emby, bc.Webdav, logger)
 	if err != nil {
 		panic(err)
 	}

@@ -54,10 +54,13 @@ message AlistConfig {}
 
 message EmbyConfig {}
 
+message WebdavConfig {}
+
 message AllServer {
   GrpcServer server = 1;
   Registry registry = 2;
   BilibiliConfig bilibili = 3;
   AlistConfig alist = 4;
   EmbyConfig emby = 5;
+  WebdavConfig webdav = 6;
 }

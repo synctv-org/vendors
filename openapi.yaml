@@ -471,13 +471,13 @@ paths:
     /fs/get:
         post:
             tags:
-                - Alist
-            operationId: Alist_FsGet
+                - Webdav
+            operationId: Webdav_FsGet
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/api.alist.FsGetReq'
+                            $ref: '#/components/schemas/api.webdav.FsGetReq'
                 required: true
             responses:
                 "200":
@@ -485,17 +485,17 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.alist.FsGetResp'
+                                $ref: '#/components/schemas/api.webdav.FsGetResp'
     /fs/list:
         post:
             tags:
-                - Alist
-            operationId: Alist_FsList
+                - Webdav
+            operationId: Webdav_FsList
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/api.alist.FsListReq'
+                            $ref: '#/components/schemas/api.webdav.FsListReq'
                 required: true
             responses:
                 "200":
@@ -503,7 +503,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.alist.FsListResp'
+                                $ref: '#/components/schemas/api.webdav.FsListResp'
     /fs/other:
         post:
             tags:
@@ -525,13 +525,13 @@ paths:
     /fs/search:
         post:
             tags:
-                - Alist
-            operationId: Alist_FsSearch
+                - Webdav
+            operationId: Webdav_FsSearch
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/api.alist.FsSearchReq'
+                            $ref: '#/components/schemas/api.webdav.FsSearchReq'
                 required: true
             responses:
                 "200":
@@ -539,7 +539,25 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.alist.FsSearchResp'
+                                $ref: '#/components/schemas/api.webdav.FsSearchResp'
+    /fs/test:
+        post:
+            tags:
+                - Webdav
+            operationId: Webdav_FsTest
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.webdav.FsTestReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.webdav.Empty'
     /me:
         get:
             tags:
@@ -1376,7 +1394,112 @@ components:
                     type: string
                 id:
                     type: string
+        api.webdav.Empty:
+            type: object
+            properties: {}
+        api.webdav.FsGetReq:
+            type: object
+            properties:
+                host:
+                    type: string
+                username:
+                    type: string
+                password:
+                    type: string
+                path:
+                    type: string
+        api.webdav.FsGetResp:
+            type: object
+            properties:
+                name:
+                    type: string
+                size:
+                    type: string
+                isDir:
+                    type: boolean
+                modified:
+                    type: string
+        api.webdav.FsListReq:
+            type: object
+            properties:
+                host:
+                    type: string
+                username:
+                    type: string
+                password:
+                    type: string
+                path:
+                    type: string
+                page:
+                    type: string
+                perPage:
+                    type: string
+        api.webdav.FsListResp:
+            type: object
+            properties:
+                content:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.webdav.FsListResp_FsListContent'
+                total:
+                    type: string
+        api.webdav.FsListResp_FsListContent:
+            type: object
+            properties:
+                name:
+                    type: string
+                size:
+                    type: string
+                isDir:
+                    type: boolean
+                modified:
+                    type: string
+        api.webdav.FsSearchReq:
+            type: object
+            properties:
+                host:
+                    type: string
+                username:
+                    type: string
+                password:
+                    type: string
+                path:
+                    type: string
+                keywords:
+                    type: string
+                page:
+                    type: string
+                perPage:
+                    type: string
+        api.webdav.FsSearchResp:
+            type: object
+            properties:
+                content:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.webdav.FsSearchResp_FsSearchContent'
+                total:
+                    type: string
+        api.webdav.FsSearchResp_FsSearchContent:
+            type: object
+            properties:
+                name:
+                    type: string
+                isDir:
+                    type: boolean
+                size:
+                    type: string
+        api.webdav.FsTestReq:
+            type: object
+            properties:
+                host:
+                    type: string
+                username:
+                    type: string
+                password:
+                    type: string
 tags:
     - name: Alist
     - name: Bilibili
     - name: Emby
+    - name: Webdav
