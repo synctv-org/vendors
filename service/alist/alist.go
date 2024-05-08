@@ -55,6 +55,28 @@ func (a *AlistService) Me(ctx context.Context, req *pb.MeReq) (*pb.MeResp, error
 	}, nil
 }
 
+func related2pb(r *alist.FsGetRelated) *pb.FsGetResp_FsGetRelated {
+	return &pb.FsGetResp_FsGetRelated{
+		Name:     r.Name,
+		Created:  uint64(r.Created.UnixMilli()),
+		Modified: uint64(r.Modified.UnixMilli()),
+		Sign:     r.Sign,
+		Thumb:    r.Thumb,
+		Hashinfo: r.Hashinfo,
+		Size:     r.Size,
+		IsDir:    r.IsDir,
+		Type:     r.Type,
+	}
+}
+
+func relateds2pb(rs []*alist.FsGetRelated) []*pb.FsGetResp_FsGetRelated {
+	var res []*pb.FsGetResp_FsGetRelated = make([]*pb.FsGetResp_FsGetRelated, len(rs))
+	for i, r := range rs {
+		res[i] = related2pb(r)
+	}
+	return res
+}
+
 func (a *AlistService) FsGet(ctx context.Context, req *pb.FsGetReq) (*pb.FsGetResp, error) {
 	cli, err := alist.NewClient(req.Host, req.Token, alist.WithContext(ctx), alist.WithUserAgent(req.UserAgent))
 	if err != nil {
@@ -80,6 +102,7 @@ func (a *AlistService) FsGet(ctx context.Context, req *pb.FsGetReq) (*pb.FsGetRe
 		RawUrl:   r.RawURL,
 		Readme:   r.Readme,
 		Provider: r.Provider,
+		Related:  relateds2pb(r.Related),
 	}, nil
 }
 

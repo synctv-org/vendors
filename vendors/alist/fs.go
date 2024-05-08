@@ -7,7 +7,7 @@ import (
 	json "github.com/json-iterator/go"
 )
 
-func (c *Client) FsGet(fSGetReq *FsGetReq) (*fsGetResp, error) {
+func (c *Client) FsGet(fSGetReq *FsGetReq) (*FsGetRespData, error) {
 	req, err := c.NewRequest(http.MethodPost, "/api/fs/get", fSGetReq)
 	if err != nil {
 		return nil, err

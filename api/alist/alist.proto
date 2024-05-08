@@ -65,6 +65,17 @@ message FsGetReq {
 }
 
 message FsGetResp {
+  message FsGetRelated {
+    string name = 1;
+    uint64 size = 2;
+    bool isDir = 3;
+    uint64 modified = 4;
+    uint64 created = 5;
+    string sign = 6;
+    string thumb = 7;
+    uint64 type = 8;
+    string hashinfo = 9;
+  }
   string name = 1;
   uint64 size = 2;
   bool isDir = 3;
@@ -77,6 +88,7 @@ message FsGetResp {
   string rawUrl = 10;
   string readme = 11;
   string provider = 12;
+  repeated FsGetRelated related = 13;
 }
 
 message FsListReq {

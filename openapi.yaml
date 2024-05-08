@@ -621,6 +621,31 @@ components:
                     type: string
                 provider:
                     type: string
+                related:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.alist.FsGetResp_FsGetRelated'
+        api.alist.FsGetResp_FsGetRelated:
+            type: object
+            properties:
+                name:
+                    type: string
+                size:
+                    type: string
+                isDir:
+                    type: boolean
+                modified:
+                    type: string
+                created:
+                    type: string
+                sign:
+                    type: string
+                thumb:
+                    type: string
+                type:
+                    type: string
+                hashinfo:
+                    type: string
         api.alist.FsListReq:
             type: object
             properties:

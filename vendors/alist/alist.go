@@ -24,9 +24,26 @@ type FsGetReq struct {
 	Password string `json:"password"`
 }
 
-type FsGetResp = AlistResp[fsGetResp]
+type FsGetResp = AlistResp[FsGetRespData]
 
-type fsGetResp struct {
+type FsGetRespData struct {
+	Name     string          `json:"name"`
+	Size     uint64          `json:"size"`
+	IsDir    bool            `json:"is_dir"`
+	Modified time.Time       `json:"modified"`
+	Created  time.Time       `json:"created"`
+	Sign     string          `json:"sign"`
+	Thumb    string          `json:"thumb"`
+	Type     uint64          `json:"type"`
+	Hashinfo string          `json:"hashinfo"`
+	HashInfo any             `json:"hash_info"`
+	RawURL   string          `json:"raw_url"`
+	Readme   string          `json:"readme"`
+	Provider string          `json:"provider"`
+	Related  []*FsGetRelated `json:"related"`
+}
+
+type FsGetRelated struct {
 	Name     string    `json:"name"`
 	Size     uint64    `json:"size"`
 	IsDir    bool      `json:"is_dir"`
@@ -36,11 +53,6 @@ type fsGetResp struct {
 	Thumb    string    `json:"thumb"`
 	Type     uint64    `json:"type"`
 	Hashinfo string    `json:"hashinfo"`
-	HashInfo any       `json:"hash_info"`
-	RawURL   string    `json:"raw_url"`
-	Readme   string    `json:"readme"`
-	Provider string    `json:"provider"`
-	Related  any       `json:"related"`
 }
 
 type FsListReq struct {
