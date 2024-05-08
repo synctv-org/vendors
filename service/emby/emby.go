@@ -218,7 +218,21 @@ func (a *EmbyService) FsList(ctx context.Context, req *pb.FsListReq) (*pb.FsList
 		case "Series":
 			resp, err = cli.Seasons(item.ID, opts...)
 		case "Season":
-			resp, err = cli.Episodes(item.SeriesID, item.ID, opts...)
+			resp, err = cli.Seasons(item.ParentID,
+				emby.WithStartIndex(req.StartIndex),
+				emby.WithLimit(req.Limit),
+			)
+			if err != nil {
+				return nil, err
+			}
+			if resp.TotalRecordCount == 1 {
+				resp, err = cli.UserItems(
+					emby.WithParentId(item.ID),
+					emby.WithRecursive(),
+				)
+			} else {
+				resp, err = cli.Episodes(item.SeriesID, item.ID, opts...)
+			}
 		default:
 			return nil, fmt.Errorf("unknown type: %s", item.Type)
 		}
