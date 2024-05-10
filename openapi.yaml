@@ -1338,8 +1338,12 @@ components:
                 mediaSourceId:
                     type: string
                 audioStreamIndex:
-                    type: string
+                    type: integer
+                    format: int32
                 subtitleStreamIndex:
+                    type: integer
+                    format: int32
+                maxStreamingBitrate:
                     type: string
         api.emby.PlaybackInfoResp:
             type: object

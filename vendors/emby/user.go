@@ -266,11 +266,37 @@ func (c *Client) Episodes(seriesID, seasonId string, opt ...QueryFunc) (*ItemsRe
 	return &itemsResp, nil
 }
 
-func (c *Client) UserPlaybackInfo(id string) (*PlayBackResp, error) {
+type UserPlaybackInfoOption func(*PlayBackReq)
+
+func WithMaxStreamingBitrate(bitrate int) UserPlaybackInfoOption {
+	return func(p *PlayBackReq) {
+		p.MaxStreamingBitrate = bitrate
+	}
+}
+
+func WithSubtitleStreamIndex(index int) UserPlaybackInfoOption {
+	return func(p *PlayBackReq) {
+		p.SubtitleStreamIndex = index
+	}
+}
+
+func WithAudioStreamIndex(index int) UserPlaybackInfoOption {
+	return func(p *PlayBackReq) {
+		p.AudioStreamIndex = index
+	}
+}
+
+func WithMediaSourceID(id string) UserPlaybackInfoOption {
+	return func(p *PlayBackReq) {
+		p.MediaSourceID = id
+	}
+}
+
+func (c *Client) UserPlaybackInfo(id string, opts ...UserPlaybackInfoOption) (*PlayBackResp, error) {
 	if c.userID == "" {
 		return nil, errors.New("user id not set")
 	}
-	req, err := c.NewRequest(http.MethodPost, fmt.Sprintf("/emby/Items/%s/PlaybackInfo", id), &PlayBackReq{
+	cfg := &PlayBackReq{
 		DeviceProfile: DeviceProfile{
 			MaxStaticBitrate:                 140000000,
 			MaxStreamingBitrate:              140000000,
@@ -406,8 +432,12 @@ func (c *Client) UserPlaybackInfo(id string) (*PlayBackResp, error) {
 		StartTimeTicks:      0,
 		IsPlayback:          true,
 		AutoOpenLiveStream:  true,
-		MaxStreamingBitrate: 6000001,
-	}, map[string]string{
+		MaxStreamingBitrate: 8000001,
+	}
+	for _, opt := range opts {
+		opt(cfg)
+	}
+	req, err := c.NewRequest(http.MethodPost, fmt.Sprintf("/emby/Items/%s/PlaybackInfo", id), cfg, map[string]string{
 		"reqformat": "json",
 	})
 	if err != nil {

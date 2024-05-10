@@ -309,7 +309,20 @@ func (a *EmbyService) Logout(ctx context.Context, req *pb.LogoutReq) (*pb.Empty,
 
 func (a *EmbyService) PlaybackInfo(ctx context.Context, req *pb.PlaybackInfoReq) (*pb.PlaybackInfoResp, error) {
 	cli := emby.NewClient(req.Host, emby.WithContext(ctx), emby.WithKey(req.Token), emby.WithUserID(req.UserId))
-	r, err := cli.UserPlaybackInfo(req.ItemId)
+	opts := []emby.UserPlaybackInfoOption{}
+	if req.MediaSourceId != "" {
+		opts = append(opts, emby.WithMediaSourceID(req.MediaSourceId))
+	}
+	if req.SubtitleStreamIndex != 0 {
+		opts = append(opts, emby.WithSubtitleStreamIndex(int(req.SubtitleStreamIndex)))
+	}
+	if req.AudioStreamIndex != 0 {
+		opts = append(opts, emby.WithAudioStreamIndex(int(req.AudioStreamIndex)))
+	}
+	if req.MaxStreamingBitrate != 0 {
+		opts = append(opts, emby.WithMaxStreamingBitrate(int(req.MaxStreamingBitrate)))
+	}
+	r, err := cli.UserPlaybackInfo(req.ItemId, opts...)
 	if err != nil {
 		return nil, err
 	}
