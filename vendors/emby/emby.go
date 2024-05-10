@@ -236,6 +236,7 @@ type RemoteTrailers struct {
 	URL  string `json:"Url"`
 	Name string `json:"Name"`
 }
+
 type People struct {
 	Name            string `json:"Name"`
 	ID              string `json:"Id"`
@@ -243,21 +244,25 @@ type People struct {
 	Type            string `json:"Type"`
 	PrimaryImageTag string `json:"PrimaryImageTag"`
 }
+
 type Studios struct {
 	Name string `json:"Name"`
 	ID   int    `json:"Id"`
 }
+
 type GenreItems struct {
 	Name string `json:"Name"`
 	ID   int    `json:"Id"`
 }
+
 type TagItems struct {
 	Name string `json:"Name"`
 	ID   int    `json:"Id"`
 }
+
 type UserData struct {
 	Rating                int       `json:"Rating"`
-	PlayedPercentage      int       `json:"PlayedPercentage"`
+	PlayedPercentage      float32   `json:"PlayedPercentage"`
 	UnplayedItemCount     int       `json:"UnplayedItemCount"`
 	PlaybackPositionTicks int       `json:"PlaybackPositionTicks"`
 	PlayCount             int       `json:"PlayCount"`
@@ -268,23 +273,28 @@ type UserData struct {
 	ItemID                string    `json:"ItemId"`
 	ServerID              string    `json:"ServerId"`
 }
+
 type ArtistItems struct {
 	Name string `json:"Name"`
 	ID   string `json:"Id"`
 }
+
 type Composers struct {
 	Name string `json:"Name"`
 	ID   string `json:"Id"`
 }
+
 type AlbumArtists struct {
 	Name string `json:"Name"`
 	ID   string `json:"Id"`
 }
+
 type ImageTags struct {
 	AdditionalProp1 string `json:"additionalProp1"`
 	AdditionalProp2 string `json:"additionalProp2"`
 	AdditionalProp3 string `json:"additionalProp3"`
 }
+
 type Chapters struct {
 	StartPositionTicks int    `json:"StartPositionTicks"`
 	Name               string `json:"Name"`
@@ -292,6 +302,7 @@ type Chapters struct {
 	MarkerType         string `json:"MarkerType"`
 	ChapterIndex       int    `json:"ChapterIndex"`
 }
+
 type Items struct {
 	Name                 string           `json:"Name"`
 	OriginalTitle        string           `json:"OriginalTitle"`
