@@ -123,8 +123,8 @@ message MediaSourceInfo {
   string path = 3;
   string container = 4;
   string protocol = 5;
-  uint64 defaultSubtitleStreamIndex = 6;
-  uint64 defaultAudioStreamIndex = 7;
+  int64 defaultSubtitleStreamIndex = 6;
+  int64 defaultAudioStreamIndex = 7;
   repeated MediaStreamInfo mediaStreamInfo = 8;
   string directPlayUrl = 9;
   string transcodingUrl = 10;

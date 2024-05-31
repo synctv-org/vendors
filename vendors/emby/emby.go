@@ -226,8 +226,8 @@ type MediaSources struct {
 	TranscodingContainer       string              `json:"TranscodingContainer"`
 	AnalyzeDurationMs          int                 `json:"AnalyzeDurationMs"`
 	ReadAtNativeFramerate      bool                `json:"ReadAtNativeFramerate"`
-	DefaultAudioStreamIndex    uint64              `json:"DefaultAudioStreamIndex"`
-	DefaultSubtitleStreamIndex uint64              `json:"DefaultSubtitleStreamIndex"`
+	DefaultAudioStreamIndex    int64               `json:"DefaultAudioStreamIndex"`
+	DefaultSubtitleStreamIndex int64               `json:"DefaultSubtitleStreamIndex"`
 	ItemID                     string              `json:"ItemId"`
 	ServerID                   string              `json:"ServerId"`
 }
