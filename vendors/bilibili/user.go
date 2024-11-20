@@ -8,9 +8,9 @@ import (
 )
 
 type UserInfo struct {
-	IsLogin  bool   `json:"isLogin"`
 	Username string `json:"username"`
 	Face     string `json:"face"`
+	IsLogin  bool   `json:"isLogin"`
 	IsVip    bool   `json:"isVip"`
 }
 

@@ -10,9 +10,9 @@ import (
 )
 
 type Client struct {
+	ctx     context.Context
 	cookies []*http.Cookie
 	buvid   []*http.Cookie
-	ctx     context.Context
 }
 
 type ClientConfig func(*Client)

@@ -10,13 +10,13 @@ import (
 	json "github.com/json-iterator/go"
 )
 
-type GetApiKeyResp struct {
+type GetAPIKeyResp struct {
 	AccessToken string `json:"AccessToken"`
 	UserID      string `json:"User"`
 	ServerID    string `json:"ServerId"`
 }
 
-func (c *Client) GetApiKey(username, password string) (*GetApiKeyResp, error) {
+func (c *Client) GetAPIKey(username, password string) (*GetAPIKeyResp, error) {
 	req, err := c.NewRequest(http.MethodPost, "/emby/Users/authenticatebyname", &LoginReq{
 		Username: username,
 		Password: password,
@@ -41,7 +41,7 @@ func (c *Client) GetApiKey(username, password string) (*GetApiKeyResp, error) {
 	if err := json.NewDecoder(resp.Body).Decode(&loginResp); err != nil {
 		return nil, err
 	}
-	return &GetApiKeyResp{
+	return &GetAPIKeyResp{
 		AccessToken: loginResp.AccessToken,
 		UserID:      loginResp.User.ID,
 		ServerID:    loginResp.ServerID,
@@ -49,7 +49,7 @@ func (c *Client) GetApiKey(username, password string) (*GetApiKeyResp, error) {
 }
 
 func (c *Client) Login(username, password string) error {
-	s, err := c.GetApiKey(username, password)
+	s, err := c.GetAPIKey(username, password)
 	if err != nil {
 		return err
 	}
@@ -85,7 +85,7 @@ func (c *Client) Me() (*MeResp, error) {
 	if c.userID == "" {
 		return nil, errors.New("user id not set")
 	}
-	req, err := c.NewRequest(http.MethodGet, fmt.Sprintf("/emby/Users/%s", c.userID), nil)
+	req, err := c.NewRequest(http.MethodGet, "/emby/Users/"+c.userID, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -233,12 +233,12 @@ func (c *Client) Seasons(id string, opt ...QueryFunc) (*ItemsResp, error) {
 	return &itemsResp, nil
 }
 
-func (c *Client) Episodes(seriesID, seasonId string, opt ...QueryFunc) (*ItemsResp, error) {
+func (c *Client) Episodes(seriesID, seasonID string, opt ...QueryFunc) (*ItemsResp, error) {
 	if c.userID == "" {
 		return nil, errors.New("user id not set")
 	}
 	o := map[string]string{
-		"SeasonId": seasonId,
+		"SeasonId": seasonID,
 	}
 	for _, f := range opt {
 		f(o)

@@ -44,12 +44,12 @@ func getBuvidCookies(ctx context.Context) ([]*http.Cookie, error) {
 }
 
 type spiResp struct {
-	Code int `json:"code"`
 	Data struct {
 		B3 string `json:"b_3"`
 		B4 string `json:"b_4"`
 	} `json:"data"`
 	Message string `json:"message"`
+	Code    int    `json:"code"`
 }
 
 func newBuvid(ctx context.Context) (string, string, error) {

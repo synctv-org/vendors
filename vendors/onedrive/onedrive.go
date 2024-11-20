@@ -149,10 +149,9 @@ type FsGet struct {
 	} `json:"lastModifiedBy"`
 	LastModifiedDateTime time.Time `json:"lastModifiedDateTime"`
 	Name                 string    `json:"name"`
-	Root                 struct {
-	} `json:"root"`
-	Size   int    `json:"size"`
-	WebURL string `json:"webUrl"`
+	Root                 struct{}  `json:"root"`
+	Size                 int       `json:"size"`
+	WebURL               string    `json:"webUrl"`
 }
 
 type fsGetResp struct {

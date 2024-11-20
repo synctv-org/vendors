@@ -2,10 +2,10 @@ package alist
 
 import "time"
 
-type AlistResp[T any] struct {
-	Code    uint64 `json:"code"`
-	Message string `json:"message"`
+type Resp[T any] struct {
 	Data    T      `json:"data"`
+	Message string `json:"message"`
+	Code    uint64 `json:"code"`
 }
 
 type LoginReq struct {
@@ -13,7 +13,7 @@ type LoginReq struct {
 	Password string `json:"password"`
 }
 
-type LoginResp = AlistResp[loginResp]
+type LoginResp = Resp[loginResp]
 
 type loginResp struct {
 	Token string `json:"token"`
@@ -24,35 +24,35 @@ type FsGetReq struct {
 	Password string `json:"password"`
 }
 
-type FsGetResp = AlistResp[FsGetRespData]
+type FsGetResp = Resp[FsGetRespData]
 
 type FsGetRespData struct {
-	Name     string          `json:"name"`
-	Size     uint64          `json:"size"`
-	IsDir    bool            `json:"is_dir"`
 	Modified time.Time       `json:"modified"`
 	Created  time.Time       `json:"created"`
+	HashInfo any             `json:"hash_info"`
 	Sign     string          `json:"sign"`
 	Thumb    string          `json:"thumb"`
-	Type     uint64          `json:"type"`
 	Hashinfo string          `json:"hashinfo"`
-	HashInfo any             `json:"hash_info"`
+	Name     string          `json:"name"`
 	RawURL   string          `json:"raw_url"`
 	Readme   string          `json:"readme"`
 	Provider string          `json:"provider"`
 	Related  []*FsGetRelated `json:"related"`
+	Size     uint64          `json:"size"`
+	Type     uint64          `json:"type"`
+	IsDir    bool            `json:"is_dir"`
 }
 
 type FsGetRelated struct {
-	Name     string    `json:"name"`
-	Size     uint64    `json:"size"`
-	IsDir    bool      `json:"is_dir"`
 	Modified time.Time `json:"modified"`
 	Created  time.Time `json:"created"`
+	Name     string    `json:"name"`
 	Sign     string    `json:"sign"`
 	Thumb    string    `json:"thumb"`
-	Type     uint64    `json:"type"`
 	Hashinfo string    `json:"hashinfo"`
+	Size     uint64    `json:"size"`
+	Type     uint64    `json:"type"`
+	IsDir    bool      `json:"is_dir"`
 }
 
 type FsListReq struct {
@@ -63,22 +63,22 @@ type FsListReq struct {
 	Refresh  bool   `json:"refresh"`
 }
 
-type FsListResp = AlistResp[fsListResp]
+type FsListResp = Resp[fsListResp]
 
 type fsListResp struct {
-	Content []struct {
-		Name     string    `json:"name"`
-		Size     uint64    `json:"size"`
-		IsDir    bool      `json:"is_dir"`
+	Readme   string `json:"readme"`
+	Provider string `json:"provider"`
+	Content  []struct {
 		Modified time.Time `json:"modified"`
+		Name     string    `json:"name"`
 		Sign     string    `json:"sign"`
 		Thumb    string    `json:"thumb"`
+		Size     uint64    `json:"size"`
 		Type     uint64    `json:"type"`
+		IsDir    bool      `json:"is_dir"`
 	} `json:"content"`
-	Total    uint64 `json:"total"`
-	Readme   string `json:"readme"`
-	Write    bool   `json:"write"`
-	Provider string `json:"provider"`
+	Total uint64 `json:"total"`
+	Write bool   `json:"write"`
 }
 
 const (
@@ -91,7 +91,7 @@ type FsOtherReq struct {
 	Password string `json:"password"`
 }
 
-type FsOtherResp = AlistResp[fsOtherResp]
+type FsOtherResp = Resp[fsOtherResp]
 
 type fsOtherResp struct {
 	DriveID              string `json:"drive_id"`
@@ -107,11 +107,11 @@ type fsOtherResp struct {
 		LiveTranscodingTaskList []struct {
 			Stage          string `json:"stage"`
 			Status         string `json:"status"`
-			TemplateHeight uint64 `json:"template_height"`
 			TemplateID     string `json:"template_id"`
 			TemplateName   string `json:"template_name"`
-			TemplateWidth  uint64 `json:"template_width"`
 			URL            string `json:"url"`
+			TemplateHeight uint64 `json:"template_height"`
+			TemplateWidth  uint64 `json:"template_width"`
 		} `json:"live_transcoding_task_list"`
 		Meta struct {
 			Duration float64 `json:"duration"`
@@ -125,43 +125,43 @@ type FsMkdirReq struct {
 	Path string `json:"path"`
 }
 
-type FsMkdirResp = AlistResp[any]
+type FsMkdirResp = Resp[any]
 
 type FsRenameReq struct {
 	Path string `json:"path"`
 	Name string `json:"name"`
 }
 
-type FsRenameResp = AlistResp[any]
+type FsRenameResp = Resp[any]
 
 type FsRemoveReq struct {
-	Dir   bool     `json:"dir"`
 	Names []string `json:"names"`
+	Dir   bool     `json:"dir"`
 }
 
-type FsRemoveResp = AlistResp[any]
+type FsRemoveResp = Resp[any]
 
-type MeResp = AlistResp[meResp]
+type MeResp = Resp[meResp]
 
 type meResp struct {
-	ID         uint64 `json:"id"`
 	Username   string `json:"username"`
 	Password   string `json:"password"`
 	BasePath   string `json:"base_path"`
-	Role       uint64 `json:"role"`
-	Disabled   bool   `json:"disabled"`
-	Permission uint64 `json:"permission"`
 	SsoID      string `json:"sso_id"`
+	ID         uint64 `json:"id"`
+	Role       uint64 `json:"role"`
+	Permission uint64 `json:"permission"`
+	Disabled   bool   `json:"disabled"`
 	Otp        bool   `json:"otp"`
 }
 
 type FsSearchReq struct {
 	Parent   string `json:"parent"`
 	Keywords string `json:"keywords"`
+	Password string `json:"password"`
 	Scope    uint64 `json:"scope"`
 	Page     uint64 `json:"page"`
 	PerPage  uint64 `json:"per_page"`
-	Password string `json:"password"`
 }
 
 type fsSearchResp struct {
@@ -175,4 +175,4 @@ type fsSearchResp struct {
 	Total uint64 `json:"total"`
 }
 
-type FsSearchResp = AlistResp[fsSearchResp]
+type FsSearchResp = Resp[fsSearchResp]

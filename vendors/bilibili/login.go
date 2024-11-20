@@ -45,16 +45,16 @@ func NewQRCode(ctx context.Context) (*RQCode, error) {
 }
 
 type loginQRResp struct {
-	Code    int    `json:"code"`
 	Message string `json:"message"`
-	TTL     int    `json:"ttl"`
 	Data    struct {
 		URL          string `json:"url"`
 		RefreshToken string `json:"refresh_token"`
+		Message      string `json:"message"`
 		Timestamp    int    `json:"timestamp"`
 		Code         uint   `json:"code"`
-		Message      string `json:"message"`
 	} `json:"data"`
+	Code int `json:"code"`
+	TTL  int `json:"ttl"`
 }
 
 const (
@@ -71,7 +71,7 @@ var (
 )
 
 func LoginWithQRCode(ctx context.Context, key string) (bilibili.QRCodeStatus, *http.Cookie, error) {
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, fmt.Sprintf("https://passport.bilibili.com/x/passport-login/web/qrcode/poll?qrcode_key=%s", key), nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, "https://passport.bilibili.com/x/passport-login/web/qrcode/poll?qrcode_key="+key, nil)
 	if err != nil {
 		return 0, nil, err
 	}
@@ -97,7 +97,7 @@ func LoginWithQRCode(ctx context.Context, key string) (bilibili.QRCodeStatus, *h
 				return bilibili.QRCodeStatus_SUCCESS, cookie, nil
 			}
 		}
-		return 0, nil, fmt.Errorf("no cookie")
+		return 0, nil, errors.New("no cookie")
 	case qrStatusExpired:
 		return bilibili.QRCodeStatus_EXPIRED, nil, nil
 	case qrStatusScanned:
@@ -142,10 +142,7 @@ func NewCaptcha(ctx context.Context) (*CaptchaResp, error) {
 }
 
 type captcha struct {
-	Code    int    `json:"code"`
-	Message string `json:"message"`
-	TTL     int    `json:"ttl"`
-	Data    struct {
+	Data struct {
 		Type    string `json:"type"`
 		Token   string `json:"token"`
 		Geetest struct {
@@ -156,14 +153,17 @@ type captcha struct {
 			Appid string `json:"appid"`
 		} `json:"tencent"`
 	} `json:"data"`
+	Message string `json:"message"`
+	Code    int    `json:"code"`
+	TTL     int    `json:"ttl"`
 }
 
 type sms struct {
-	Code    int    `json:"code"`
 	Message string `json:"message"`
 	Data    struct {
 		CaptchaKey string `json:"captcha_key"`
 	} `json:"data"`
+	Code int `json:"code"`
 }
 
 const (
@@ -189,7 +189,7 @@ func NewSMS(ctx context.Context, tel, token, challenge, validate string) (captch
 	data.Set("token", token)
 	data.Set("challenge", challenge)
 	data.Set("validate", validate)
-	data.Set("seccode", fmt.Sprintf("%s|jordan", validate))
+	data.Set("seccode", validate+"|jordan")
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, "https://passport.bilibili.com/x/passport-login/web/sms/send", strings.NewReader(data.Encode()))
 	if err != nil {
@@ -218,13 +218,13 @@ func NewSMS(ctx context.Context, tel, token, challenge, validate string) (captch
 }
 
 type loginSMSResp struct {
-	Code    int    `json:"code"`
 	Message string `json:"message"`
 	Data    struct {
-		IsNew  bool   `json:"is_new"`
-		Status int    `json:"status"`
 		URL    string `json:"url"`
+		Status int    `json:"status"`
+		IsNew  bool   `json:"is_new"`
 	} `json:"data"`
+	Code int `json:"code"`
 }
 
 func LoginWithSMS(ctx context.Context, tel, code, captchaKey string) (*http.Cookie, error) {
@@ -260,5 +260,5 @@ func LoginWithSMS(ctx context.Context, tel, code, captchaKey string) (*http.Cook
 			return cookie, nil
 		}
 	}
-	return nil, fmt.Errorf("no cookie")
+	return nil, errors.New("no cookie")
 }

@@ -121,9 +121,9 @@ func (a *AlistService) FsList(ctx context.Context, req *pb.FsListReq) (*pb.FsLis
 	if err != nil {
 		return nil, err
 	}
-	var content []*pb.FsListResp_FsListContent
-	for _, v := range r.Content {
-		content = append(content, &pb.FsListResp_FsListContent{
+	content := make([]*pb.FsListResp_FsListContent, len(r.Content))
+	for i, v := range r.Content {
+		content[i] = &pb.FsListResp_FsListContent{
 			Name:     v.Name,
 			Size:     v.Size,
 			IsDir:    v.IsDir,
@@ -131,7 +131,7 @@ func (a *AlistService) FsList(ctx context.Context, req *pb.FsListReq) (*pb.FsLis
 			Sign:     v.Sign,
 			Thumb:    v.Thumb,
 			Type:     v.Type,
-		})
+		}
 	}
 	return &pb.FsListResp{
 		Content:  content,
@@ -156,7 +156,7 @@ func (a *AlistService) FsOther(ctx context.Context, req *pb.FsOtherReq) (*pb.FsO
 		return nil, err
 	}
 
-	var videoPreviewPlayInfo = pb.FsOtherResp_VideoPreviewPlayInfo{
+	videoPreviewPlayInfo := pb.FsOtherResp_VideoPreviewPlayInfo{
 		Category:                        r.VideoPreviewPlayInfo.Category,
 		LiveTranscodingSubtitleTaskList: make([]*pb.FsOtherResp_VideoPreviewPlayInfo_LiveTranscodingSubtitleTaskList, len(r.VideoPreviewPlayInfo.LiveTranscodingSubtitleTaskList)),
 		LiveTranscodingTaskList:         make([]*pb.FsOtherResp_VideoPreviewPlayInfo_LiveTranscodingTaskList, len(r.VideoPreviewPlayInfo.LiveTranscodingTaskList)),
@@ -210,15 +210,15 @@ func (a *AlistService) FsSearch(ctx context.Context, req *pb.FsSearchReq) (*pb.F
 	if err != nil {
 		return nil, err
 	}
-	var content []*pb.FsSearchResp_FsSearchContent
-	for _, v := range r.Content {
-		content = append(content, &pb.FsSearchResp_FsSearchContent{
+	content := make([]*pb.FsSearchResp_FsSearchContent, len(r.Content))
+	for i, v := range r.Content {
+		content[i] = &pb.FsSearchResp_FsSearchContent{
 			Parent: v.Parent,
 			Name:   v.Name,
 			Size:   v.Size,
 			IsDir:  v.IsDir,
 			Type:   v.Type,
-		})
+		}
 	}
 	return &pb.FsSearchResp{
 		Content: content,

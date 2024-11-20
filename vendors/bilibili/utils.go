@@ -1,7 +1,9 @@
 package bilibili
 
 import (
+	"context"
 	"errors"
+	"net/http"
 	"regexp"
 
 	"github.com/synctv-org/vendors/utils"
@@ -18,7 +20,12 @@ var (
 
 func Match(url string) (t string, id string, err error) {
 	if B23Regex.MatchString(url) {
-		resp, err := utils.NoRedirectHttpClient().Get(url)
+		req, err := http.NewRequestWithContext(context.Background(), http.MethodGet, url, nil)
+		if err != nil {
+			return "", "", err
+		}
+		req.Header.Set("User-Agent", utils.UA)
+		resp, err := utils.NoRedirectHttpClient().Do(req)
 		if err != nil {
 			return "", "", err
 		}

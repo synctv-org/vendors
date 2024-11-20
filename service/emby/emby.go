@@ -19,7 +19,7 @@ func NewEmbyService(c *conf.EmbyConfig) *EmbyService {
 
 func (a *EmbyService) Login(ctx context.Context, req *pb.LoginReq) (*pb.LoginResp, error) {
 	cli := emby.NewClient(req.Host, emby.WithContext(ctx))
-	r, err := cli.GetApiKey(req.Username, req.Password)
+	r, err := cli.GetAPIKey(req.Username, req.Password)
 	if err != nil {
 		return nil, err
 	}
@@ -111,16 +111,16 @@ func (a *EmbyService) GetItems(ctx context.Context, req *pb.GetItemsReq) (*pb.Ge
 		)
 	} else {
 		opts = append(opts,
-			emby.WithParentId(req.ParentId),
+			emby.WithParentID(req.ParentId),
 		)
 	}
 	r, err := cli.UserItems(opts...)
 	if err != nil {
 		return nil, err
 	}
-	var items []*pb.Item
-	for _, item := range r.Items {
-		items = append(items, item2pb(&item))
+	items := make([]*pb.Item, len(r.Items))
+	for i, item := range r.Items {
+		items[i] = item2pb(item)
 	}
 	return &pb.GetItemsResp{
 		Items:            items,
@@ -157,7 +157,7 @@ func (a *EmbyService) FsList(ctx context.Context, req *pb.FsListReq) (*pb.FsList
 			emby.WithSearch(req.SearchTerm),
 		)
 		if req.Path != "" {
-			opts = append(opts, emby.WithParentId(req.Path))
+			opts = append(opts, emby.WithParentID(req.Path))
 			var item *emby.Items
 			item, err = cli.UserItemsByID(req.Path)
 			if err != nil {
@@ -201,7 +201,7 @@ func (a *EmbyService) FsList(ctx context.Context, req *pb.FsListReq) (*pb.FsList
 			opts = append(opts,
 				emby.WithSortBy("SortName"),
 				emby.WithSortOrderAsc(),
-				emby.WithParentId(item.ID),
+				emby.WithParentID(item.ID),
 				emby.WithRecursive(),
 			)
 			switch item.CollectionType {
@@ -227,7 +227,7 @@ func (a *EmbyService) FsList(ctx context.Context, req *pb.FsListReq) (*pb.FsList
 			}
 			if resp.TotalRecordCount == 1 {
 				resp, err = cli.UserItems(
-					emby.WithParentId(item.ID),
+					emby.WithParentID(item.ID),
 					emby.WithRecursive(),
 				)
 			} else {
@@ -250,9 +250,9 @@ func (a *EmbyService) FsList(ctx context.Context, req *pb.FsListReq) (*pb.FsList
 	if err != nil {
 		return nil, err
 	}
-	var items []*pb.Item
-	for _, item := range resp.Items {
-		items = append(items, item2pb(&item))
+	items := make([]*pb.Item, len(resp.Items))
+	for i, item := range resp.Items {
+		items[i] = item2pb(item)
 	}
 	return &pb.FsListResp{
 		Items: items,
@@ -284,9 +284,9 @@ func (a *EmbyService) GetSystemInfo(ctx context.Context, req *pb.SystemInfoReq) 
 		LogPath:                              r.LogPath,
 		InternalMetadataPath:                 r.InternalMetadataPath,
 		TranscodingTempPath:                  r.TranscodingTempPath,
-		HttpServerPortNumber:                 r.HttpServerPortNumber,
-		SupportsHttps:                        r.SupportsHttps,
-		HttpsPortNumber:                      r.HttpsPortNumber,
+		HttpServerPortNumber:                 r.HTTPServerPortNumber,
+		SupportsHttps:                        r.SupportsHTTPS,
+		HttpsPortNumber:                      r.HTTPSPortNumber,
 		HasUpdateAvailable:                   r.HasUpdateAvailable,
 		SupportsAutoRunAtStartup:             r.SupportsAutoRunAtStartup,
 		HardwareAccelerationRequiresPremiere: r.HardwareAccelerationRequiresPremiere,
@@ -295,7 +295,7 @@ func (a *EmbyService) GetSystemInfo(ctx context.Context, req *pb.SystemInfoReq) 
 		ServerName:                           r.ServerName,
 		Version:                              r.Version,
 		OperatingSystem:                      r.OperatingSystem,
-		Id:                                   r.Id,
+		Id:                                   r.ID,
 	}, nil
 }
 

@@ -46,7 +46,7 @@ func (c *Client) ParseLivePage(roomID uint64) (*VideoPageInfo, error) {
 		return nil, fmt.Errorf("parse live page failed: %s, code: %d", data.Message, data.Code)
 	}
 
-	uinfo, err := c.GetLiveMasterInfo(data.Data.Uid)
+	uinfo, err := c.GetLiveMasterInfo(data.Data.UID)
 	if err != nil {
 		return nil, fmt.Errorf("get live master info failed: %w", err)
 	}
@@ -66,9 +66,9 @@ func (c *Client) ParseLivePage(roomID uint64) (*VideoPageInfo, error) {
 }
 
 type LiveMasterInfo struct {
-	UID      uint64 `json:"uid"`
 	Username string `json:"username"`
 	Face     string `json:"face"`
+	UID      uint64 `json:"uid"`
 }
 
 // https://api.live.bilibili.com/live_user/v1/Master/info
@@ -107,21 +107,21 @@ func (c *Client) GetLiveMasterInfo(uid uint64) (*LiveMasterInfo, error) {
 	}
 
 	return &LiveMasterInfo{
-		UID:      data.Data.Info.Uid,
+		UID:      data.Data.Info.UID,
 		Username: data.Data.Info.Username,
 		Face:     data.Data.Info.Face,
 	}, nil
 }
 
 type LiveStream struct {
-	Quality uint64   `json:"quality"`
-	Urls    []string `json:"url"`
 	Desc    string   `json:"desc"`
+	Urls    []string `json:"url"`
+	Quality uint64   `json:"quality"`
 }
 
 type GetLiveStreamWithQualityResp struct {
-	AcceptQuality []uint64 `json:"acceptQuality"`
 	*LiveStream
+	AcceptQuality []uint64 `json:"acceptQuality"`
 }
 
 // https://api.live.bilibili.com/room/v1/Room/playUrl?cid=1000&quality=4&platform=web
@@ -191,7 +191,7 @@ func (c *Client) GetLiveStreamWithQuality(cid uint64, hls bool, qn uint64) (*Get
 
 	urls := make([]string, len(data.Data.DUrl))
 	for i, v := range data.Data.DUrl {
-		urls[i] = v.Url
+		urls[i] = v.URL
 	}
 
 	var acceptQuality []uint64 = make([]uint64, len(data.Data.AcceptQuality))

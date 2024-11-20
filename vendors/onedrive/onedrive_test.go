@@ -7,9 +7,7 @@ import (
 	"github.com/synctv-org/vendors/vendors/onedrive"
 )
 
-var (
-	client *onedrive.Client = onedrive.NewClient("", "", "")
-)
+var client *onedrive.Client = onedrive.NewClient("", "", "")
 
 func TestRefreshToken(t *testing.T) {
 	tk, err := client.Token()

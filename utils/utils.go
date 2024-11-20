@@ -32,9 +32,7 @@ const (
 	UA = `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36 Edg/118.0.2088.69`
 )
 
-var (
-	noRedirectHttpClient = NoRedirectClient(&http.Client{})
-)
+var noRedirectHttpClient = NoRedirectClient(&http.Client{})
 
 func NoRedirectHttpClient() *http.Client {
 	return noRedirectHttpClient
@@ -51,7 +49,7 @@ func MapToHttpCookies(m map[string]string) []*http.Cookie {
 	if len(m) == 0 {
 		return nil
 	}
-	var cookies = make([]*http.Cookie, 0, len(m))
+	cookies := make([]*http.Cookie, 0, len(m))
 	for k, v := range m {
 		cookies = append(cookies, &http.Cookie{
 			Name:  k,
@@ -131,13 +129,13 @@ func NewGrpcGatewayServer(config *conf.GrpcServer) *GrpcGatewayServer {
 		panic(err)
 	}
 
-	var hopts = []ghttp.ServerOption{
+	hopts := []ghttp.ServerOption{
 		ghttp.Middleware(middlewares...),
 		ghttp.Listener(l),
 		ghttp.Address(config.Addr),
 	}
 
-	var gopts = []ggrpc.ServerOption{
+	gopts := []ggrpc.ServerOption{
 		ggrpc.Middleware(middlewares...),
 		ggrpc.Listener(l),
 		ggrpc.Address(config.Addr),
@@ -148,9 +146,9 @@ func NewGrpcGatewayServer(config *conf.GrpcServer) *GrpcGatewayServer {
 		gopts = append(gopts, ggrpc.Timeout(config.Timeout.AsDuration()))
 	}
 
-	var enableTls bool
+	var enableTLS bool
 	if config.Tls != nil && config.Tls.CertFile != "" && config.Tls.KeyFile != "" {
-		enableTls = true
+		enableTLS = true
 		var rootCAs *x509.CertPool
 		rootCAs, err := x509.SystemCertPool()
 		if err != nil {
@@ -188,21 +186,22 @@ func NewGrpcGatewayServer(config *conf.GrpcServer) *GrpcGatewayServer {
 			hu = *u
 			gu = *u
 		)
-		if u.Scheme == "grpcs" || u.Scheme == "https" {
+		switch u.Scheme {
+		case "grpcs", "https":
 			hu.Scheme = "https"
 			gu.Scheme = "grpcs"
-		} else if u.Scheme == "grpc" || u.Scheme == "http" {
+		case "grpc", "http":
 			hu.Scheme = "http"
 			gu.Scheme = "grpc"
-		} else if u.Scheme == "" {
-			if enableTls {
+		case "":
+			if enableTLS {
 				hu.Scheme = "https"
 				gu.Scheme = "grpcs"
 			} else {
 				hu.Scheme = "http"
 				gu.Scheme = "grpc"
 			}
-		} else {
+		default:
 			panic("invalid custom endpoint scheme: " + u.Scheme)
 		}
 		hopts = append(hopts, ghttp.Endpoint(&hu))
@@ -231,7 +230,6 @@ func GetEnvFiles(root string) ([]string, error) {
 
 		return nil
 	})
-
 	if err != nil {
 		return nil, err
 	}

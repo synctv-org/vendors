@@ -19,10 +19,10 @@ type VideoPageInfo struct {
 
 type VideoInfo struct {
 	Bvid       string `json:"bvid,omitempty"`
-	Cid        uint64 `json:"cid,omitempty"`
-	Epid       uint64 `json:"epid,omitempty"`
 	Name       string `json:"name"`
 	CoverImage string `json:"coverImage"`
+	Cid        uint64 `json:"cid,omitempty"`
+	Epid       uint64 `json:"epid,omitempty"`
 	Live       bool   `json:"live"`
 }
 
@@ -32,9 +32,9 @@ type ParseVideoPageConf struct {
 
 type ParseVideoPageConfig func(*ParseVideoPageConf)
 
-func WithGetSections(GetSections bool) ParseVideoPageConfig {
+func WithGetSections(getSections bool) ParseVideoPageConfig {
 	return func(c *ParseVideoPageConf) {
-		c.GetSections = GetSections
+		c.GetSections = getSections
 	}
 }
 
@@ -47,9 +47,9 @@ func (c *Client) ParseVideoPage(aid uint64, bvid string, conf ...ParseVideoPageC
 	if aid != 0 {
 		url = fmt.Sprintf("https://api.bilibili.com/x/web-interface/view?aid=%d", aid)
 	} else if bvid != "" {
-		url = fmt.Sprintf("https://api.bilibili.com/x/web-interface/view?bvid=%s", bvid)
+		url = "https://api.bilibili.com/x/web-interface/view?bvid=" + bvid
 	} else {
-		return nil, fmt.Errorf("aid and bvid are both empty")
+		return nil, errors.New("aid and bvid are both empty")
 	}
 	req, err := c.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -117,10 +117,10 @@ const (
 )
 
 type VideoURL struct {
+	URL               string   `json:"url"`
 	AcceptDescription []string `json:"acceptDescription"`
 	AcceptQuality     []uint64 `json:"acceptQuality"`
 	CurrentQuality    uint64   `json:"currentQuality"`
-	URL               string   `json:"url"`
 }
 
 type GetVideoURLConf struct {
@@ -157,7 +157,7 @@ func (c *Client) GetVideoURL(aid uint64, bvid string, cid uint64, conf ...GetVid
 	} else if bvid != "" {
 		url = fmt.Sprintf("https://api.bilibili.com/x/player/wbi/playurl?bvid=%s&cid=%d&qn=%d&platform=html5&high_quality=1", bvid, cid, config.Quality)
 	} else {
-		return nil, fmt.Errorf("aid and bvid are both empty")
+		return nil, errors.New("aid and bvid are both empty")
 	}
 	req, err := c.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -218,7 +218,7 @@ func (c *Client) GetDashVideoURL(aid uint64, bvid string, cid uint64, conf ...Ge
 	} else if bvid != "" {
 		url = fmt.Sprintf("https://api.bilibili.com/x/player/wbi/playurl?bvid=%s&cid=%d&fnver=0&platform=pc&fnval=%d%s", bvid, cid, fnval, extQuery)
 	} else {
-		return nil, nil, fmt.Errorf("aid and bvid are both empty")
+		return nil, nil, errors.New("aid and bvid are both empty")
 	}
 	req, err := c.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -316,7 +316,7 @@ func (c *Client) GetSubtitles(aid uint64, bvid string, cid uint64) ([]*Subtitle,
 	} else if bvid != "" {
 		url = fmt.Sprintf("https://api.bilibili.com/x/player/v2?bvid=%s&cid=%d", bvid, cid)
 	} else {
-		return nil, fmt.Errorf("aid and bvid are both empty")
+		return nil, errors.New("aid and bvid are both empty")
 	}
 	req, err := c.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -345,14 +345,14 @@ func (c *Client) GetSubtitles(aid uint64, bvid string, cid uint64) ([]*Subtitle,
 	return r, nil
 }
 
-func (c *Client) ParsePGCPage(epid, season_id uint64) (*VideoPageInfo, error) {
+func (c *Client) ParsePGCPage(epid, seasonID uint64) (*VideoPageInfo, error) {
 	var url string
 	if epid != 0 {
 		url = fmt.Sprintf("https://api.bilibili.com/pgc/view/web/season?ep_id=%d", epid)
-	} else if season_id != 0 {
-		url = fmt.Sprintf("https://api.bilibili.com/pgc/view/web/season?season_id=%d", season_id)
+	} else if seasonID != 0 {
+		url = fmt.Sprintf("https://api.bilibili.com/pgc/view/web/season?season_id=%d", seasonID)
 	} else {
-		return nil, fmt.Errorf("edId and season_id are both empty")
+		return nil, errors.New("edId and season_id are both empty")
 	}
 
 	req, err := c.NewRequest(http.MethodGet, url, nil)
@@ -407,7 +407,7 @@ func (c *Client) GetPGCURL(epid, cid uint64, conf ...GetVideoURLConfig) (*VideoU
 	} else if cid != 0 {
 		url = fmt.Sprintf("https://api.bilibili.com/pgc/player/web/playurl?cid=%d&qn=%d&fourk=1&fnval=0", cid, config.Quality)
 	} else {
-		return nil, fmt.Errorf("edId and season_id are both empty")
+		return nil, errors.New("edId and season_id are both empty")
 	}
 
 	req, err := c.NewRequest(http.MethodGet, url, nil)
@@ -457,7 +457,7 @@ func (c *Client) GetDashPGCURL(epid, cid uint64, conf ...GetDashVideoURLConfig) 
 	} else if cid != 0 {
 		url = fmt.Sprintf("https://api.bilibili.com/pgc/player/web/playurl?cid=%d&fnval=%d%s", epid, fnval, extQuery)
 	} else {
-		return nil, nil, fmt.Errorf("edId and season_id are both empty")
+		return nil, nil, errors.New("edId and season_id are both empty")
 	}
 	req, err := c.NewRequest(http.MethodGet, url, nil)
 	if err != nil {

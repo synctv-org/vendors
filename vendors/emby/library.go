@@ -1,9 +1,11 @@
 package emby
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
+	"strconv"
 	"strings"
 
 	json "github.com/json-iterator/go"
@@ -37,33 +39,33 @@ func (c *Client) GetItem(id string) (*Items, error) {
 		return nil, err
 	}
 	if len(fsGetResp.Items) == 0 {
-		return nil, fmt.Errorf("item not found")
+		return nil, errors.New("item not found")
 	} else if len(fsGetResp.Items) > 1 {
-		return nil, fmt.Errorf("item not unique")
+		return nil, errors.New("item not unique")
 	}
-	return &fsGetResp.Items[0], nil
+	return fsGetResp.Items[0], nil
 }
 
 type QueryFunc func(map[string]string)
 
 func WithStartIndex(startIndex uint64) QueryFunc {
 	return func(o map[string]string) {
-		o["StartIndex"] = fmt.Sprintf("%d", startIndex)
+		o["StartIndex"] = strconv.FormatUint(startIndex, 10)
 	}
 }
 
 func WithLimit(limit uint64) QueryFunc {
 	return func(o map[string]string) {
-		o["Limit"] = fmt.Sprintf("%d", limit)
+		o["Limit"] = strconv.FormatUint(limit, 10)
 	}
 }
 
-func WithParentId(parentId string) QueryFunc {
+func WithParentID(parentID string) QueryFunc {
 	return func(o map[string]string) {
-		if parentId == "" || parentId == "0" {
-			parentId = "1"
+		if parentID == "" || parentID == "0" {
+			parentID = "1"
 		}
-		o["ParentId"] = parentId
+		o["ParentId"] = parentID
 	}
 }
 

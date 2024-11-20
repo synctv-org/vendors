@@ -6,9 +6,7 @@ import (
 	"github.com/synctv-org/vendors/vendors/emby"
 )
 
-var (
-	cli *emby.Client
-)
+var cli *emby.Client
 
 func TestLibrary(t *testing.T) {
 	flr, err := cli.Library()
@@ -54,7 +52,7 @@ func TestViews(t *testing.T) {
 	}
 	// t.Logf("%+v", item)
 	items, err := cli.UserItems(
-		emby.WithParentId(item.ID),
+		emby.WithParentID(item.ID),
 		emby.WithIncludeItemTypes("Series"),
 		emby.WithSortOrderAsc(),
 		emby.WithSortBy("SortName"),
