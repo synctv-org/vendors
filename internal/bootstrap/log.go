@@ -31,7 +31,7 @@ func InitLog() (err error) {
 		DisableColors:    !forceColor,
 		ForceQuote:       flags.Dev,
 		DisableQuote:     !flags.Dev,
-		DisableSorting:   true,
+		DisableSorting:   false,
 		FullTimestamp:    true,
 		TimestampFormat:  time.DateTime,
 		QuoteEmptyFields: true,
