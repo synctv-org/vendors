@@ -212,6 +212,11 @@ func (c *Client) GetDashVideoURL(aid uint64, bvid string, cid uint64, conf ...Ge
 		fnval |= 64
 	}
 
+	// 4K
+	fnval |= 128
+	// 8K
+	fnval |= 1024
+
 	var url string
 	if aid != 0 {
 		url = fmt.Sprintf("https://api.bilibili.com/x/player/wbi/playurl?aid=%d&cid=%d&fnver=0&platform=pc&fnval=%d%s", aid, cid, fnval, extQuery)
@@ -237,6 +242,10 @@ func (c *Client) GetDashVideoURL(aid uint64, bvid string, cid uint64, conf ...Ge
 	if info.Code != 0 {
 		return nil, nil, errors.New(info.Message)
 	}
+	videoFormatsID2Name := map[int]string{}
+	for _, v := range info.Data.SupportFormats {
+		videoFormatsID2Name[v.Quality] = v.NewDescription
+	}
 	m := mpd.NewMPD(mpd.DASH_PROFILE_ONDEMAND, fmt.Sprintf("PT%.2fS", info.Data.Dash.Duration), fmt.Sprintf("PT%.2fS", info.Data.Dash.MinBufferTime))
 	hevcM := mpd.NewMPD(mpd.DASH_PROFILE_ONDEMAND, fmt.Sprintf("PT%.2fS", info.Data.Dash.Duration), fmt.Sprintf("PT%.2fS", info.Data.Dash.MinBufferTime))
 	var as, mAs, hevcMAs *mpd.AdaptationSet
@@ -256,7 +265,7 @@ func (c *Client) GetDashVideoURL(aid uint64, bvid string, cid uint64, conf ...Ge
 		} else {
 			as = mAs
 		}
-		video, err := as.AddNewRepresentationVideo(v.Bandwidth, v.Codecs, strconv.Itoa(v.ID), v.FrameRate, v.Width, v.Height)
+		video, err := as.AddNewRepresentationVideo(v.Bandwidth, v.Codecs, videoFormatsID2Name[v.ID], v.FrameRate, v.Width, v.Height)
 		if err != nil {
 			return nil, nil, err
 		}
@@ -451,6 +460,11 @@ func (c *Client) GetDashPGCURL(epid, cid uint64, conf ...GetDashVideoURLConfig) 
 		fnval |= 64
 	}
 
+	// 4K
+	fnval |= 128
+	// 8K
+	fnval |= 1024
+
 	var url string
 	if epid != 0 {
 		url = fmt.Sprintf("https://api.bilibili.com/pgc/player/web/playurl?ep_id=%d&fnval=%d%s", epid, fnval, extQuery)
@@ -476,6 +490,10 @@ func (c *Client) GetDashPGCURL(epid, cid uint64, conf ...GetDashVideoURLConfig) 
 	if info.Code != 0 {
 		return nil, nil, errors.New(info.Message)
 	}
+	videoFormatsID2Name := map[int]string{}
+	for _, v := range info.Result.SupportFormats {
+		videoFormatsID2Name[v.Quality] = v.NewDescription
+	}
 	m := mpd.NewMPD(mpd.DASH_PROFILE_ONDEMAND, fmt.Sprintf("PT%.2fS", info.Result.Dash.Duration), fmt.Sprintf("PT%.2fS", info.Result.Dash.MinBufferTime))
 	hevcM := mpd.NewMPD(mpd.DASH_PROFILE_ONDEMAND, fmt.Sprintf("PT%.2fS", info.Result.Dash.Duration), fmt.Sprintf("PT%.2fS", info.Result.Dash.MinBufferTime))
 	var as, mAs, hevcMAs *mpd.AdaptationSet
@@ -495,7 +513,7 @@ func (c *Client) GetDashPGCURL(epid, cid uint64, conf ...GetDashVideoURLConfig) 
 		} else {
 			as = mAs
 		}
-		video, err := as.AddNewRepresentationVideo(v.Bandwidth, v.Codecs, strconv.Itoa(v.ID), v.FrameRate, v.Width, v.Height)
+		video, err := as.AddNewRepresentationVideo(v.Bandwidth, v.Codecs, videoFormatsID2Name[v.ID], v.FrameRate, v.Width, v.Height)
 		if err != nil {
 			return nil, nil, err
 		}
