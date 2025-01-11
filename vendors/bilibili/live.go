@@ -145,6 +145,9 @@ func (c *Client) GetLiveStreamWithQuality(cid uint64, hls bool, qn uint64) (*Get
 	} else {
 		platform = "web"
 	}
+	if qn == 0 {
+		qn = 4
+	}
 
 	u := url.URL{
 		Scheme: "https",
@@ -222,23 +225,25 @@ func (c *Client) GetLiveStreamWithQuality(cid uint64, hls bool, qn uint64) (*Get
 //	web: http-flv
 //	h5: hls
 func (c *Client) GetLiveStreams(cid uint64, hls bool) ([]*LiveStream, error) {
-	first, err := c.GetLiveStreamWithQuality(cid, hls, 0)
+	first, err := c.GetLiveStreamWithQuality(cid, hls, 4)
 	if err != nil {
 		return nil, err
 	}
 	streams := make([]*LiveStream, 0, len(first.AcceptQuality))
 	streams = append(streams, first.LiveStream)
 
-	for _, qn := range first.AcceptQuality {
-		if qn == first.LiveStream.Quality {
-			continue
-		}
+	if len(first.AcceptQuality) != 1 {
+		for _, qn := range first.AcceptQuality {
+			if qn == first.LiveStream.Quality {
+				continue
+			}
 
-		stream, err := c.GetLiveStreamWithQuality(cid, hls, qn)
-		if err != nil {
-			return nil, err
+			stream, err := c.GetLiveStreamWithQuality(cid, hls, qn)
+			if err != nil {
+				return nil, err
+			}
+			streams = append(streams, stream.LiveStream)
 		}
-		streams = append(streams, stream.LiveStream)
 	}
 
 	return streams, nil
