@@ -301,3 +301,27 @@ func videoInfos2pb(in []*bilibili.VideoInfo) []*pb.VideoInfo {
 	}
 	return out
 }
+
+func (s *BilibiliService) GetLiveDanmuInfo(ctx context.Context, req *pb.GetLiveDanmuInfoReq) (*pb.GetLiveDanmuInfoResp, error) {
+	c, err := bilibili.NewClient(utils.MapToHttpCookies(req.Cookies), bilibili.WithContext(ctx))
+	if err != nil {
+		return nil, err
+	}
+	r, err := c.GetLiveDanmuInfo(req.RoomID)
+	if err != nil {
+		return nil, err
+	}
+	resp := &pb.GetLiveDanmuInfoResp{
+		Token: r.Token,
+	}
+	resp.HostList = make([]*pb.GetLiveDanmuInfoResp_Host, len(r.HostList))
+	for i, v := range r.HostList {
+		resp.HostList[i] = &pb.GetLiveDanmuInfoResp_Host{
+			Host:    v.Host,
+			Port:    uint32(v.Port),
+			WssPort: uint32(v.WssPort),
+			WsPort:  uint32(v.WsPort),
+		}
+	}
+	return resp, nil
+}

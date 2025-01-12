@@ -42,6 +42,24 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.bilibili.GetDashVideoURLResp'
+    /api/bilibili/get_live_danmu_info:
+        post:
+            tags:
+                - Bilibili
+            operationId: Bilibili_GetLiveDanmuInfo
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.bilibili.GetLiveDanmuInfoReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.bilibili.GetLiveDanmuInfoResp'
     /api/bilibili/get_live_streams:
         post:
             tags:
@@ -884,6 +902,38 @@ components:
                     type: string
                 hevcMpd:
                     type: string
+        api.bilibili.GetLiveDanmuInfoReq:
+            type: object
+            properties:
+                cookies:
+                    type: object
+                    additionalProperties:
+                        type: string
+                roomID:
+                    type: string
+        api.bilibili.GetLiveDanmuInfoResp:
+            type: object
+            properties:
+                token:
+                    type: string
+                hostList:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.bilibili.GetLiveDanmuInfoResp_Host'
+        api.bilibili.GetLiveDanmuInfoResp_Host:
+            type: object
+            properties:
+                host:
+                    type: string
+                port:
+                    type: integer
+                    format: uint32
+                wssPort:
+                    type: integer
+                    format: uint32
+                wsPort:
+                    type: integer
+                    format: uint32
         api.bilibili.GetLiveStreamsReq:
             type: object
             properties:

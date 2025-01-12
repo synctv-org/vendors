@@ -103,6 +103,12 @@ service Bilibili {
       body : "*"
     };
   };
+  rpc GetLiveDanmuInfo(GetLiveDanmuInfoReq) returns (GetLiveDanmuInfoResp) {
+    option (google.api.http) = {
+      post : "/api/bilibili/get_live_danmu_info"
+      body : "*"
+    };
+  };
 }
 
 message Empty {}
@@ -267,4 +273,20 @@ message GetLiveStreamsResp {
 message ParseLivePageReq {
   map<string, string> cookies = 1;
   uint64 roomID = 2;
+}
+
+message GetLiveDanmuInfoReq {
+  map<string, string> cookies = 1;
+  uint64 roomID = 2;
+}
+
+message GetLiveDanmuInfoResp {
+  message Host {
+    string host = 1;
+    uint32 port = 2;
+    uint32 wss_port = 3;
+    uint32 ws_port = 4;
+  }
+  string token = 1;
+  repeated Host hostList = 2;
 }

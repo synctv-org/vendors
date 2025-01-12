@@ -1141,3 +1141,19 @@ type getLiveStreamResp struct {
 	Code int `json:"code"`
 	TTL  int `json:"ttl"`
 }
+
+type liveDanmuInfoHost struct {
+	Host    string `json:"host"`
+	Port    int    `json:"port"`
+	WsPort  int    `json:"ws_port"`
+	WssPort int    `json:"wss_port"`
+}
+
+type getLiveDanmuInfoResp struct {
+	Message string `json:"message"`
+	Data    struct {
+		Token    string              `json:"token"`
+		HostList []liveDanmuInfoHost `json:"host_list"`
+	} `json:"data"`
+	Code int `json:"code"`
+}

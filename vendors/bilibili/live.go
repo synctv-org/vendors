@@ -248,3 +248,45 @@ func (c *Client) GetLiveStreams(cid uint64, hls bool) ([]*LiveStream, error) {
 
 	return streams, nil
 }
+
+type LiveDanmuInfo struct {
+	Token    string              `json:"token"`
+	HostList []liveDanmuInfoHost `json:"host_list"`
+}
+
+// https://api.live.bilibili.com/xlive/web-room/v1/index/getDanmuInfo?id=946413
+func (c *Client) GetLiveDanmuInfo(roomID uint64) (*LiveDanmuInfo, error) {
+	u := url.URL{
+		Scheme: "https",
+		Host:   "api.live.bilibili.com",
+		Path:   "/xlive/web-room/v1/index/getDanmuInfo",
+	}
+	q := url.Values{}
+	q.Set("id", strconv.FormatUint(roomID, 10))
+	u.RawQuery = q.Encode()
+
+	req, err := c.NewRequest(http.MethodGet, u.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := c.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	var data getLiveDanmuInfoResp
+	if err := json.NewDecoder(resp.Body).Decode(&data); err != nil {
+		return nil, err
+	}
+
+	if data.Code != 0 {
+		return nil, fmt.Errorf("get live danmu info failed: %s, code: %d", data.Message, data.Code)
+	}
+
+	return &LiveDanmuInfo{
+		Token:    data.Data.Token,
+		HostList: data.Data.HostList,
+	}, nil
+}
