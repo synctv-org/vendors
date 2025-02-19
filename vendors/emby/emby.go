@@ -506,17 +506,18 @@ type DirectPlayProfile struct {
 }
 
 type TranscodingProfile struct {
-	Container           string `json:"Container"`
-	Type                string `json:"Type"`
-	AudioCodec          string `json:"AudioCodec"`
-	Context             string `json:"Context"`
-	Protocol            string `json:"Protocol,omitempty"`
-	MaxAudioChannels    string `json:"MaxAudioChannels,omitempty"`
-	MinSegments         string `json:"MinSegments,omitempty"`
-	VideoCodec          string `json:"VideoCodec,omitempty"`
-	ManifestSubtitles   string `json:"ManifestSubtitles,omitempty"`
-	BreakOnNonKeyFrames bool   `json:"BreakOnNonKeyFrames,omitempty"`
-	CopyTimestamps      bool   `json:"CopyTimestamps,omitempty"`
+	Container              string `json:"Container"`
+	Type                   string `json:"Type"`
+	AudioCodec             string `json:"AudioCodec"`
+	Context                string `json:"Context"`
+	Protocol               string `json:"Protocol,omitempty"`
+	MaxAudioChannels       string `json:"MaxAudioChannels,omitempty"`
+	MinSegments            string `json:"MinSegments,omitempty"`
+	VideoCodec             string `json:"VideoCodec,omitempty"`
+	ManifestSubtitles      string `json:"ManifestSubtitles,omitempty"`
+	BreakOnNonKeyFrames    bool   `json:"BreakOnNonKeyFrames,omitempty"`
+	CopyTimestamps         bool   `json:"CopyTimestamps,omitempty"`
+	EnableAudioVbrEncoding bool   `json:"EnableAudioVbrEncoding,omitempty"`
 }
 
 type Condition struct {
