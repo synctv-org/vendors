@@ -244,16 +244,6 @@ type People struct {
 	PrimaryImageTag string `json:"PrimaryImageTag"`
 }
 
-type Studios struct {
-	Name string `json:"Name"`
-	ID   int    `json:"Id"`
-}
-
-type GenreItems struct {
-	Name string `json:"Name"`
-	ID   int    `json:"Id"`
-}
-
 type TagItems struct {
 	Name string `json:"Name"`
 	ID   int    `json:"Id"`
@@ -352,7 +342,6 @@ type Items struct {
 	SeriesName           string           `json:"SeriesName"`
 	DisplayOrder         string           `json:"DisplayOrder"`
 	GUID                 string           `json:"Guid"`
-	GenreItems           []GenreItems     `json:"GenreItems"`
 	ExternalUrls         []ExternalUrls   `json:"ExternalUrls"`
 	TagItems             []TagItems       `json:"TagItems"`
 	Tags                 []string         `json:"Tags"`
@@ -370,7 +359,6 @@ type Items struct {
 	Taglines             []string         `json:"Taglines"`
 	Genres               []string         `json:"Genres"`
 	BackdropImageTags    []string         `json:"BackdropImageTags"`
-	Studios              []Studios        `json:"Studios"`
 	Composers            []Composers      `json:"Composers"`
 	UserData             UserData         `json:"UserData"`
 	MusicVideoCount      int              `json:"MusicVideoCount"`
