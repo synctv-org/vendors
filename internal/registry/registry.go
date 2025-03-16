@@ -18,13 +18,13 @@ func NewRegistry(reg *conf.Registry) registry.Registrar {
 		log.Infof("no registry configed")
 		return nil
 	}
-	if reg.Consul != nil && reg.Consul.Addr != "" {
-		log.Infof("use consul: %v", reg.Consul)
-		return newConsulRegistry(newConsul(reg.Consul))
+	if reg.GetConsul() != nil && reg.GetConsul().GetAddr() != "" {
+		log.Infof("use consul: %v", reg.GetConsul())
+		return newConsulRegistry(newConsul(reg.GetConsul()))
 	}
-	if reg.Etcd != nil && reg.Etcd.Endpoint != "" {
-		log.Infof("use etcd: %v", reg.Etcd)
-		return newEtcdRegistry(newEtcd(reg.Etcd))
+	if reg.GetEtcd() != nil && reg.GetEtcd().GetEndpoint() != "" {
+		log.Infof("use etcd: %v", reg.GetEtcd())
+		return newEtcdRegistry(newEtcd(reg.GetEtcd()))
 	}
 	log.Infof("no registry configed")
 	return nil

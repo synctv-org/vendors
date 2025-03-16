@@ -1,6 +1,7 @@
 package onedrive
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -22,7 +23,7 @@ func (c *Client) FsGet(path string, opt ...FsOptionFunc) (*FsGet, error) {
 		err error
 	)
 	if opts.DriveID == "" {
-		req, err = c.NewRequest(http.MethodGet, fmt.Sprintf("/me/drive/root:/%s", url.PathEscape(path)), nil)
+		req, err = c.NewRequest(http.MethodGet, "/me/drive/root:/"+url.PathEscape(path), nil)
 	} else {
 		req, err = c.NewRequest(http.MethodGet, fmt.Sprintf("/drives/%s/root:/%s", opts.DriveID, url.PathEscape(path)), nil)
 	}
@@ -121,7 +122,7 @@ func (c *Client) FsDownload(path string, opt ...FsOptionFunc) (string, error) {
 	resp.Body.Close()
 	location := resp.Header.Get("Location")
 	if location == "" {
-		return "", fmt.Errorf("download file failed: location not found")
+		return "", errors.New("download file failed: location not found")
 	}
 	return location, nil
 }

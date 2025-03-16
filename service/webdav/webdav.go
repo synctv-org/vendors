@@ -19,15 +19,15 @@ func NewWebdavService(c *conf.WebdavConfig) *WebdavService {
 }
 
 func (a *WebdavService) FsTest(ctx context.Context, req *pb.FsTestReq) (*pb.Empty, error) {
-	cli := gowebdav.NewClient(req.Host, req.Username, req.Password)
+	cli := gowebdav.NewClient(req.GetHost(), req.GetUsername(), req.GetPassword())
 	cli.SetTransport(uhc.DefaultTransport)
 	return nil, cli.Connect()
 }
 
 func (a *WebdavService) FsGet(ctx context.Context, req *pb.FsGetReq) (*pb.FsGetResp, error) {
-	cli := gowebdav.NewClient(req.Host, req.Username, req.Password)
+	cli := gowebdav.NewClient(req.GetHost(), req.GetUsername(), req.GetPassword())
 	cli.SetTransport(uhc.DefaultTransport)
-	info, err := cli.Stat(req.Path)
+	info, err := cli.Stat(req.GetPath())
 	if err != nil {
 		return nil, err
 	}
@@ -40,15 +40,15 @@ func (a *WebdavService) FsGet(ctx context.Context, req *pb.FsGetReq) (*pb.FsGetR
 }
 
 func (a *WebdavService) FsList(ctx context.Context, req *pb.FsListReq) (*pb.FsListResp, error) {
-	cli := gowebdav.NewClient(req.Host, req.Username, req.Password)
+	cli := gowebdav.NewClient(req.GetHost(), req.GetUsername(), req.GetPassword())
 	cli.SetTransport(uhc.DefaultTransport)
-	infos, err := cli.ReadDir(req.Path)
+	infos, err := cli.ReadDir(req.GetPath())
 	if err != nil {
 		return nil, err
 	}
-	var items []*pb.FsListResp_FsListContent = make([]*pb.FsListResp_FsListContent, 0, req.PerPage)
+	items := make([]*pb.FsListResp_FsListContent, 0, req.GetPerPage())
 	var low, high int
-	low, high = int(req.Page-1)*int(req.PerPage), int(req.Page)*int(req.PerPage)
+	low, high = int(req.GetPage()-1)*int(req.GetPerPage()), int(req.GetPage())*int(req.GetPerPage())
 	if low > len(infos) {
 		low = len(infos)
 	}

@@ -117,14 +117,14 @@ func (s *GrpcGatewayServer) ServiceName() string {
 
 func NewGrpcGatewayServer(config *conf.GrpcServer) *GrpcGatewayServer {
 	middlewares := []middleware.Middleware{recovery.Recovery()}
-	if config.JwtSecret != "" {
-		jwtSecret := []byte(config.JwtSecret)
+	if config.GetJwtSecret() != "" {
+		jwtSecret := []byte(config.GetJwtSecret())
 		middlewares = append(middlewares, jwt.Server(func(token *jwtv5.Token) (interface{}, error) {
 			return jwtSecret, nil
 		}, jwt.WithSigningMethod(jwtv5.SigningMethodHS256)))
 	}
 
-	l, err := net.Listen("tcp", config.Addr)
+	l, err := net.Listen("tcp", config.GetAddr())
 	if err != nil {
 		panic(err)
 	}
@@ -132,22 +132,22 @@ func NewGrpcGatewayServer(config *conf.GrpcServer) *GrpcGatewayServer {
 	hopts := []ghttp.ServerOption{
 		ghttp.Middleware(middlewares...),
 		ghttp.Listener(l),
-		ghttp.Address(config.Addr),
+		ghttp.Address(config.GetAddr()),
 	}
 
 	gopts := []ggrpc.ServerOption{
 		ggrpc.Middleware(middlewares...),
 		ggrpc.Listener(l),
-		ggrpc.Address(config.Addr),
+		ggrpc.Address(config.GetAddr()),
 	}
 
-	if config.Timeout != nil {
-		hopts = append(hopts, ghttp.Timeout(config.Timeout.AsDuration()))
-		gopts = append(gopts, ggrpc.Timeout(config.Timeout.AsDuration()))
+	if config.GetTimeout() != nil {
+		hopts = append(hopts, ghttp.Timeout(config.GetTimeout().AsDuration()))
+		gopts = append(gopts, ggrpc.Timeout(config.GetTimeout().AsDuration()))
 	}
 
 	var enableTLS bool
-	if config.Tls != nil && config.Tls.CertFile != "" && config.Tls.KeyFile != "" {
+	if config.GetTls() != nil && config.GetTls().GetCertFile() != "" && config.GetTls().GetKeyFile() != "" {
 		enableTLS = true
 		var rootCAs *x509.CertPool
 		rootCAs, err := x509.SystemCertPool()
@@ -155,15 +155,15 @@ func NewGrpcGatewayServer(config *conf.GrpcServer) *GrpcGatewayServer {
 			fmt.Println("Failed to load system root CA:", err)
 			panic(err)
 		}
-		if config.Tls.CaFile != "" {
-			b, err := os.ReadFile(config.Tls.CaFile)
+		if config.GetTls().GetCaFile() != "" {
+			b, err := os.ReadFile(config.GetTls().GetCaFile())
 			if err != nil {
 				panic(err)
 			}
 			rootCAs.AppendCertsFromPEM(b)
 		}
 
-		cert, err := tls.LoadX509KeyPair(config.Tls.CertFile, config.Tls.KeyFile)
+		cert, err := tls.LoadX509KeyPair(config.GetTls().GetCertFile(), config.GetTls().GetKeyFile())
 		if err != nil {
 			panic(err)
 		}
@@ -177,8 +177,8 @@ func NewGrpcGatewayServer(config *conf.GrpcServer) *GrpcGatewayServer {
 		}))
 	}
 
-	if config.CustomEndpoint != "" {
-		u, err := url.Parse(config.CustomEndpoint)
+	if config.GetCustomEndpoint() != "" {
+		u, err := url.Parse(config.GetCustomEndpoint())
 		if err != nil {
 			panic(err)
 		}

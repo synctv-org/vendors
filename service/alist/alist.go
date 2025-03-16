@@ -18,12 +18,12 @@ func NewAlistService(c *conf.AlistConfig) *AlistService {
 
 func (a *AlistService) Login(ctx context.Context, req *pb.LoginReq) (*pb.LoginResp, error) {
 	opts := []alist.LoginOpt{}
-	if req.Hashed {
+	if req.GetHashed() {
 		opts = append(opts, alist.WithHashed())
 	}
-	s, err := alist.Login(ctx, req.Host, alist.LoginReq{
-		Username: req.Username,
-		Password: req.Password,
+	s, err := alist.Login(ctx, req.GetHost(), alist.LoginReq{
+		Username: req.GetUsername(),
+		Password: req.GetPassword(),
 	}, opts...)
 	if err != nil {
 		return nil, err
@@ -34,7 +34,7 @@ func (a *AlistService) Login(ctx context.Context, req *pb.LoginReq) (*pb.LoginRe
 }
 
 func (a *AlistService) Me(ctx context.Context, req *pb.MeReq) (*pb.MeResp, error) {
-	cli, err := alist.NewClient(req.Host, req.Token, alist.WithContext(ctx))
+	cli, err := alist.NewClient(req.GetHost(), req.GetToken(), alist.WithContext(ctx))
 	if err != nil {
 		return nil, err
 	}
@@ -70,7 +70,7 @@ func related2pb(r *alist.FsGetRelated) *pb.FsGetResp_FsGetRelated {
 }
 
 func relateds2pb(rs []*alist.FsGetRelated) []*pb.FsGetResp_FsGetRelated {
-	var res []*pb.FsGetResp_FsGetRelated = make([]*pb.FsGetResp_FsGetRelated, len(rs))
+	res := make([]*pb.FsGetResp_FsGetRelated, len(rs))
 	for i, r := range rs {
 		res[i] = related2pb(r)
 	}
@@ -78,13 +78,13 @@ func relateds2pb(rs []*alist.FsGetRelated) []*pb.FsGetResp_FsGetRelated {
 }
 
 func (a *AlistService) FsGet(ctx context.Context, req *pb.FsGetReq) (*pb.FsGetResp, error) {
-	cli, err := alist.NewClient(req.Host, req.Token, alist.WithContext(ctx), alist.WithUserAgent(req.UserAgent))
+	cli, err := alist.NewClient(req.GetHost(), req.GetToken(), alist.WithContext(ctx), alist.WithUserAgent(req.GetUserAgent()))
 	if err != nil {
 		return nil, err
 	}
 	r, err := cli.FsGet(&alist.FsGetReq{
-		Path:     req.Path,
-		Password: req.Password,
+		Path:     req.GetPath(),
+		Password: req.GetPassword(),
 	})
 	if err != nil {
 		return nil, err
@@ -107,16 +107,16 @@ func (a *AlistService) FsGet(ctx context.Context, req *pb.FsGetReq) (*pb.FsGetRe
 }
 
 func (a *AlistService) FsList(ctx context.Context, req *pb.FsListReq) (*pb.FsListResp, error) {
-	cli, err := alist.NewClient(req.Host, req.Token, alist.WithContext(ctx))
+	cli, err := alist.NewClient(req.GetHost(), req.GetToken(), alist.WithContext(ctx))
 	if err != nil {
 		return nil, err
 	}
 	r, err := cli.FsList(&alist.FsListReq{
-		Path:     req.Path,
-		Password: req.Password,
-		Page:     req.Page,
-		PerPage:  req.PerPage,
-		Refresh:  req.Refresh,
+		Path:     req.GetPath(),
+		Password: req.GetPassword(),
+		Page:     req.GetPage(),
+		PerPage:  req.GetPerPage(),
+		Refresh:  req.GetRefresh(),
 	})
 	if err != nil {
 		return nil, err
@@ -143,14 +143,14 @@ func (a *AlistService) FsList(ctx context.Context, req *pb.FsListReq) (*pb.FsLis
 }
 
 func (a *AlistService) FsOther(ctx context.Context, req *pb.FsOtherReq) (*pb.FsOtherResp, error) {
-	cli, err := alist.NewClient(req.Host, req.Token, alist.WithContext(ctx))
+	cli, err := alist.NewClient(req.GetHost(), req.GetToken(), alist.WithContext(ctx))
 	if err != nil {
 		return nil, err
 	}
 	r, err := cli.FsOther(&alist.FsOtherReq{
-		Path:     req.Path,
-		Method:   req.Method,
-		Password: req.Password,
+		Path:     req.GetPath(),
+		Method:   req.GetMethod(),
+		Password: req.GetPassword(),
 	})
 	if err != nil {
 		return nil, err
@@ -195,17 +195,17 @@ func (a *AlistService) FsOther(ctx context.Context, req *pb.FsOtherReq) (*pb.FsO
 }
 
 func (a *AlistService) FsSearch(ctx context.Context, req *pb.FsSearchReq) (*pb.FsSearchResp, error) {
-	cli, err := alist.NewClient(req.Host, req.Token, alist.WithContext(ctx))
+	cli, err := alist.NewClient(req.GetHost(), req.GetToken(), alist.WithContext(ctx))
 	if err != nil {
 		return nil, err
 	}
 	r, err := cli.FsSearch(&alist.FsSearchReq{
-		Parent:   req.Parent,
-		Password: req.Password,
-		Keywords: req.Keywords,
-		Scope:    req.Scope,
-		Page:     req.Page,
-		PerPage:  req.PerPage,
+		Parent:   req.GetParent(),
+		Password: req.GetPassword(),
+		Keywords: req.GetKeywords(),
+		Scope:    req.GetScope(),
+		Page:     req.GetPage(),
+		PerPage:  req.GetPerPage(),
 	})
 	if err != nil {
 		return nil, err

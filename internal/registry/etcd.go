@@ -8,14 +8,14 @@ import (
 )
 
 func newEtcd(c *conf.Registry_Etcd) *clientv3.Client {
-	if c == nil || c.Endpoint == "" {
+	if c == nil || c.GetEndpoint() == "" {
 		return nil
 	}
 	client, err := clientv3.New(clientv3.Config{
-		Endpoints:   strings.Split(c.Endpoint, ","),
-		Username:    c.Username,
-		Password:    c.Password,
-		DialTimeout: c.Timeout.AsDuration(),
+		Endpoints:   strings.Split(c.GetEndpoint(), ","),
+		Username:    c.GetUsername(),
+		Password:    c.GetPassword(),
+		DialTimeout: c.GetTimeout().AsDuration(),
 	})
 	if err != nil {
 		panic(err)

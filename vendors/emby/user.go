@@ -466,7 +466,7 @@ func (c *Client) UserPlaybackInfo(id string, opts ...UserPlaybackInfoOption) (*P
 					Container:           "mp4",
 					Type:                "Video",
 					AudioCodec:          "aac,mp2,opus,flac",
-					VideoCodec:          "av1,hevc,h264,vp9",
+					VideoCodec:          "hevc,h264,vp9",
 					Context:             "Streaming",
 					Protocol:            "hls",
 					MaxAudioChannels:    "2",

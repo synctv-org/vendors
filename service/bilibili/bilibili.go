@@ -29,7 +29,7 @@ func (s *BilibiliService) NewQRCode(ctx context.Context, req *pb.Empty) (*pb.New
 }
 
 func (s *BilibiliService) LoginWithQRCode(ctx context.Context, req *pb.LoginWithQRCodeReq) (*pb.LoginWithQRCodeResp, error) {
-	status, c, err := bilibili.LoginWithQRCode(ctx, req.Key)
+	status, c, err := bilibili.LoginWithQRCode(ctx, req.GetKey())
 	if err != nil {
 		return nil, err
 	}
@@ -55,7 +55,7 @@ func (s *BilibiliService) NewCaptcha(ctx context.Context, req *pb.Empty) (*pb.Ne
 }
 
 func (s *BilibiliService) NewSMS(ctx context.Context, req *pb.NewSMSReq) (*pb.NewSMSResp, error) {
-	captchaKey, err := bilibili.NewSMS(ctx, req.Phone, req.Token, req.Challenge, req.Validate)
+	captchaKey, err := bilibili.NewSMS(ctx, req.GetPhone(), req.GetToken(), req.GetChallenge(), req.GetValidate())
 	if err != nil {
 		return nil, err
 	}
@@ -65,7 +65,7 @@ func (s *BilibiliService) NewSMS(ctx context.Context, req *pb.NewSMSReq) (*pb.Ne
 }
 
 func (s *BilibiliService) LoginWithSMS(ctx context.Context, req *pb.LoginWithSMSReq) (*pb.LoginWithSMSResp, error) {
-	c, err := bilibili.LoginWithSMS(ctx, req.Phone, req.Code, req.CaptchaKey)
+	c, err := bilibili.LoginWithSMS(ctx, req.GetPhone(), req.GetCode(), req.GetCaptchaKey())
 	if err != nil {
 		return nil, err
 	}
@@ -75,11 +75,11 @@ func (s *BilibiliService) LoginWithSMS(ctx context.Context, req *pb.LoginWithSMS
 }
 
 func (s *BilibiliService) ParseVideoPage(ctx context.Context, req *pb.ParseVideoPageReq) (*pb.VideoPageInfo, error) {
-	c, err := bilibili.NewClient(utils.MapToHttpCookies(req.Cookies), bilibili.WithContext(ctx))
+	c, err := bilibili.NewClient(utils.MapToHttpCookies(req.GetCookies()), bilibili.WithContext(ctx))
 	if err != nil {
 		return nil, err
 	}
-	r, err := c.ParseVideoPage(req.Aid, req.Bvid)
+	r, err := c.ParseVideoPage(req.GetAid(), req.GetBvid())
 	if err != nil {
 		return nil, err
 	}
@@ -92,15 +92,15 @@ func (s *BilibiliService) ParseVideoPage(ctx context.Context, req *pb.ParseVideo
 }
 
 func (s *BilibiliService) GetVideoURL(ctx context.Context, req *pb.GetVideoURLReq) (*pb.VideoURL, error) {
-	c, err := bilibili.NewClient(utils.MapToHttpCookies(req.Cookies), bilibili.WithContext(ctx))
+	c, err := bilibili.NewClient(utils.MapToHttpCookies(req.GetCookies()), bilibili.WithContext(ctx))
 	if err != nil {
 		return nil, err
 	}
 	conf := []bilibili.GetVideoURLConfig{}
-	if req.Quality != 0 {
-		conf = append(conf, bilibili.WithQuality(req.Quality))
+	if req.GetQuality() != 0 {
+		conf = append(conf, bilibili.WithQuality(req.GetQuality()))
 	}
-	r, err := c.GetVideoURL(req.Aid, req.Bvid, req.Cid, conf...)
+	r, err := c.GetVideoURL(req.GetAid(), req.GetBvid(), req.GetCid(), conf...)
 	if err != nil {
 		return nil, err
 	}
@@ -113,12 +113,12 @@ func (s *BilibiliService) GetVideoURL(ctx context.Context, req *pb.GetVideoURLRe
 }
 
 func (s *BilibiliService) GetDashVideoURL(ctx context.Context, req *pb.GetDashVideoURLReq) (*pb.GetDashVideoURLResp, error) {
-	c, err := bilibili.NewClient(utils.MapToHttpCookies(req.Cookies), bilibili.WithContext(ctx))
+	c, err := bilibili.NewClient(utils.MapToHttpCookies(req.GetCookies()), bilibili.WithContext(ctx))
 	if err != nil {
 		return nil, err
 	}
 	opt := make([]bilibili.GetDashVideoURLConfig, 0)
-	m, m2, err := c.GetDashVideoURL(req.Aid, req.Bvid, req.Cid, opt...)
+	m, m2, err := c.GetDashVideoURL(req.GetAid(), req.GetBvid(), req.GetCid(), opt...)
 	if err != nil {
 		return nil, err
 	}
@@ -137,11 +137,11 @@ func (s *BilibiliService) GetDashVideoURL(ctx context.Context, req *pb.GetDashVi
 }
 
 func (s *BilibiliService) GetSubtitles(ctx context.Context, req *pb.GetSubtitlesReq) (*pb.GetSubtitlesResp, error) {
-	c, err := bilibili.NewClient(utils.MapToHttpCookies(req.Cookies), bilibili.WithContext(ctx))
+	c, err := bilibili.NewClient(utils.MapToHttpCookies(req.GetCookies()), bilibili.WithContext(ctx))
 	if err != nil {
 		return nil, err
 	}
-	sub, err := c.GetSubtitles(req.Aid, req.Bvid, req.Cid)
+	sub, err := c.GetSubtitles(req.GetAid(), req.GetBvid(), req.GetCid())
 	if err != nil {
 		return nil, err
 	}
@@ -156,11 +156,11 @@ func (s *BilibiliService) GetSubtitles(ctx context.Context, req *pb.GetSubtitles
 }
 
 func (s *BilibiliService) ParsePGCPage(ctx context.Context, req *pb.ParsePGCPageReq) (*pb.VideoPageInfo, error) {
-	c, err := bilibili.NewClient(utils.MapToHttpCookies(req.Cookies), bilibili.WithContext(ctx))
+	c, err := bilibili.NewClient(utils.MapToHttpCookies(req.GetCookies()), bilibili.WithContext(ctx))
 	if err != nil {
 		return nil, err
 	}
-	r, err := c.ParsePGCPage(req.Epid, req.Ssid)
+	r, err := c.ParsePGCPage(req.GetEpid(), req.GetSsid())
 	if err != nil {
 		return nil, err
 	}
@@ -173,15 +173,15 @@ func (s *BilibiliService) ParsePGCPage(ctx context.Context, req *pb.ParsePGCPage
 }
 
 func (s *BilibiliService) GetPGCURL(ctx context.Context, req *pb.GetPGCURLReq) (*pb.VideoURL, error) {
-	c, err := bilibili.NewClient(utils.MapToHttpCookies(req.Cookies), bilibili.WithContext(ctx))
+	c, err := bilibili.NewClient(utils.MapToHttpCookies(req.GetCookies()), bilibili.WithContext(ctx))
 	if err != nil {
 		return nil, err
 	}
 	conf := []bilibili.GetVideoURLConfig{}
-	if req.Quality != 0 {
-		conf = append(conf, bilibili.WithQuality(req.Quality))
+	if req.GetQuality() != 0 {
+		conf = append(conf, bilibili.WithQuality(req.GetQuality()))
 	}
-	r, err := c.GetPGCURL(req.Epid, req.Cid, conf...)
+	r, err := c.GetPGCURL(req.GetEpid(), req.GetCid(), conf...)
 	if err != nil {
 		return nil, err
 	}
@@ -194,12 +194,12 @@ func (s *BilibiliService) GetPGCURL(ctx context.Context, req *pb.GetPGCURLReq) (
 }
 
 func (s *BilibiliService) GetDashPGCURL(ctx context.Context, req *pb.GetDashPGCURLReq) (*pb.GetDashPGCURLResp, error) {
-	c, err := bilibili.NewClient(utils.MapToHttpCookies(req.Cookies), bilibili.WithContext(ctx))
+	c, err := bilibili.NewClient(utils.MapToHttpCookies(req.GetCookies()), bilibili.WithContext(ctx))
 	if err != nil {
 		return nil, err
 	}
 	opt := make([]bilibili.GetDashVideoURLConfig, 0)
-	m, m2, err := c.GetDashPGCURL(req.Epid, req.Cid, opt...)
+	m, m2, err := c.GetDashPGCURL(req.GetEpid(), req.GetCid(), opt...)
 	if err != nil {
 		return nil, err
 	}
@@ -218,7 +218,7 @@ func (s *BilibiliService) GetDashPGCURL(ctx context.Context, req *pb.GetDashPGCU
 }
 
 func (s *BilibiliService) UserInfo(ctx context.Context, req *pb.UserInfoReq) (*pb.UserInfoResp, error) {
-	c, err := bilibili.NewClient(utils.MapToHttpCookies(req.Cookies), bilibili.WithContext(ctx))
+	c, err := bilibili.NewClient(utils.MapToHttpCookies(req.GetCookies()), bilibili.WithContext(ctx))
 	if err != nil {
 		return nil, err
 	}
@@ -235,7 +235,7 @@ func (s *BilibiliService) UserInfo(ctx context.Context, req *pb.UserInfoReq) (*p
 }
 
 func (s *BilibiliService) Match(ctx context.Context, req *pb.MatchReq) (*pb.MatchResp, error) {
-	t, id, err := bilibili.Match(req.Url)
+	t, id, err := bilibili.Match(req.GetUrl())
 	if err != nil {
 		return nil, err
 	}
@@ -246,11 +246,11 @@ func (s *BilibiliService) Match(ctx context.Context, req *pb.MatchReq) (*pb.Matc
 }
 
 func (s *BilibiliService) GetLiveStreams(ctx context.Context, req *pb.GetLiveStreamsReq) (*pb.GetLiveStreamsResp, error) {
-	c, err := bilibili.NewClient(utils.MapToHttpCookies(req.Cookies), bilibili.WithContext(ctx))
+	c, err := bilibili.NewClient(utils.MapToHttpCookies(req.GetCookies()), bilibili.WithContext(ctx))
 	if err != nil {
 		return nil, err
 	}
-	r, err := c.GetLiveStreams(req.Cid, req.Hls)
+	r, err := c.GetLiveStreams(req.GetCid(), req.GetHls())
 	if err != nil {
 		return nil, err
 	}
@@ -268,11 +268,11 @@ func (s *BilibiliService) GetLiveStreams(ctx context.Context, req *pb.GetLiveStr
 }
 
 func (s *BilibiliService) ParseLivePage(ctx context.Context, req *pb.ParseLivePageReq) (*pb.VideoPageInfo, error) {
-	c, err := bilibili.NewClient(utils.MapToHttpCookies(req.Cookies), bilibili.WithContext(ctx))
+	c, err := bilibili.NewClient(utils.MapToHttpCookies(req.GetCookies()), bilibili.WithContext(ctx))
 	if err != nil {
 		return nil, err
 	}
-	r, err := c.ParseLivePage(req.RoomID)
+	r, err := c.ParseLivePage(req.GetRoomID())
 	if err != nil {
 		return nil, err
 	}
@@ -303,11 +303,11 @@ func videoInfos2pb(in []*bilibili.VideoInfo) []*pb.VideoInfo {
 }
 
 func (s *BilibiliService) GetLiveDanmuInfo(ctx context.Context, req *pb.GetLiveDanmuInfoReq) (*pb.GetLiveDanmuInfoResp, error) {
-	c, err := bilibili.NewClient(utils.MapToHttpCookies(req.Cookies), bilibili.WithContext(ctx))
+	c, err := bilibili.NewClient(utils.MapToHttpCookies(req.GetCookies()), bilibili.WithContext(ctx))
 	if err != nil {
 		return nil, err
 	}
-	r, err := c.GetLiveDanmuInfo(req.RoomID)
+	r, err := c.GetLiveDanmuInfo(req.GetRoomID())
 	if err != nil {
 		return nil, err
 	}

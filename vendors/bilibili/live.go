@@ -197,7 +197,7 @@ func (c *Client) GetLiveStreamWithQuality(cid uint64, hls bool, qn uint64) (*Get
 		urls[i] = v.URL
 	}
 
-	var acceptQuality []uint64 = make([]uint64, len(data.Data.AcceptQuality))
+	acceptQuality := make([]uint64, len(data.Data.AcceptQuality))
 	for i, v := range data.Data.AcceptQuality {
 		q, err := strconv.ParseUint(v, 10, 64)
 		if err != nil {

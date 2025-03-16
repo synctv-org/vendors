@@ -18,8 +18,8 @@ func NewEmbyService(c *conf.EmbyConfig) *EmbyService {
 }
 
 func (a *EmbyService) Login(ctx context.Context, req *pb.LoginReq) (*pb.LoginResp, error) {
-	cli := emby.NewClient(req.Host, emby.WithContext(ctx))
-	r, err := cli.GetAPIKey(req.Username, req.Password)
+	cli := emby.NewClient(req.GetHost(), emby.WithContext(ctx))
+	r, err := cli.GetAPIKey(req.GetUsername(), req.GetPassword())
 	if err != nil {
 		return nil, err
 	}
@@ -31,7 +31,7 @@ func (a *EmbyService) Login(ctx context.Context, req *pb.LoginReq) (*pb.LoginRes
 }
 
 func (a *EmbyService) Me(ctx context.Context, req *pb.MeReq) (*pb.MeResp, error) {
-	cli := emby.NewClient(req.Host, emby.WithContext(ctx), emby.WithKey(req.Token), emby.WithUserID(req.UserId))
+	cli := emby.NewClient(req.GetHost(), emby.WithContext(ctx), emby.WithKey(req.GetToken()), emby.WithUserID(req.GetUserId()))
 	r, err := cli.Me()
 	if err != nil {
 		return nil, err
@@ -44,7 +44,7 @@ func (a *EmbyService) Me(ctx context.Context, req *pb.MeReq) (*pb.MeResp, error)
 }
 
 func mediaStreamInfo2pb(msi []emby.MediaStreams) []*pb.MediaStreamInfo {
-	var pbmsi []*pb.MediaStreamInfo = make([]*pb.MediaStreamInfo, len(msi))
+	pbmsi := make([]*pb.MediaStreamInfo, len(msi))
 	for i, msi := range msi {
 		pbmsi[i] = &pb.MediaStreamInfo{
 			Codec:           msi.Codec,
@@ -62,7 +62,7 @@ func mediaStreamInfo2pb(msi []emby.MediaStreams) []*pb.MediaStreamInfo {
 }
 
 func mediaSources2pb(ms []emby.MediaSources) []*pb.MediaSourceInfo {
-	var pbms []*pb.MediaSourceInfo = make([]*pb.MediaSourceInfo, len(ms))
+	pbms := make([]*pb.MediaSourceInfo, len(ms))
 	for i, msi := range ms {
 		pbms[i] = &pb.MediaSourceInfo{
 			Id:                         msi.ID,
@@ -98,20 +98,20 @@ func item2pb(item *emby.Items) *pb.Item {
 }
 
 func (a *EmbyService) GetItems(ctx context.Context, req *pb.GetItemsReq) (*pb.GetItemsResp, error) {
-	cli := emby.NewClient(req.Host, emby.WithContext(ctx), emby.WithKey(req.Token), emby.WithUserID(req.UserId))
+	cli := emby.NewClient(req.GetHost(), emby.WithContext(ctx), emby.WithKey(req.GetToken()), emby.WithUserID(req.GetUserId()))
 	opts := []emby.QueryFunc{
 		emby.WithSortBy("SortName"),
 		emby.WithSortOrderAsc(),
 		emby.WithNotFolder(),
 	}
-	if req.SearchTerm != "" {
+	if req.GetSearchTerm() != "" {
 		opts = append(opts,
-			emby.WithSearch(req.SearchTerm),
+			emby.WithSearch(req.GetSearchTerm()),
 			emby.WithRecursive(),
 		)
 	} else {
 		opts = append(opts,
-			emby.WithParentID(req.ParentId),
+			emby.WithParentID(req.GetParentId()),
 		)
 	}
 	r, err := cli.UserItems(opts...)
@@ -129,8 +129,8 @@ func (a *EmbyService) GetItems(ctx context.Context, req *pb.GetItemsReq) (*pb.Ge
 }
 
 func (a *EmbyService) GetItem(ctx context.Context, req *pb.GetItemReq) (*pb.Item, error) {
-	cli := emby.NewClient(req.Host, emby.WithContext(ctx), emby.WithKey(req.Token))
-	r, err := cli.GetItem(req.ItemId)
+	cli := emby.NewClient(req.GetHost(), emby.WithContext(ctx), emby.WithKey(req.GetToken()))
+	r, err := cli.GetItem(req.GetItemId())
 	if err != nil {
 		return nil, err
 	}
@@ -138,28 +138,28 @@ func (a *EmbyService) GetItem(ctx context.Context, req *pb.GetItemReq) (*pb.Item
 }
 
 func (a *EmbyService) FsList(ctx context.Context, req *pb.FsListReq) (*pb.FsListResp, error) {
-	cli := emby.NewClient(req.Host, emby.WithContext(ctx), emby.WithKey(req.Token), emby.WithUserID(req.UserId))
+	cli := emby.NewClient(req.GetHost(), emby.WithContext(ctx), emby.WithKey(req.GetToken()), emby.WithUserID(req.GetUserId()))
 	var resp *emby.ItemsResp
 	var paths []*pb.Path
 	var err error
 	opts := []emby.QueryFunc{}
-	if req.StartIndex != 0 || req.Limit != 0 {
+	if req.GetStartIndex() != 0 || req.GetLimit() != 0 {
 		opts = append(opts,
-			emby.WithStartIndex(req.StartIndex),
-			emby.WithLimit(req.Limit),
+			emby.WithStartIndex(req.GetStartIndex()),
+			emby.WithLimit(req.GetLimit()),
 		)
 	}
-	if req.SearchTerm != "" {
+	if req.GetSearchTerm() != "" {
 		opts = append(opts,
 			emby.WithSortBy("SortName"),
 			emby.WithSortOrderAsc(),
 			emby.WithRecursive(),
-			emby.WithSearch(req.SearchTerm),
+			emby.WithSearch(req.GetSearchTerm()),
 		)
-		if req.Path != "" {
-			opts = append(opts, emby.WithParentID(req.Path))
+		if req.GetPath() != "" {
+			opts = append(opts, emby.WithParentID(req.GetPath()))
 			var item *emby.Items
-			item, err = cli.UserItemsByID(req.Path)
+			item, err = cli.UserItemsByID(req.GetPath())
 			if err != nil {
 				return nil, err
 			}
@@ -182,7 +182,7 @@ func (a *EmbyService) FsList(ctx context.Context, req *pb.FsListReq) (*pb.FsList
 			}
 		}
 		resp, err = cli.UserItems(opts...)
-	} else if req.Path == "" {
+	} else if req.GetPath() == "" {
 		resp, err = cli.UserViews(opts...)
 		paths = []*pb.Path{
 			{
@@ -192,7 +192,7 @@ func (a *EmbyService) FsList(ctx context.Context, req *pb.FsListReq) (*pb.FsList
 		}
 	} else {
 		var item *emby.Items
-		item, err = cli.UserItemsByID(req.Path)
+		item, err = cli.UserItemsByID(req.GetPath())
 		if err != nil {
 			return nil, err
 		}
@@ -219,8 +219,8 @@ func (a *EmbyService) FsList(ctx context.Context, req *pb.FsListReq) (*pb.FsList
 			resp, err = cli.Seasons(item.ID, opts...)
 		case "Season":
 			resp, err = cli.Seasons(item.ParentID,
-				emby.WithStartIndex(req.StartIndex),
-				emby.WithLimit(req.Limit),
+				emby.WithStartIndex(req.GetStartIndex()),
+				emby.WithLimit(req.GetLimit()),
 			)
 			if err != nil {
 				return nil, err
@@ -262,7 +262,7 @@ func (a *EmbyService) FsList(ctx context.Context, req *pb.FsListReq) (*pb.FsList
 }
 
 func (a *EmbyService) GetSystemInfo(ctx context.Context, req *pb.SystemInfoReq) (*pb.SystemInfoResp, error) {
-	cli := emby.NewClient(req.Host, emby.WithContext(ctx), emby.WithKey(req.Token))
+	cli := emby.NewClient(req.GetHost(), emby.WithContext(ctx), emby.WithKey(req.GetToken()))
 	r, err := cli.SystemInfo()
 	if err != nil {
 		return nil, err
@@ -300,7 +300,7 @@ func (a *EmbyService) GetSystemInfo(ctx context.Context, req *pb.SystemInfoReq) 
 }
 
 func (a *EmbyService) Logout(ctx context.Context, req *pb.LogoutReq) (*pb.Empty, error) {
-	err := emby.NewClient(req.Host, emby.WithContext(ctx), emby.WithKey(req.Token)).Logout()
+	err := emby.NewClient(req.GetHost(), emby.WithContext(ctx), emby.WithKey(req.GetToken())).Logout()
 	if err != nil {
 		return nil, err
 	}
@@ -308,21 +308,21 @@ func (a *EmbyService) Logout(ctx context.Context, req *pb.LogoutReq) (*pb.Empty,
 }
 
 func (a *EmbyService) PlaybackInfo(ctx context.Context, req *pb.PlaybackInfoReq) (*pb.PlaybackInfoResp, error) {
-	cli := emby.NewClient(req.Host, emby.WithContext(ctx), emby.WithKey(req.Token), emby.WithUserID(req.UserId))
+	cli := emby.NewClient(req.GetHost(), emby.WithContext(ctx), emby.WithKey(req.GetToken()), emby.WithUserID(req.GetUserId()))
 	opts := []emby.UserPlaybackInfoOption{}
-	if req.MediaSourceId != "" {
-		opts = append(opts, emby.WithMediaSourceID(req.MediaSourceId))
+	if req.GetMediaSourceId() != "" {
+		opts = append(opts, emby.WithMediaSourceID(req.GetMediaSourceId()))
 	}
-	if req.SubtitleStreamIndex != 0 {
-		opts = append(opts, emby.WithSubtitleStreamIndex(int(req.SubtitleStreamIndex)))
+	if req.GetSubtitleStreamIndex() != 0 {
+		opts = append(opts, emby.WithSubtitleStreamIndex(int(req.GetSubtitleStreamIndex())))
 	}
-	if req.AudioStreamIndex != 0 {
-		opts = append(opts, emby.WithAudioStreamIndex(int(req.AudioStreamIndex)))
+	if req.GetAudioStreamIndex() != 0 {
+		opts = append(opts, emby.WithAudioStreamIndex(int(req.GetAudioStreamIndex())))
 	}
-	if req.MaxStreamingBitrate != 0 {
-		opts = append(opts, emby.WithMaxStreamingBitrate(int(req.MaxStreamingBitrate)))
+	if req.GetMaxStreamingBitrate() != 0 {
+		opts = append(opts, emby.WithMaxStreamingBitrate(int(req.GetMaxStreamingBitrate())))
 	}
-	r, err := cli.UserPlaybackInfo(req.ItemId, opts...)
+	r, err := cli.UserPlaybackInfo(req.GetItemId(), opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -333,6 +333,6 @@ func (a *EmbyService) PlaybackInfo(ctx context.Context, req *pb.PlaybackInfoReq)
 }
 
 func (a *EmbyService) DeleteActiveEncodeings(ctx context.Context, req *pb.DeleteActiveEncodeingsReq) (*pb.Empty, error) {
-	cli := emby.NewClient(req.Host, emby.WithContext(ctx), emby.WithKey(req.Token))
-	return nil, cli.DeleteActiveEncodeings(req.PalySessionId)
+	cli := emby.NewClient(req.GetHost(), emby.WithContext(ctx), emby.WithKey(req.GetToken()))
+	return nil, cli.DeleteActiveEncodeings(req.GetPalySessionId())
 }

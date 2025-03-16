@@ -6,19 +6,19 @@ import (
 )
 
 func newConsul(c *conf.Registry_Consul) *api.Client {
-	if c == nil || c.Addr == "" {
+	if c == nil || c.GetAddr() == "" {
 		return nil
 	}
 	config := api.DefaultConfig()
-	if c.Addr == "" {
+	if c.GetAddr() == "" {
 		panic("consul address is empty")
 	}
-	config.Address = c.Addr
-	if c.Scheme != "" {
-		config.Scheme = c.Scheme
+	config.Address = c.GetAddr()
+	if c.GetScheme() != "" {
+		config.Scheme = c.GetScheme()
 	}
-	if c.Timeout != nil && c.Timeout.AsDuration() != 0 {
-		config.WaitTime = c.Timeout.AsDuration()
+	if c.GetTimeout() != nil && c.GetTimeout().AsDuration() != 0 {
+		config.WaitTime = c.GetTimeout().AsDuration()
 	}
 	client, err := api.NewClient(config)
 	if err != nil {
